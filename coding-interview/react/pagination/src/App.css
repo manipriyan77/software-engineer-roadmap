@@ -1,0 +1,21 @@
+.user_container div {
+  width: 250px;
+  background-color: azure;
+  border-radius: 6px;
+  border: 1px solid gray;
+  margin-bottom: 5px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.user_container {
+  margin-bottom: 30px;
+}
+
+.selected_value {
+  background-color: bisque;
+  border-radius: 10px;
+  border: 1px solid black;
+  padding: 5px 10px;
+  margin-top: 20px;
+}
