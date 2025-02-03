@@ -1,5 +1,3 @@
-const { current } = require('@reduxjs/toolkit');
-
 class Node {
   constructor(val) {
     this.val = val;
