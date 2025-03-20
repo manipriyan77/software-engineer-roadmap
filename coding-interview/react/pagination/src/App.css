@@ -60,3 +60,8 @@ body {
 .reset-button {
   padding: 5px 10px;
 }
+
+.list_container {
+  text-align: left;
+  padding-left: 20px;
+}
