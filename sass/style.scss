@@ -1,0 +1,25 @@
+$clr-primary : hotpink;
+
+body{
+    background-color: $clr-primary;
+    section{
+        margin-top: 10px;
+    }
+}
+
+// Parent selector 
+a{
+    background-color: blue;
+    // If the & is not there the css will look like this a :hover which selects the element inside the a tag
+    &:hover{
+        text-decoration: underline;
+    }
+}
+
+// Specificity
+.card{
+    // This method is used to combine the classNames like card__container
+    &__container{
+        background-color: yellow;
+    }
+}

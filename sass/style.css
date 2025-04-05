@@ -1,0 +1,19 @@
+body {
+  background-color: hotpink;
+}
+body section {
+  margin-top: 10px;
+}
+
+a {
+  background-color: blue;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.card__container {
+  background-color: yellow;
+}
+
+/*# sourceMappingURL=style.css.map */
