@@ -3,7 +3,6 @@ const root = ReactDOM.createRoot(rootNode);
 root.render(React.createElement(App));
 
 function App() {
-  // console.log("called");
   return React.createElement(
     "section",
     null,
@@ -11,16 +10,18 @@ function App() {
     React.createElement(
       "section",
       null,
-      React.createElement(counter),
-      React.createElement(counter)
+      React.createElement(counter, { name: "one", count: 0 }),
+      React.createElement(counter, { name: "two", count: 0 })
     )
   );
 }
 
-function counter() {
+function counter(props) {
+  console.log("props :>> ", props);
   return React.createElement(
     "article",
     null,
+    React.createElement("h2", null, props.name),
     React.createElement("p", null, "Clicked 2 time"),
     React.createElement("button", null, "Click me")
   );
