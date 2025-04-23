@@ -1,9 +1,11 @@
-import React from 'react'
+import React from "react";
 
-const ImageShow = () => {
+const ImageShow = ({ image }) => {
   return (
-    <div>ImageShow</div>
-  )
-}
+    <div>
+      <img src={image.urls.small} alt={image.alt_description} />
+    </div>
+  );
+};
 
-export default ImageShow
+export default ImageShow;

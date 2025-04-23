@@ -5,7 +5,7 @@ function classNames(...args) {
 
     if (Array.isArray(item)) {
       item.forEach(processItem); // Recursively process arrays
-    } else if (typeof item === 'object') {
+    } else if (typeof item === "object") {
       for (let key in item) {
         if (item[key]) result.push(key); // Only push truthy keys
       }
@@ -15,10 +15,10 @@ function classNames(...args) {
   }
 
   args.forEach(processItem);
-  console.log('result :>> ', result);
-  return result.join(' ');
+  console.log("result :>> ", result);
+  return result.join(" ");
 }
 
 // classNames('foo', { bar: true });
-// classNames(['foo', 'bar', 'baz']);
-classNames(null, false, 'bar', undefined, 0, 1, { baz: null }, '');
+classNames(["foo", "bar", "baz"]);
+classNames(null, false, "bar", undefined, 0, 1, { baz: null }, "");
