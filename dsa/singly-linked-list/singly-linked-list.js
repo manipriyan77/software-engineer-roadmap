@@ -70,6 +70,63 @@ class SinglyLinkedList {
     }
     return results;
   }
+  removeDuplicates(val) {
+    let current = this.head;
+    while (current.val) {
+      if (current.val === val) {
+        current = current.next;
+      }
+    }
+    console.log(this.head);
+    return this.head;
+  }
+  deleteNodeWithValueX(head, X) {
+    if (!head) return null;
+
+    while (head && head.val === X) {
+      head = head.next;
+    }
+
+    let current = head;
+
+    while (current && current.next) {
+      if (current.next.val === X) {
+        current.next = current.next.next;
+      } else {
+        current = current.next;
+      }
+    }
+
+    return head;
+  }
+  insertAtHead(X) {
+    let newNode = new Node(X);
+    if (!this.head) {
+      this.head = newNode;
+    } else {
+      let temp = this.head;
+      this.head = newNode;
+      newNode.next = temp;
+    }
+    return this.head;
+  }
+  insertAtKthPosition(X, K) {
+    let newNode = new Node(K);
+    let count = 1;
+    let current = this.head;
+    while (current.next) {
+      if (count === X) {
+        let temp = current.next;
+        newNode.next = temp;
+        current.next = newNode;
+      }
+      count++;
+      current = current.next;
+    }
+    console.log("list :>> ", this.head);
+
+    return this.head;
+  }
 }
 
 let list = new SinglyLinkedList();
@@ -77,5 +134,7 @@ list.push(3);
 list.push(4);
 list.push(7);
 list.push(8);
+list.push(7);
+list.push(7);
+list.insertAtKthPosition(2, 77);
 console.log("list :>> ", list);
-export default SinglyLinkedList;
