@@ -65,3 +65,53 @@ body {
   text-align: left;
   padding-left: 20px;
 }
+
+.line {
+  display: flex;
+  gap: 10px;
+}
+
+.tile {
+  width: 40px;
+  height: 40px;
+  border: 1px solid black;
+  margin-bottom: 10px;
+}
+
+/* VirtualizedTable.css */
+
+.virtualized-container {
+  height: 400px;
+  /* can be overridden via inline style */
+  overflow-y: auto;
+  border: 1px solid #ccc;
+}
+
+.virtualized-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.virtualized-thead {
+  position: sticky;
+  top: 0;
+  background-color: #f0f0f0;
+  z-index: 1;
+}
+
+.virtualized-th {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  background-color: #f9f9f9;
+  font-weight: bold;
+}
+
+.virtualized-td {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.virtualized-row {
+  height: 40px;
+}
