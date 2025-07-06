@@ -12,7 +12,7 @@ class SinglyLinkedList {
     this.length = 0;
   }
   push(val) {
-    if (!val) return "Please enter a value";
+    if (!val) return 'Please enter a value';
     let newNode = new Node(val);
     if (!this.head) {
       this.head = newNode;
@@ -25,7 +25,7 @@ class SinglyLinkedList {
     return this;
   }
   pop() {
-    if (!this.head) return "No values to pop";
+    if (!this.head) return 'No values to pop';
     let current = this.head;
     let newTail = current;
     while (current.next) {
@@ -35,12 +35,27 @@ class SinglyLinkedList {
     this.tail = newTail;
     this.tail.next = null;
     this.length--;
-
     if (this.length === 0) {
       this.head = null;
       this.tail = null;
     }
-
     return current;
   }
+  traverse() {
+    let values = [];
+    let current = this.head;
+    while (current !== null) {
+      values.push(current.val);
+      current = current.next;
+    }
+    console.log('values :>> ', values);
+    return values;
+  }
 }
+
+const list = new SinglyLinkedList();
+list.push(5);
+list.push(5);
+list.push(5);
+list.push(88);
+list.traverse();
