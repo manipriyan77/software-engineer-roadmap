@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Rendering Demo - Complete Beginner's Guide</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .demo-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .demo-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .phase-indicator {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .render-phase {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .commit-phase {
+            background: #e8f5e8;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .component-tree {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+        
+        .virtual-dom {
+            background: #f3e5f5;
+            border: 2px solid #9c27b0;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+        
+        .real-dom {
+            background: #ffebee;
+            border: 2px solid #f44336;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+        
+        .log-container {
+            background: #263238;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 10px 0;
+        }
+        
+        .counter-demo {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .counter-button {
+            background: #2196f3;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        
+        .counter-button:hover {
+            background: #1976d2;
+        }
+        
+        .count-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: #333;
+            margin: 20px 0;
+        }
+        
+        .highlight {
+            animation: highlight 0.5s ease-in-out;
+        }
+        
+        @keyframes highlight {
+            0% { background-color: yellow; }
+            100% { background-color: transparent; }
+        }
+        
+        .phase-timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: linear-gradient(90deg, #e3f2fd 0%, #e3f2fd 50%, #e8f5e8 50%, #e8f5e8 100%);
+            border-radius: 8px;
+        }
+        
+        .timeline-step {
+            text-align: center;
+            padding: 10px;
+            border-radius: 4px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            min-width: 120px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .timeline-step:hover {
+            transform: scale(1.05);
+        }
+        
+        .arrow {
+            font-size: 24px;
+            color: #666;
+        }
+        
+        /* Tooltip Styles */
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 300px;
+            background-color: #333;
+            color: #fff;
+            text-align: left;
+            border-radius: 6px;
+            padding: 15px;
+            position: absolute;
+            z-index: 1000;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -150px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Beginner Guide Styles */
+        .beginner-guide {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .guide-step {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #fff;
+        }
+        
+        .step-number {
+            background: #fff;
+            color: #667eea;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .explanation-box {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .explanation-title {
+            color: #495057;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .phase-indicator-live {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 5px;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .phase-render {
+            background: #e3f2fd;
+            color: #1976d2;
+            border: 2px solid #2196f3;
+        }
+        
+        .phase-commit {
+            background: #e8f5e8;
+            color: #388e3c;
+            border: 2px solid #4caf50;
+        }
+        
+        .phase-active {
+            animation: pulse 1s infinite;
+            transform: scale(1.1);
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(33, 150, 243, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0); }
+        }
+        
+        /* Diffing Visualization Styles */
+        .diffing-container {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            margin: 20px 0;
+            align-items: center;
+        }
+        
+        .virtual-dom-box {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            position: relative;
+        }
+        
+        .virtual-dom-old {
+            border-color: #dc3545;
+            background: #fff5f5;
+        }
+        
+        .virtual-dom-new {
+            border-color: #28a745;
+            background: #f8fff8;
+        }
+        
+        .diff-arrow {
+            font-size: 48px;
+            color: #007bff;
+            text-align: center;
+            animation: diffPulse 2s infinite;
+        }
+        
+        @keyframes diffPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        .diff-highlight {
+            background: #ffeb3b !important;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+            animation: diffHighlight 1s ease-in-out;
+        }
+        
+        @keyframes diffHighlight {
+            0%, 100% { background: #ffeb3b; }
+            50% { background: #ff9800; }
+        }
+        
+        .diff-label {
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .diff-old-label {
+            color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+        
+        .diff-new-label {
+            color: #28a745;
+            border: 1px solid #28a745;
+        }
+        
+        /* UI Comparison Styles */
+        .ui-comparison {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            margin: 20px 0;
+            align-items: center;
+        }
+        
+        .ui-preview {
+            border: 3px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            background: white;
+            text-align: center;
+            position: relative;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .ui-old {
+            border-color: #dc3545;
+            background: #fff5f5;
+        }
+        
+        .ui-new {
+            border-color: #28a745;
+            background: #f8fff8;
+        }
+        
+        .ui-count-display {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .ui-count-old {
+            color: #dc3545;
+            background: #fff5f5;
+        }
+        
+        .ui-count-new {
+            color: #28a745;
+            background: #f8fff8;
+            animation: newValuePulse 1s ease-in-out;
+        }
+        
+        @keyframes newValuePulse {
+            0% { transform: scale(1); background: #f8fff8; }
+            50% { transform: scale(1.1); background: #ffeb3b; }
+            100% { transform: scale(1); background: #f8fff8; }
+        }
+        
+        .ui-label {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .phase-indicator-box {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .phase-step {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 5px;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .phase-step.active {
+            animation: stepPulse 1s infinite;
+            transform: scale(1.1);
+        }
+        
+        @keyframes stepPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7); }
+            50% { box-shadow: 0 0 0 10px rgba(33, 150, 243, 0); }
+        }
+        
+        /* Complex App Styles */
+        .complex-app {
+            border: 3px solid #007bff;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .app-header {
+            background: #007bff;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .component-section {
+            border: 2px solid #6c757d;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            position: relative;
+        }
+        
+        .component-label {
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background: #6c757d;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .user-profile {
+            border-color: #28a745;
+        }
+        
+        .user-profile .component-label {
+            background: #28a745;
+        }
+        
+        .todo-list {
+            border-color: #ffc107;
+        }
+        
+        .todo-list .component-label {
+            background: #ffc107;
+            color: #000;
+        }
+        
+        .stats-panel {
+            border-color: #dc3545;
+        }
+        
+        .stats-panel .component-label {
+            background: #dc3545;
+        }
+        
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            background: #f8f9fa;
+        }
+        
+        .todo-item.completed {
+            background: #d4edda;
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        
+        .todo-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        
+        .control-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .control-button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .control-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #000;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .render-indicator {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #ff6b6b;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: bold;
+            animation: renderFlash 0.5s ease-in-out;
+        }
+        
+        @keyframes renderFlash {
+            0% { background: #ff6b6b; transform: scale(1); }
+            50% { background: #ff9f43; transform: scale(1.2); }
+            100% { background: #ff6b6b; transform: scale(1); }
+        }
+        
+        .component-tree-complex {
+            background: #f8f9fa;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .tree-node {
+            margin: 5px 0;
+            padding: 5px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .tree-node.rendering {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            animation: treeNodePulse 1s ease-in-out;
+        }
+        
+        @keyframes treeNodePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .interaction-log {
+            background: #263238;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 10px 0;
+        }
+        
+        .log-entry {
+            margin: 2px 0;
+            padding: 2px 0;
+        }
+        
+        .log-component {
+            color: #64b5f6;
+        }
+        
+        .log-prop {
+            color: #81c784;
+        }
+        
+        .log-state {
+            color: #ffb74d;
+        }
+        
+        .log-effect {
+            color: #f06292;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 React Rendering Process - Complete Beginner's Guide</h1>
+    
+    <div class="beginner-guide">
+        <h2>👋 Welcome! Let's Learn React Rendering Together</h2>
+        <p>This interactive demo will show you exactly how React works under the hood. Don't worry if you're new to React - we'll explain everything step by step!</p>
+        
+        <div class="guide-step">
+            <span class="step-number">1</span>
+            <strong>Click the button below</strong> to trigger a state change and watch React's rendering process in real-time.
+        </div>
+        
+        <div class="guide-step">
+            <span class="step-number">2</span>
+            <strong>Watch the logs</strong> on the right to see each phase as it happens.
+        </div>
+        
+        <div class="guide-step">
+            <span class="step-number">3</span>
+            <strong>Hover over elements</strong> to see detailed explanations of what's happening.
+        </div>
+    </div>
+    
+    <div class="demo-container">
+        <div class="demo-section">
+            <h2>📊 Interactive Demo: Counter + Todo List (Basic Example)</h2>
+            <div class="explanation-box">
+                <div class="explanation-title">🎯 What you're seeing:</div>
+                <p>This is a React component with multiple pieces of state (counter + todo list). Perfect for understanding how different state changes trigger re-renders!</p>
+            </div>
+            <div id="counter-app"></div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>📝 Live Rendering Logs</h2>
+            <div class="explanation-box">
+                <div class="explanation-title">🔍 How to read the logs:</div>
+                <div style="margin: 10px 0;">
+                    <span class="phase-indicator-live phase-render">🔄 Blue = Render Phase</span>
+                    <span class="phase-indicator-live phase-commit">✅ Green = Commit Phase</span>
+                </div>
+                <p>Each log entry shows you exactly when each phase happens and what React is doing.</p>
+            </div>
+            <div id="log-container" class="log-container">
+                <div>🎯 Click any button to see React's rendering process in action...</div>
+                <div style="color: #888; margin-top: 10px;">💡 Tip: Each color represents a different phase of rendering!</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>🏗️ Complex Multi-Component App (Advanced Example)</h2>
+        <div class="explanation-box">
+            <div class="explanation-title">🎯 Real-World Complexity:</div>
+            <p>This shows how React handles multiple components, prop passing, and complex state interactions. Watch how changes in one component can trigger re-renders in others!</p>
+        </div>
+        
+        <div class="beginner-guide">
+            <h3>🎮 Interactive Features:</h3>
+            <div class="guide-step">
+                <span class="step-number">👤</span>
+                <strong>User Profile:</strong> Change name/theme - watch how it affects the entire app
+            </div>
+            <div class="guide-step">
+                <span class="step-number">📝</span>
+                <strong>Todo List:</strong> Add/complete tasks - see how child components re-render
+            </div>
+            <div class="guide-step">
+                <span class="step-number">📊</span>
+                <strong>Stats Panel:</strong> Automatically updates when todos change - prop-based re-rendering
+            </div>
+            <div class="guide-step">
+                <span class="step-number">🎯</span>
+                <strong>Watch the logs:</strong> See which components re-render and why!
+            </div>
+        </div>
+        
+        <div id="complex-app"></div>
+    </div>
+    
+    <div class="demo-section">
+        <h2>🔄 React Rendering Timeline (Hover for Details!)</h2>
+        <div class="explanation-box">
+            <div class="explanation-title">📚 Understanding the Timeline:</div>
+            <p>React rendering happens in these 4 steps, every single time something changes. Hover over each step to learn more!</p>
+        </div>
+        <div class="phase-timeline">
+            <div class="timeline-step tooltip">
+                <div>1️⃣ Trigger</div>
+                <small>Something Happens</small>
+                <span class="tooltiptext">
+                    <strong>🚨 The Trigger Phase</strong><br><br>
+                    This is when something tells React "Hey, something changed!"<br><br>
+                    <strong>Common triggers:</strong><br>
+                    • Button click (setState)<br>
+                    • Props change from parent<br>
+                    • Timer/API response<br><br>
+                    <strong>Think of it like:</strong> Ordering food at a restaurant - you tell the waiter what you want.
+                </span>
+            </div>
+            <div class="arrow">→</div>
+            <div class="timeline-step render-phase tooltip">
+                <div>2️⃣ Render Phase</div>
+                <small>Planning & Virtual DOM</small>
+                <span class="tooltiptext">
+                    <strong>🔄 The Render Phase</strong><br><br>
+                    React figures out what needs to change, but doesn't change anything yet!<br><br>
+                    <strong>What happens:</strong><br>
+                    • Your component function runs<br>
+                    • New Virtual DOM is created<br>
+                    • No side effects allowed<br><br>
+                    <strong>Think of it like:</strong> The waiter writing down your order and planning what the kitchen needs to do.
+                </span>
+            </div>
+            <div class="arrow">→</div>
+            <div class="timeline-step tooltip">
+                <div>3️⃣ Diffing</div>
+                <small>Find Differences</small>
+                <span class="tooltiptext">
+                    <strong>🔍 The Diffing Algorithm</strong><br><br>
+                    React compares the old Virtual DOM with the new Virtual DOM to find what actually changed.<br><br>
+                    <strong>React asks:</strong><br>
+                    • What's different?<br>
+                    • What can I keep the same?<br>
+                    • What's the minimum I need to change?<br><br>
+                    <strong>Think of it like:</strong> The waiter checking "What's different about this order from the last one?"
+                </span>
+            </div>
+            <div class="arrow">→</div>
+            <div class="timeline-step commit-phase tooltip">
+                <div>4️⃣ Commit Phase</div>
+                <small>Update Real DOM</small>
+                <span class="tooltiptext">
+                    <strong>✅ The Commit Phase</strong><br><br>
+                    React actually makes the changes to the real DOM that users can see!<br><br>
+                    <strong>What happens:</strong><br>
+                    • Real DOM gets updated<br>
+                    • useLayoutEffect runs<br>
+                    • Browser paints the screen<br>
+                    • useEffect runs<br><br>
+                    <strong>Think of it like:</strong> The kitchen actually preparing your food and serving it to you.
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="demo-section">
+        <h2>🔍 Live Diffing Algorithm Visualization</h2>
+        <div class="explanation-box">
+            <div class="explanation-title">🎯 See React's Diffing in Action!</div>
+            <p>This shows exactly how React compares the old Virtual DOM with the new Virtual DOM to find what changed. The highlighted parts show the differences React detected!</p>
+        </div>
+        
+        <div class="phase-indicator-box">
+            <div>Current Phase: <span id="current-phase" class="phase-step">🎯 Ready to Start</span></div>
+        </div>
+        
+        <div class="diffing-container">
+            <div class="virtual-dom-box virtual-dom-old">
+                <div class="diff-label diff-old-label">🕰️ OLD Virtual DOM</div>
+                <pre id="old-virtual-dom">{
+  type: 'div',
+  children: [
+    { type: 'h2', children: ['Count: 0'] },
+    { type: 'button', children: ['Increment'] }
+  ]
+}</pre>
+            </div>
+            
+            <div class="diff-arrow">
+                <div>🔍</div>
+                <div style="font-size: 16px; margin-top: 10px;">DIFFING</div>
+            </div>
+            
+            <div class="virtual-dom-box virtual-dom-new">
+                <div class="diff-label diff-new-label">🆕 NEW Virtual DOM</div>
+                <pre id="new-virtual-dom">{
+  type: 'div',
+  children: [
+    { type: 'h2', children: ['Count: 0'] },
+    { type: 'button', children: ['Increment'] }
+  ]
+}</pre>
+            </div>
+        </div>
+        
+        <div id="diff-result" class="explanation-box" style="display: none;">
+            <div class="explanation-title">🎯 Diffing Result:</div>
+            <div id="diff-details">Click the button to see what React detects as different!</div>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>👀 UI Before vs After Comparison</h2>
+        <div class="explanation-box">
+            <div class="explanation-title">🎯 Visual UI Changes</div>
+            <p>See the actual UI difference! This shows what the user interface looked like before and after the state change.</p>
+        </div>
+        
+        <div class="ui-comparison">
+            <div class="ui-preview ui-old">
+                <div class="ui-label diff-old-label">👈 BEFORE (Old UI)</div>
+                <h3>🧮 Interactive Counter</h3>
+                <div class="ui-count-display ui-count-old" id="ui-old-count">0</div>
+                <button style="padding: 10px 20px; border-radius: 8px; border: none; background: #ccc;">🚀 Click Me!</button>
+            </div>
+            
+            <div class="diff-arrow">
+                <div>➡️</div>
+                <div style="font-size: 16px; margin-top: 10px;">UPDATE</div>
+            </div>
+            
+            <div class="ui-preview ui-new">
+                <div class="ui-label diff-new-label">👉 AFTER (New UI)</div>
+                <h3>🧮 Interactive Counter</h3>
+                <div class="ui-count-display ui-count-new" id="ui-new-count">0</div>
+                <button style="padding: 10px 20px; border-radius: 8px; border: none; background: #ccc;">🚀 Click Me!</button>
+            </div>
+        </div>
+        
+        <div id="ui-diff-result" class="explanation-box" style="display: none;">
+            <div class="explanation-title">✨ What Changed in the UI:</div>
+            <div id="ui-diff-details">Click the button to see the visual changes!</div>
+        </div>
+    </div>
+
+    <div class="demo-container">
+        <div class="demo-section">
+            <h3>🌳 Interactive Demo Component Tree</h3>
+            <div class="explanation-box">
+                <div class="explanation-title">🎯 Component Structure:</div>
+                <p>This shows how the counter + todo list demo is structured. Watch how the state values update in real-time!</p>
+            </div>
+            <div class="component-tree">
+                <div><strong>App</strong> (Root Component)</div>
+                <div style="margin-left: 20px;">├── <strong>InteractiveDemo</strong> (Main Component)</div>
+                <div style="margin-left: 40px;">├── count: <span id="tree-count" style="background: yellow; padding: 2px 6px; border-radius: 4px; font-weight: bold;">0</span> (State)</div>
+                <div style="margin-left: 40px;">├── todos: <span id="tree-todos" style="background: lightgreen; padding: 2px 6px; border-radius: 4px; font-weight: bold;">2</span> items (State)</div>
+                <div style="margin-left: 40px;">├── newTodo: "" (State)</div>
+                <div style="margin-left: 40px;">└── <strong>SimpleTodoItem</strong> × <span id="simple-todo-count">2</span> (Child Components)</div>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h3>👻 Current Virtual DOM</h3>
+            <div class="explanation-box">
+                <div class="explanation-title">🎯 Simple Virtual DOM:</div>
+                <p>This shows the Virtual DOM for the simple counter.</p>
+            </div>
+            <div class="virtual-dom">
+                <div><strong>Current Virtual DOM Structure:</strong></div>
+                <pre id="virtual-dom-display" style="background: #f8f9fa; padding: 15px; border-radius: 8px; border: 2px solid #e9ecef;">{
+  type: 'div',
+  children: [
+    { type: 'h2', children: ['Count: 0'] },
+    { type: 'button', children: ['Increment'] }
+  ]
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>🏗️ Complex Component Tree Visualization</h2>
+        <div class="explanation-box">
+            <div class="explanation-title">🎯 Advanced Component Hierarchy:</div>
+            <p>This shows the complex app's component structure. Watch how components light up when they re-render!</p>
+        </div>
+        
+        <div class="component-tree-complex">
+            <div class="tree-node" id="tree-app">
+                <strong>📱 ComplexApp</strong> (Root Component)
+                <div style="margin-left: 20px; color: #6c757d;">State: userName, theme, todos</div>
+            </div>
+            <div style="margin-left: 20px;">
+                <div class="tree-node" id="tree-header">
+                    ├── <strong>🎨 AppHeader</strong> (Presentational)
+                    <div style="margin-left: 20px; color: #6c757d;">Props: userName, theme</div>
+                </div>
+                <div class="tree-node" id="tree-profile">
+                    ├── <strong>👤 UserProfile</strong> (Interactive)
+                    <div style="margin-left: 20px; color: #6c757d;">Props: userName, theme, onNameChange, onThemeChange</div>
+                </div>
+                <div class="tree-node" id="tree-todolist">
+                    ├── <strong>📝 TodoList</strong> (Container)
+                    <div style="margin-left: 20px; color: #6c757d;">Props: todos, onToggle, onAdd</div>
+                    <div style="margin-left: 40px;">
+                        <div class="tree-node" id="tree-todoitem">
+                            └── <strong>✅ TodoItem</strong> × <span id="todo-count">3</span> (List Items)
+                            <div style="margin-left: 20px; color: #6c757d;">Props: todo, onToggle</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tree-node" id="tree-stats">
+                    └── <strong>📊 StatsPanel</strong> (Computed)
+                    <div style="margin-left: 20px; color: #6c757d;">Props: todos (derived stats)</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="explanation-box" style="margin-top: 15px;">
+            <div class="explanation-title">🎯 Rendering Patterns:</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 10px;">
+                <div style="background: #fff3cd; padding: 10px; border-radius: 4px;">
+                    <strong>🔄 State Change:</strong> Component + all children re-render
+                </div>
+                <div style="background: #d1ecf1; padding: 10px; border-radius: 4px;">
+                    <strong>📦 Prop Change:</strong> Only receiving component re-renders
+                </div>
+                <div style="background: #f8d7da; padding: 10px; border-radius: 4px;">
+                    <strong>🎯 Parent Re-render:</strong> All children re-render by default
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="demo-section">
+        <h3>🔴 Real DOM Updates <span class="tooltip">ℹ️
+            <span class="tooltiptext">
+                <strong>🔴 Real DOM Explained</strong><br><br>
+                The Real DOM is what you actually see in the browser - the real HTML elements!<br><br>
+                <strong>What happens here:</strong><br>
+                • React updates only what changed<br>
+                • Browser repaints the screen<br>
+                • You see the visual changes<br><br>
+                <strong>This happens during:</strong> The Commit Phase, after React has planned all the changes.
+            </span>
+        </span></h3>
+        <div class="explanation-box">
+            <div class="explanation-title">🎯 What is this?</div>
+            <p>This shows what React actually changes in the browser's DOM during the <strong>Commit Phase</strong>. React is smart - it only updates what actually changed!</p>
+        </div>
+        <div class="real-dom">
+            <div><strong>DOM Mutations (What Actually Changed):</strong></div>
+            <div id="dom-mutations" style="padding: 15px; background: #f8f9fa; border-radius: 8px; margin-top: 10px;">
+                <div style="color: #666;">🎯 Click the button to see what React changes in the real DOM...</div>
+                <div style="color: #888; font-size: 14px; margin-top: 5px;">💡 React only updates what needs to change - not the entire page!</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="demo-section">
+        <h2>🎓 Learning Summary</h2>
+        <div class="beginner-guide">
+            <h3>🎉 Congratulations! You've Learned React Rendering!</h3>
+            <div class="guide-step">
+                <span class="step-number">✅</span>
+                <strong>Render Phase:</strong> React plans what to change (Virtual DOM, diffing)
+            </div>
+            <div class="guide-step">
+                <span class="step-number">✅</span>
+                <strong>Commit Phase:</strong> React actually makes the changes (Real DOM updates)
+            </div>
+            <div class="guide-step">
+                <span class="step-number">✅</span>
+                <strong>Efficiency:</strong> React only updates what actually changed
+            </div>
+            <div class="guide-step">
+                <span class="step-number">✅</span>
+                <strong>Timing:</strong> You see changes after the Commit Phase completes
+            </div>
+        </div>
+    </div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useLayoutEffect } = React;
+        
+        let renderCount = 0;
+        let logContainer;
+        let previousCount = 0; // Track previous count for diffing visualization
+        let complexRenderCount = 0; // Track complex app renders
+        
+        // Component render tracking
+        const componentRenders = {
+            ComplexApp: 0,
+            AppHeader: 0,
+            UserProfile: 0,
+            TodoList: 0,
+            TodoItem: 0,
+            StatsPanel: 0
+        };
+        
+        // 📝 Helper function to add logs to our demo
+        // This shows you what's happening during React's rendering process
+        function addLog(message, type = 'info') {
+            if (!logContainer) {
+                logContainer = document.getElementById('log-container');
+            }
+            
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `[${timestamp}] ${message}`;
+            logEntry.style.marginBottom = '5px';
+            
+            // Color-code different phases so you can see them clearly
+            if (type === 'render') {
+                logEntry.style.color = '#64b5f6';  // Blue for Render Phase
+            } else if (type === 'commit') {
+                logEntry.style.color = '#81c784';  // Green for Commit Phase
+            } else if (type === 'effect') {
+                logEntry.style.color = '#ffb74d';  // Orange for Effects
+            }
+            
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight; // Auto-scroll to bottom
+        }
+        
+        // 🔍 Function to update the diffing visualization
+        function updateDiffingVisualization(oldCount, newCount) {
+            // Update phase indicator
+            const phaseIndicator = document.getElementById('current-phase');
+            phaseIndicator.textContent = '🔍 Diffing in Progress...';
+            phaseIndicator.className = 'phase-step active';
+            phaseIndicator.style.background = '#fff3e0';
+            phaseIndicator.style.color = '#f57c00';
+            
+            // Show old Virtual DOM
+            const oldVirtualDOM = document.getElementById('old-virtual-dom');
+            oldVirtualDOM.innerHTML = `{
+  type: 'div',
+  children: [
+    { type: 'h2', children: ['Count: ${oldCount}'] },
+    { type: 'button', children: ['Increment'] }
+  ]
+}`;
+            
+            // Show new Virtual DOM with highlighting
+            const newVirtualDOM = document.getElementById('new-virtual-dom');
+            newVirtualDOM.innerHTML = `{
+  type: 'div',
+  children: [
+    { type: 'h2', children: [<span class="diff-highlight">'Count: ${newCount}'</span>] },
+    { type: 'button', children: ['Increment'] }
+  ]
+}`;
+            
+            // Show diffing result
+            const diffResult = document.getElementById('diff-result');
+            const diffDetails = document.getElementById('diff-details');
+            diffResult.style.display = 'block';
+            diffDetails.innerHTML = `
+                <div style="color: #28a745; font-weight: bold; margin-bottom: 10px;">
+                    ✅ React detected 1 change:
+                </div>
+                <div style="background: #f8f9fa; padding: 10px; border-radius: 4px; font-family: monospace;">
+                    <div style="color: #dc3545;">- Count: ${oldCount}</div>
+                    <div style="color: #28a745;">+ Count: ${newCount}</div>
+                </div>
+                <div style="margin-top: 10px; color: #6c757d;">
+                    💡 React will only update this specific text node, not the entire component!
+                </div>
+            `;
+            
+            // Update UI comparison
+            document.getElementById('ui-old-count').textContent = oldCount;
+            document.getElementById('ui-new-count').textContent = newCount;
+            
+            const uiDiffResult = document.getElementById('ui-diff-result');
+            const uiDiffDetails = document.getElementById('ui-diff-details');
+            uiDiffResult.style.display = 'block';
+            uiDiffDetails.innerHTML = `
+                <div style="color: #28a745; font-weight: bold; margin-bottom: 10px;">
+                    🎯 Visual Change Detected:
+                </div>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                    <div style="margin-bottom: 10px;">
+                        <strong>Element:</strong> <code>&lt;div class="count-display"&gt;</code>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <strong>Property:</strong> <code>textContent</code>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <strong>Change:</strong> 
+                        <span style="color: #dc3545; text-decoration: line-through;">"${oldCount}"</span> 
+                        → 
+                        <span style="color: #28a745; font-weight: bold;">"${newCount}"</span>
+                    </div>
+                    <div style="color: #6c757d; font-style: italic;">
+                        💡 Only this number changed - everything else stays the same!
+                    </div>
+                </div>
+            `;
+            
+            // Reset phase indicator after a delay
+            setTimeout(() => {
+                phaseIndicator.textContent = '✅ Diffing Complete';
+                phaseIndicator.className = 'phase-step';
+                phaseIndicator.style.background = '#e8f5e8';
+                phaseIndicator.style.color = '#388e3c';
+            }, 2000);
+        }
+        
+        // 🎯 Helper function to track component renders and update tree visualization
+        function trackComponentRender(componentName) {
+            componentRenders[componentName]++;
+            addLog(`🔄 RENDER: ${componentName} #${componentRenders[componentName]}`, 'render');
+            
+            // Highlight component in tree
+            const treeElement = document.getElementById(`tree-${componentName.toLowerCase()}`);
+            if (treeElement) {
+                treeElement.classList.add('rendering');
+                setTimeout(() => {
+                    treeElement.classList.remove('rendering');
+                }, 1000);
+            }
+        }
+        
+        // 🎯 Complex App Components
+        
+        // Individual Todo Item Component
+        function TodoItem({ todo, onToggle }) {
+            trackComponentRender('TodoItem');
+            
+            return (
+                <div className={`todo-item ${todo.completed ? 'completed' : ''}`}>
+                    <div className="render-indicator">R#{componentRenders.TodoItem}</div>
+                    <input 
+                        type="checkbox" 
+                        checked={todo.completed}
+                        onChange={() => onToggle(todo.id)}
+                    />
+                    <span>{todo.text}</span>
+                </div>
+            );
+        }
+        
+        // Todo List Container Component
+        function TodoList({ todos, onToggle, onAdd }) {
+            trackComponentRender('TodoList');
+            const [newTodo, setNewTodo] = useState('');
+            
+            const handleAdd = () => {
+                if (newTodo.trim()) {
+                    onAdd(newTodo.trim());
+                    setNewTodo('');
+                }
+            };
+            
+            return (
+                <div className="component-section todo-list">
+                    <div className="component-label">📝 TodoList</div>
+                    <div className="render-indicator">R#{componentRenders.TodoList}</div>
+                    
+                    <h4>📋 My Tasks</h4>
+                    
+                    <div style={{marginBottom: '15px'}}>
+                        <input 
+                            type="text"
+                            value={newTodo}
+                            onChange={(e) => setNewTodo(e.target.value)}
+                            placeholder="Add a new task..."
+                            style={{padding: '8px', marginRight: '10px', borderRadius: '4px', border: '1px solid #ccc'}}
+                            onKeyPress={(e) => e.key === 'Enter' && handleAdd()}
+                        />
+                        <button className="control-button btn-success" onClick={handleAdd}>
+                            ➕ Add Task
+                        </button>
+                    </div>
+                    
+                    <div>
+                        {todos.map(todo => (
+                            <TodoItem key={todo.id} todo={todo} onToggle={onToggle} />
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+        
+        // User Profile Component
+        function UserProfile({ userName, theme, onNameChange, onThemeChange }) {
+            trackComponentRender('UserProfile');
+            
+            return (
+                <div className="component-section user-profile">
+                    <div className="component-label">👤 UserProfile</div>
+                    <div className="render-indicator">R#{componentRenders.UserProfile}</div>
+                    
+                    <h4>👋 User Settings</h4>
+                    
+                    <div style={{marginBottom: '15px'}}>
+                        <label style={{display: 'block', marginBottom: '5px'}}>
+                            <strong>Name:</strong>
+                        </label>
+                        <input 
+                            type="text"
+                            value={userName}
+                            onChange={(e) => onNameChange(e.target.value)}
+                            style={{padding: '8px', borderRadius: '4px', border: '1px solid #ccc', width: '200px'}}
+                        />
+                    </div>
+                    
+                    <div>
+                        <label style={{display: 'block', marginBottom: '5px'}}>
+                            <strong>Theme:</strong>
+                        </label>
+                        <select 
+                            value={theme}
+                            onChange={(e) => onThemeChange(e.target.value)}
+                            style={{padding: '8px', borderRadius: '4px', border: '1px solid #ccc'}}
+                        >
+                            <option value="light">☀️ Light</option>
+                            <option value="dark">🌙 Dark</option>
+                            <option value="colorful">🌈 Colorful</option>
+                        </select>
+                    </div>
+                </div>
+            );
+        }
+        
+        // Stats Panel Component
+        function StatsPanel({ todos }) {
+            trackComponentRender('StatsPanel');
+            
+            const totalTodos = todos.length;
+            const completedTodos = todos.filter(todo => todo.completed).length;
+            const pendingTodos = totalTodos - completedTodos;
+            const completionRate = totalTodos > 0 ? Math.round((completedTodos / totalTodos) * 100) : 0;
+            
+            return (
+                <div className="component-section stats-panel">
+                    <div className="component-label">📊 StatsPanel</div>
+                    <div className="render-indicator">R#{componentRenders.StatsPanel}</div>
+                    
+                    <h4>📈 Statistics</h4>
+                    
+                    <div style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px'}}>
+                        <div style={{background: '#e3f2fd', padding: '10px', borderRadius: '4px', textAlign: 'center'}}>
+                            <div style={{fontSize: '24px', fontWeight: 'bold', color: '#1976d2'}}>{totalTodos}</div>
+                            <div style={{fontSize: '12px', color: '#666'}}>Total Tasks</div>
+                        </div>
+                        <div style={{background: '#e8f5e8', padding: '10px', borderRadius: '4px', textAlign: 'center'}}>
+                            <div style={{fontSize: '24px', fontWeight: 'bold', color: '#388e3c'}}>{completedTodos}</div>
+                            <div style={{fontSize: '12px', color: '#666'}}>Completed</div>
+                        </div>
+                        <div style={{background: '#fff3e0', padding: '10px', borderRadius: '4px', textAlign: 'center'}}>
+                            <div style={{fontSize: '24px', fontWeight: 'bold', color: '#f57c00'}}>{pendingTodos}</div>
+                            <div style={{fontSize: '12px', color: '#666'}}>Pending</div>
+                        </div>
+                        <div style={{background: '#fce4ec', padding: '10px', borderRadius: '4px', textAlign: 'center'}}>
+                            <div style={{fontSize: '24px', fontWeight: 'bold', color: '#c2185b'}}>{completionRate}%</div>
+                            <div style={{fontSize: '12px', color: '#666'}}>Complete</div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        
+        // App Header Component
+        function AppHeader({ userName, theme }) {
+            trackComponentRender('AppHeader');
+            
+            const themeStyles = {
+                light: { background: '#007bff', color: 'white' },
+                dark: { background: '#343a40', color: 'white' },
+                colorful: { background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1)', color: 'white' }
+            };
+            
+            return (
+                <div className="app-header" style={themeStyles[theme]}>
+                    <div className="render-indicator">R#{componentRenders.AppHeader}</div>
+                    <h2>🚀 {userName}'s Productivity Dashboard</h2>
+                    <p>Theme: {theme} | Welcome to your personal task manager!</p>
+                </div>
+            );
+        }
+        
+        // Main Complex App Component
+        function ComplexApp() {
+            trackComponentRender('ComplexApp');
+            
+            // Multiple pieces of state
+            const [userName, setUserName] = useState('John Doe');
+            const [theme, setTheme] = useState('light');
+            const [todos, setTodos] = useState([
+                { id: 1, text: 'Learn React Rendering', completed: false },
+                { id: 2, text: 'Build a Todo App', completed: true },
+                { id: 3, text: 'Master Component Trees', completed: false }
+            ]);
+            
+            // Event handlers
+            const handleNameChange = (newName) => {
+                addLog(`🎯 TRIGGER: User name changed from "${userName}" to "${newName}"`, 'info');
+                setUserName(newName);
+            };
+            
+            const handleThemeChange = (newTheme) => {
+                addLog(`🎯 TRIGGER: Theme changed from "${theme}" to "${newTheme}"`, 'info');
+                setTheme(newTheme);
+            };
+            
+            const handleTodoToggle = (todoId) => {
+                addLog(`🎯 TRIGGER: Todo ${todoId} toggled`, 'info');
+                setTodos(prevTodos => 
+                    prevTodos.map(todo => 
+                        todo.id === todoId 
+                            ? { ...todo, completed: !todo.completed }
+                            : todo
+                    )
+                );
+            };
+            
+            const handleTodoAdd = (text) => {
+                const newId = Math.max(...todos.map(t => t.id), 0) + 1;
+                addLog(`🎯 TRIGGER: New todo added: "${text}"`, 'info');
+                setTodos(prevTodos => [...prevTodos, { id: newId, text, completed: false }]);
+            };
+            
+            // Update todo count in tree visualization
+            useEffect(() => {
+                const todoCountElement = document.getElementById('todo-count');
+                if (todoCountElement) {
+                    todoCountElement.textContent = todos.length;
+                }
+            }, [todos.length]);
+            
+            return (
+                <div className="complex-app">
+                    <div className="render-indicator">R#{componentRenders.ComplexApp}</div>
+                    
+                    <AppHeader userName={userName} theme={theme} />
+                    
+                    <div className="control-panel">
+                        <button 
+                            className="control-button btn-primary"
+                            onClick={() => handleNameChange(`User${Math.floor(Math.random() * 100)}`)}
+                        >
+                            🎲 Random Name
+                        </button>
+                        <button 
+                            className="control-button btn-warning"
+                            onClick={() => {
+                                const themes = ['light', 'dark', 'colorful'];
+                                const currentIndex = themes.indexOf(theme);
+                                const nextTheme = themes[(currentIndex + 1) % themes.length];
+                                handleThemeChange(nextTheme);
+                            }}
+                        >
+                            🎨 Switch Theme
+                        </button>
+                        <button 
+                            className="control-button btn-success"
+                            onClick={() => handleTodoAdd(`Task ${Date.now()}`)}
+                        >
+                            ➕ Quick Add Task
+                        </button>
+                        <button 
+                            className="control-button btn-danger"
+                            onClick={() => {
+                                addLog(`🎯 TRIGGER: All todos cleared`, 'info');
+                                setTodos([]);
+                            }}
+                        >
+                            🗑️ Clear All
+                        </button>
+                    </div>
+                    
+                    <UserProfile 
+                        userName={userName}
+                        theme={theme}
+                        onNameChange={handleNameChange}
+                        onThemeChange={handleThemeChange}
+                    />
+                    
+                    <TodoList 
+                        todos={todos}
+                        onToggle={handleTodoToggle}
+                        onAdd={handleTodoAdd}
+                    />
+                    
+                    <StatsPanel todos={todos} />
+                </div>
+            );
+        }
+        
+        // 🎯 Simple Todo Item Component for the basic demo
+        function SimpleTodoItem({ todo, onToggle, onDelete }) {
+            addLog(`🔄 RENDER: SimpleTodoItem #${todo.id}`, 'render');
+            
+            return (
+                <div className={`todo-item ${todo.completed ? 'completed' : ''}`} style={{marginBottom: '8px'}}>
+                    <input 
+                        type="checkbox" 
+                        checked={todo.completed}
+                        onChange={() => onToggle(todo.id)}
+                    />
+                    <span style={{flex: 1}}>{todo.text}</span>
+                    <button 
+                        onClick={() => onDelete(todo.id)}
+                        style={{
+                            marginLeft: '10px', 
+                            padding: '4px 8px', 
+                            background: '#dc3545', 
+                            color: 'white', 
+                            border: 'none', 
+                            borderRadius: '4px',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        🗑️
+                    </button>
+                </div>
+            );
+        }
+        
+        // 🎯 This is our main React component - Counter + Todo List
+        // Every time state changes, this entire function runs again (that's a re-render!)
+        function InteractiveDemo() {
+            // 🏪 Multiple pieces of state - each can trigger re-renders independently
+            const [count, setCount] = useState(0);
+            const [todos, setTodos] = useState([
+                { id: 1, text: 'Learn React basics', completed: true },
+                { id: 2, text: 'Understand rendering', completed: false }
+            ]);
+            const [newTodo, setNewTodo] = useState('');
+            
+            renderCount++; // Keep track of how many times this component has rendered
+            
+            // 🔄 RENDER PHASE: This code runs during the Render Phase
+            addLog(`🔄 RENDER PHASE #${renderCount}: InteractiveDemo component executing`, 'render');
+            addLog(`   └── Current count: ${count}, todos: ${todos.length} items`, 'render');
+            addLog(`   └── Creating Virtual DOM with current state`, 'render');
+            
+            // Show diffing visualization if this is not the first render
+            if (renderCount > 1) {
+                addLog(`🔍 DIFFING: Comparing old and new Virtual DOM structures`, 'render');
+                updateDiffingVisualization(previousCount, count);
+            }
+            
+            // 🎨 useLayoutEffect: Runs during COMMIT PHASE, BEFORE browser paints
+            useLayoutEffect(() => {
+                addLog(`🎨 COMMIT PHASE: Layout Effect running (DOM updated, but not painted yet)`, 'commit');
+                
+                // Update our visual indicators
+                document.getElementById('tree-count').textContent = count;
+                const todosElement = document.getElementById('tree-todos');
+                const simpleTodoCountElement = document.getElementById('simple-todo-count');
+                if (todosElement) todosElement.textContent = todos.length;
+                if (simpleTodoCountElement) simpleTodoCountElement.textContent = todos.length;
+                
+                document.getElementById('virtual-dom-display').textContent = `{
+  type: 'div',
+  children: [
+    { type: 'h2', children: ['Count: ${count}'] },
+    { type: 'div', children: ['${todos.length} todos'] },
+    { type: 'button', children: ['Increment'] },
+    { type: 'input', children: [] },
+    ...todoItems: ${todos.length} items
+  ]
+}`;
+                
+                // Show what actually changed in the real DOM
+                const domMutations = document.getElementById('dom-mutations');
+                domMutations.innerHTML = `
+                    <div style="color: #28a745; font-weight: bold;">✅ Updates made:</div>
+                    <div style="color: #6c757d;">📊 Count display: ${count}</div>
+                    <div style="color: #6c757d;">📝 Todo list: ${todos.length} items</div>
+                    <div style="color: #6c757d;">⏰ Updated at: ${new Date().toLocaleTimeString()}</div>
+                    <div style="color: #17a2b8; margin-top: 10px;">💡 React only updates what actually changed!</div>
+                `;
+                
+                // Add visual highlight effects
+                const countDisplay = document.querySelector('.count-display');
+                const todoList = document.querySelector('.simple-todo-list');
+                if (countDisplay) {
+                    countDisplay.classList.add('highlight');
+                    setTimeout(() => countDisplay.classList.remove('highlight'), 500);
+                }
+                if (todoList) {
+                    todoList.classList.add('highlight');
+                    setTimeout(() => todoList.classList.remove('highlight'), 500);
+                }
+                
+            }, [count, todos]); // Run when count OR todos change
+            
+            // ⚡ useEffect: Runs during COMMIT PHASE, AFTER browser paints
+            useEffect(() => {
+                addLog(`⚡ COMMIT PHASE: Effect running (after browser paint)`, 'effect');
+                addLog(`   └── Side effects: Update page title, analytics, etc.`, 'effect');
+                
+                // Update page title with current state
+                document.title = `Count: ${count}, Todos: ${todos.length} - React Demo`;
+                
+            }, [count, todos]); // Run when count OR todos change
+            
+            // 🎯 Event handlers
+            const handleIncrement = () => {
+                addLog(`🎯 TRIGGER: Increment button clicked`, 'info');
+                previousCount = count;
+                setCount(prevCount => {
+                    const newCount = prevCount + 1;
+                    addLog(`   └── Count: ${prevCount} → ${newCount}`, 'info');
+                    return newCount;
+                });
+            };
+            
+            const handleDecrement = () => {
+                addLog(`🎯 TRIGGER: Decrement button clicked`, 'info');
+                previousCount = count;
+                setCount(prevCount => {
+                    const newCount = Math.max(0, prevCount - 1);
+                    addLog(`   └── Count: ${prevCount} → ${newCount}`, 'info');
+                    return newCount;
+                });
+            };
+            
+            const handleAddTodo = () => {
+                if (newTodo.trim()) {
+                    addLog(`🎯 TRIGGER: Add todo "${newTodo}"`, 'info');
+                    const newId = Math.max(...todos.map(t => t.id), 0) + 1;
+                    setTodos(prevTodos => [...prevTodos, { id: newId, text: newTodo.trim(), completed: false }]);
+                    setNewTodo('');
+                    addLog(`   └── Todo list updated: ${todos.length} → ${todos.length + 1} items`, 'info');
+                }
+            };
+            
+            const handleToggleTodo = (todoId) => {
+                addLog(`🎯 TRIGGER: Toggle todo #${todoId}`, 'info');
+                setTodos(prevTodos => 
+                    prevTodos.map(todo => 
+                        todo.id === todoId 
+                            ? { ...todo, completed: !todo.completed }
+                            : todo
+                    )
+                );
+            };
+            
+            const handleDeleteTodo = (todoId) => {
+                addLog(`🎯 TRIGGER: Delete todo #${todoId}`, 'info');
+                setTodos(prevTodos => prevTodos.filter(todo => todo.id !== todoId));
+                addLog(`   └── Todo list updated: ${todos.length} → ${todos.length - 1} items`, 'info');
+            };
+            
+            // Calculate some derived state
+            const completedCount = todos.filter(todo => todo.completed).length;
+            const pendingCount = todos.length - completedCount;
+            
+            // 📝 JSX: This describes what the UI should look like
+            return (
+                <div className="counter-demo">
+                    <h2>🎮 Interactive Demo: Counter + Todo List</h2>
+                    
+                    {/* Counter Section */}
+                    <div style={{
+                        background: '#e3f2fd', 
+                        padding: '15px', 
+                        borderRadius: '8px', 
+                        marginBottom: '20px',
+                        border: '2px solid #2196f3'
+                    }}>
+                        <h3>🧮 Counter</h3>
+                        <div className="count-display" style={{fontSize: '36px', fontWeight: 'bold', margin: '10px 0'}}>{count}</div>
+                        <div style={{display: 'flex', gap: '10px'}}>
+                            <button className="counter-button" onClick={handleIncrement} style={{background: '#28a745'}}>
+                                ➕ Increment
+                            </button>
+                            <button className="counter-button" onClick={handleDecrement} style={{background: '#dc3545'}}>
+                                ➖ Decrement
+                            </button>
+                        </div>
+                    </div>
+                    
+                    {/* Todo Section */}
+                    <div style={{
+                        background: '#fff3e0', 
+                        padding: '15px', 
+                        borderRadius: '8px', 
+                        marginBottom: '20px',
+                        border: '2px solid #ff9800'
+                    }}>
+                        <h3>📝 Todo List</h3>
+                        
+                        {/* Add Todo */}
+                        <div style={{marginBottom: '15px', display: 'flex', gap: '10px'}}>
+                            <input 
+                                type="text"
+                                value={newTodo}
+                                onChange={(e) => setNewTodo(e.target.value)}
+                                placeholder="Add a new task..."
+                                style={{
+                                    flex: 1,
+                                    padding: '8px', 
+                                    borderRadius: '4px', 
+                                    border: '1px solid #ccc'
+                                }}
+                                onKeyPress={(e) => e.key === 'Enter' && handleAddTodo()}
+                            />
+                            <button 
+                                className="counter-button" 
+                                onClick={handleAddTodo}
+                                style={{background: '#007bff'}}
+                            >
+                                ➕ Add
+                            </button>
+                        </div>
+                        
+                        {/* Todo List */}
+                        <div className="simple-todo-list">
+                            {todos.map(todo => (
+                                <SimpleTodoItem 
+                                    key={todo.id} 
+                                    todo={todo} 
+                                    onToggle={handleToggleTodo}
+                                    onDelete={handleDeleteTodo}
+                                />
+                            ))}
+                            {todos.length === 0 && (
+                                <div style={{color: '#666', fontStyle: 'italic', textAlign: 'center', padding: '20px'}}>
+                                    No todos yet. Add one above! 👆
+                                </div>
+                            )}
+                        </div>
+                        
+                        {/* Stats */}
+                        <div style={{
+                            marginTop: '15px', 
+                            padding: '10px', 
+                            background: '#f8f9fa', 
+                            borderRadius: '4px',
+                            display: 'flex',
+                            justifyContent: 'space-around',
+                            fontSize: '14px'
+                        }}>
+                            <span><strong>Total:</strong> {todos.length}</span>
+                            <span><strong>Completed:</strong> {completedCount}</span>
+                            <span><strong>Pending:</strong> {pendingCount}</span>
+                        </div>
+                    </div>
+                    
+                    {/* Render Info */}
+                    <div style={{fontSize: '14px', color: '#666', background: '#f8f9fa', padding: '10px', borderRadius: '4px'}}>
+                        <div><strong>Component Renders:</strong> {renderCount}</div>
+                        <div><strong>Current State:</strong> Count={count}, Todos={todos.length}</div>
+                        <div style={{color: '#28a745', marginTop: '5px'}}>
+                            💡 Each interaction triggers: Render Phase → Commit Phase
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        
+        // 🏠 Root App component - this is where everything starts
+        function App() {
+            addLog('🚀 Interactive Demo App initialized - Counter + Todo List', 'info');
+            
+            return (
+                <div>
+                    <InteractiveDemo />
+                </div>
+            );
+        }
+        
+        // 🏠 Complex App Wrapper
+        function ComplexAppWrapper() {
+            addLog('🚀 Complex Multi-Component App initialized', 'info');
+            addLog('👋 Try different interactions to see how components re-render!', 'info');
+            
+            return (
+                <div>
+                    <ComplexApp />
+                </div>
+            );
+        }
+        
+        // 🎬 Start both React apps
+        const simpleRoot = ReactDOM.createRoot(document.getElementById('counter-app'));
+        simpleRoot.render(<App />);
+        
+        const complexRoot = ReactDOM.createRoot(document.getElementById('complex-app'));
+        complexRoot.render(<ComplexAppWrapper />);
+        
+        // 📚 Helpful information for learners
+        console.log('🎯 React Rendering Demo Successfully Loaded!');
+        console.log('');
+        console.log('📖 What to do next:');
+        console.log('1. 🖱️  Click the "Increment Count" button');
+        console.log('2. 👀 Watch the colored logs to see each rendering phase');
+        console.log('3. 🔍 Open React DevTools (F12 → Components tab) for more insights');
+        console.log('4. 🎯 Notice how React only updates what changed, not the whole page');
+        console.log('');
+        console.log('🎨 Log Colors:');
+        console.log('🔵 Blue = Render Phase (planning)');
+        console.log('🟢 Green = Commit Phase (action)');
+        console.log('🟠 Orange = Effects (after paint)');
+        console.log('');
+        console.log('🚀 Happy learning!');
+        
+    </script>
+</body>
+</html>

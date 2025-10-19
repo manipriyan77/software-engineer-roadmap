@@ -1,0 +1,16 @@
+.hidden_input{
+    width: 1px;
+    height: 1px;
+    border: none;
+    outline: none;
+}
+
+.char{
+    color: grey;
+}
+.char.correct{
+    color: green;
+}
+.char.incorrect{
+    color: red;
+}

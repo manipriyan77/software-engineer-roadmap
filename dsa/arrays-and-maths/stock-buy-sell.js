@@ -11,5 +11,4 @@ function stockBuySell(prices){
     return profit
 }
 
-stockBuySell([7,6,4,3,1]
-)
+stockBuySell([7,6,4,3,1])
