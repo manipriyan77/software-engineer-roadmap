@@ -25,7 +25,7 @@
 
 
 class AsyncTaskQueue {
-    constructor(concurrency:) {
+    constructor(concurrency) {
         // Initialize the queue with the specified concurrency limit
     }
     queue(task) {
