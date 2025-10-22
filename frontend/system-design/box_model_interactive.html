@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive CSS Box Model Visualizer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab:hover {
+            color: #667eea;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .demo-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .controls {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #d3d3d3;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .control-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+
+        .control-group input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+
+        .control-group input[type="color"] {
+            width: 100%;
+            height: 40px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .control-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .value-display {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .visualization {
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 500px;
+        }
+
+        .box-model-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .margin-box {
+            background: #ffeaa7;
+            padding: var(--margin);
+            border: 2px dashed #fdcb6e;
+            position: relative;
+        }
+
+        .border-box {
+            background: #74b9ff;
+            padding: var(--border);
+            border: 2px solid #0984e3;
+        }
+
+        .padding-box {
+            background: #a29bfe;
+            padding: var(--padding);
+            border: 2px solid #6c5ce7;
+        }
+
+        .content-box {
+            background: #55efc4;
+            width: var(--width);
+            height: var(--height);
+            border: 2px solid #00b894;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #00564d;
+        }
+
+        .label {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 10;
+            white-space: nowrap;
+        }
+
+        .margin-label { top: 5px; left: 5px; }
+        .border-label { top: 5px; right: 5px; }
+        .padding-label { bottom: 5px; left: 5px; }
+        .content-label { bottom: 5px; right: 5px; }
+
+        /* Dimension arrows and measurements */
+        .dimension-arrow {
+            position: absolute;
+            background: #2c3e50;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            z-index: 20;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .dimension-arrow::before,
+        .dimension-arrow::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border: 6px solid transparent;
+        }
+
+        .dimension-top {
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .dimension-top::before {
+            position: absolute;
+            border-bottom-color: #2c3e50;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .dimension-right {
+            right: -120px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .dimension-right::after {
+            position: absolute;
+            border-left-color: #2c3e50;
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .dimension-bottom {
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .dimension-bottom::after {
+            position: absolute;
+            border-top-color: #2c3e50;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .dimension-left {
+            left: -120px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .dimension-left::before {
+            position: absolute;
+            border-right-color: #2c3e50;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .arrow-icon {
+            font-size: 16px;
+        }
+
+        .calculations {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .calculations h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .calc-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: white;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+        }
+
+        .calc-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .calc-value {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* Inline vs Block Demo */
+        .inline-demo {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            line-height: 2;
+        }
+
+        .inline-element {
+            background: #a29bfe;
+            padding: var(--inline-padding);
+            margin: var(--inline-margin);
+            border: var(--inline-border) solid #6c5ce7;
+            color: white;
+            font-weight: bold;
+        }
+
+        .block-element {
+            background: #74b9ff;
+            padding: var(--block-padding);
+            margin: var(--block-margin);
+            border: var(--block-border) solid #0984e3;
+            width: var(--block-width);
+            height: var(--block-height);
+            color: white;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .info-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .info-box h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .info-box ul {
+            margin-left: 20px;
+            color: #856404;
+        }
+
+        .info-box li {
+            margin-bottom: 5px;
+        }
+
+        .anonymous-box-demo {
+            border: 3px dashed #667eea;
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 8px;
+        }
+
+        .anonymous-box-demo p {
+            background: white;
+            padding: 15px;
+            border: 2px solid #667eea;
+            border-radius: 6px;
+        }
+
+        .anonymous-text {
+            color: #e74c3c;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        .reset-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+            width: 100%;
+            transition: background 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: #c0392b;
+        }
+
+        @media (max-width: 1024px) {
+            .demo-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Interactive CSS Box Model</h1>
+        <p class="subtitle">Explore and understand the CSS Box Model with live interactions</p>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="content-box">Content Box</button>
+            <button class="tab" data-tab="border-box">Border Box</button>
+            <button class="tab" data-tab="inline-block">Inline vs Block</button>
+            <button class="tab" data-tab="anonymous">Anonymous Box</button>
+        </div>
+
+        <!-- Content Box Tab -->
+        <div class="tab-content active" id="content-box">
+            <div class="demo-section">
+                <div class="controls">
+                    <h3>🎛️ Box Model Controls (box-sizing: content-box)</h3>
+
+                    <div class="control-group">
+                        <label>Width: <span class="value-display" id="width-value">200px</span></label>
+                        <input type="range" id="width" min="50" max="400" value="200" step="10">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Height: <span class="value-display" id="height-value">100px</span></label>
+                        <input type="range" id="height" min="50" max="300" value="100" step="10">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Padding: <span class="value-display" id="padding-value">20px</span></label>
+                        <input type="range" id="padding" min="0" max="60" value="20" step="5">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Border: <span class="value-display" id="border-value">10px</span></label>
+                        <input type="range" id="border" min="0" max="40" value="10" step="5">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Margin: <span class="value-display" id="margin-value">30px</span></label>
+                        <input type="range" id="margin" min="0" max="80" value="30" step="5">
+                    </div>
+
+                    <button class="reset-btn" id="reset-content">Reset to Default</button>
+
+                    <div class="info-box">
+                        <h4>📏 box-sizing: content-box (Default)</h4>
+                        <ul>
+                            <li>Width/height apply to content only</li>
+                            <li>Padding and border are ADDED to total size</li>
+                            <li>Total width = width + padding + border</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="visualization">
+                    <div class="box-model-container" id="content-box-model">
+                        <span class="dimension-arrow dimension-top" id="cb-width-label">
+                            <span class="arrow-icon">↔</span> Width: 260px
+                        </span>
+                        <span class="dimension-arrow dimension-right" id="cb-height-label">
+                            <span class="arrow-icon">↕</span> Height: 160px
+                        </span>
+                        <div class="margin-box" style="--margin: 30px;">
+                            <span class="label margin-label">Margin</span>
+                            <div class="border-box" style="--border: 10px;">
+                                <span class="label border-label">Border</span>
+                                <div class="padding-box" style="--padding: 20px;">
+                                    <span class="label padding-label">Padding</span>
+                                    <div class="content-box" style="--width: 200px; --height: 100px;">
+                                        <span class="label content-label">Content</span>
+                                        Content
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calculations" id="content-calculations">
+                <h3>📊 Calculations (box-sizing: content-box)</h3>
+                <div class="calc-row">
+                    <span class="calc-label">Content Width:</span>
+                    <span class="calc-value" id="calc-content-width">200px</span>
+                </div>
+                <div class="calc-row">
+                    <span class="calc-label">Total Width:</span>
+                    <span class="calc-value" id="calc-total-width">260px</span>
+                </div>
+                <div class="calc-row">
+                    <span class="calc-label">Content Height:</span>
+                    <span class="calc-value" id="calc-content-height">100px</span>
+                </div>
+                <div class="calc-row">
+                    <span class="calc-label">Total Height:</span>
+                    <span class="calc-value" id="calc-total-height">160px</span>
+                </div>
+                <div class="calc-row">
+                    <span class="calc-label">Formula:</span>
+                    <span class="calc-value" id="calc-formula">200 + 2×20 + 2×10 = 260px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Border Box Tab -->
+        <div class="tab-content" id="border-box">
+            <div class="demo-section">
+                <div class="controls">
+                    <h3>🎛️ Box Model Controls (box-sizing: border-box)</h3>
+
+                    <div class="control-group">
+                        <label>Width: <span class="value-display" id="bb-width-value">200px</span></label>
+                        <input type="range" id="bb-width" min="50" max="400" value="200" step="10">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Height: <span class="value-display" id="bb-height-value">100px</span></label>
+                        <input type="range" id="bb-height" min="50" max="300" value="100" step="10">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Padding: <span class="value-display" id="bb-padding-value">20px</span></label>
+                        <input type="range" id="bb-padding" min="0" max="60" value="20" step="5">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Border: <span class="value-display" id="bb-border-value">10px</span></label>
+                        <input type="range" id="bb-border" min="0" max="40" value="10" step="5">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Margin: <span class="value-display" id="bb-margin-value">30px</span></label>
+                        <input type="range" id="bb-margin" min="0" max="80" value="30" step="5">
+                    </div>
+
+                    <button class="reset-btn" id="reset-border">Reset to Default</button>
+
+                    <div class="info-box">
+                        <h4>📏 box-sizing: border-box</h4>
+                        <ul>
+                            <li>Width/height include padding and border</li>
+                            <li>Total size stays constant as you adjust padding/border</li>
+                            <li>Total width = width (includes everything)</li>
+                            <li>Content shrinks when padding/border increase</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="visualization">
+                    <div class="box-model-container" id="border-box-model">
+                        <span class="dimension-arrow dimension-top" id="bb-width-label">
+                            <span class="arrow-icon">↔</span> Width: 200px
+                        </span>
+                        <span class="dimension-arrow dimension-right" id="bb-height-label">
+                            <span class="arrow-icon">↕</span> Height: 100px
+                        </span>
+                        <div class="margin-box" style="--margin: 30px;">
+                            <span class="label margin-label">Margin</span>
+                            <div style="width: 200px; height: 100px; border: 10px solid #0984e3; padding: 20px; background: #74b9ff; box-sizing: border-box; position: relative;">
+                                <span class="label border-label">Border</span>
+                                <span class="label padding-label">Padding</span>
+                                <div style="background: #55efc4; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border: 2px solid #00b894; position: relative;">
+                                    <span class="label content-label">Content</span>
+                                    Content
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calculations" id="border-calculations">
+                <h3>📊 Calculations (box-sizing: border-box)</h3>
+                <div class="calc-row">
+                    <span class="calc-label">Total Width (Fixed):</span>
+                    <span class="calc-value" id="bb-calc-total-width">200px</span>
+                </div>
+                <div class="calc-row">
+                    <span class="calc-label">Available Content Width:</span>
+                    <span class="calc-value" id="bb-calc-content-width">140px</span>
+                </div>
+                <div class="calc-row">
+                    <span class="calc-label">Total Height (Fixed):</span>
+                    <span class="calc-value" id="bb-calc-total-height">100px</span>
+                </div>
+                <div class="calc-row">
+                    <span class="calc-label">Available Content Height:</span>
+                    <span class="calc-value" id="bb-calc-content-height">40px</span>
+                </div>
+                <div class="calc-row">
+                    <span class="calc-label">Formula:</span>
+                    <span class="calc-value" id="bb-calc-formula">200 - 2×20 - 2×10 = 140px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inline vs Block Tab -->
+        <div class="tab-content" id="inline-block">
+            <div class="demo-section">
+                <div class="controls">
+                    <h3>🎛️ Block Element Controls</h3>
+
+                    <div class="control-group">
+                        <label>Width: <span class="value-display" id="block-width-value">300px</span></label>
+                        <input type="range" id="block-width" min="100" max="600" value="300" step="10">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Height: <span class="value-display" id="block-height-value">80px</span></label>
+                        <input type="range" id="block-height" min="40" max="200" value="80" step="10">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Padding: <span class="value-display" id="block-padding-value">15px</span></label>
+                        <input type="range" id="block-padding" min="0" max="50" value="15" step="5">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Margin: <span class="value-display" id="block-margin-value">20px</span></label>
+                        <input type="range" id="block-margin" min="0" max="50" value="20" step="5">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Border: <span class="value-display" id="block-border-value">3px</span></label>
+                        <input type="range" id="block-border" min="0" max="20" value="3" step="1">
+                    </div>
+
+                    <h3 style="margin-top: 30px;">🎛️ Inline Element Controls</h3>
+
+                    <div class="control-group">
+                        <label>Padding: <span class="value-display" id="inline-padding-value">10px</span></label>
+                        <input type="range" id="inline-padding" min="0" max="40" value="10" step="2">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Horizontal Margin: <span class="value-display" id="inline-margin-value">5px</span></label>
+                        <input type="range" id="inline-margin" min="0" max="30" value="5" step="1">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Border: <span class="value-display" id="inline-border-value">2px</span></label>
+                        <input type="range" id="inline-border" min="0" max="10" value="2" step="1">
+                    </div>
+
+                    <button class="reset-btn" id="reset-inline-block">Reset to Default</button>
+                </div>
+
+                <div class="visualization" style="display: block;">
+                    <h3 style="margin-bottom: 20px;">Block Elements (Display: Block)</h3>
+                    <div id="block-demo">
+                        <div class="block-element" style="--block-width: 300px; --block-height: 80px; --block-padding: 15px; --block-margin: 20px; --block-border: 3px;">
+                            Block Element 1
+                        </div>
+                        <div class="block-element" style="--block-width: 300px; --block-height: 80px; --block-padding: 15px; --block-margin: 20px; --block-border: 3px;">
+                            Block Element 2
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>📦 Block Elements</h4>
+                        <ul>
+                            <li>Takes 100% width of parent (or specified width)</li>
+                            <li>Starts on a new line</li>
+                            <li>Respects all box model properties</li>
+                            <li>Renders top to bottom</li>
+                        </ul>
+                    </div>
+
+                    <h3 style="margin: 30px 0 20px;">Inline Elements (Display: Inline)</h3>
+                    <div class="inline-demo" id="inline-demo">
+                        This is some text with
+                        <span class="inline-element" style="--inline-padding: 10px; --inline-margin: 0 5px; --inline-border: 2px;">Inline Element 1</span>
+                        and more text with
+                        <span class="inline-element" style="--inline-padding: 10px; --inline-margin: 0 5px; --inline-border: 2px;">Inline Element 2</span>
+                        flowing naturally in the content. Notice how inline elements don't break the flow and
+                        <span class="inline-element" style="--inline-padding: 10px; --inline-margin: 0 5px; --inline-border: 2px;">Inline Element 3</span>
+                        stays within the text line.
+                    </div>
+
+                    <div class="info-box">
+                        <h4>📝 Inline Elements</h4>
+                        <ul>
+                            <li>Flows with text (left to right, top to bottom)</li>
+                            <li>Ignores width and height properties</li>
+                            <li>Ignores vertical margins</li>
+                            <li>Padding doesn't affect line height</li>
+                            <li>Only horizontal margins work</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Anonymous Box Tab -->
+        <div class="tab-content" id="anonymous">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <h2 style="color: #667eea; margin-bottom: 20px;">Anonymous Boxes</h2>
+
+                <p style="margin-bottom: 20px; line-height: 1.6;">
+                    Anonymous boxes are automatically created by the browser when text content exists
+                    directly inside a block container without being wrapped in an element.
+                </p>
+
+                <h3 style="margin-bottom: 15px;">Visual Example:</h3>
+
+                <div class="anonymous-box-demo">
+                    <span class="anonymous-text">This text is an anonymous box! (not wrapped in any element)</span>
+                    <p>This paragraph IS wrapped in a &lt;p&gt; element</p>
+                    <span class="anonymous-text">This is another anonymous box!</span>
+                </div>
+
+                <div class="info-box" style="margin-top: 30px;">
+                    <h4>🔍 What are Anonymous Boxes?</h4>
+                    <ul>
+                        <li>Created automatically by the browser</li>
+                        <li>Wrap text nodes that aren't inside any element</li>
+                        <li>Cannot be styled directly with CSS</li>
+                        <li>Inherit styles from their parent</li>
+                        <li>Help maintain proper block formatting context</li>
+                    </ul>
+                </div>
+
+                <div style="background: white; border: 2px solid #667eea; border-radius: 8px; padding: 20px; margin-top: 30px;">
+                    <h4 style="color: #667eea; margin-bottom: 15px;">Code Example:</h4>
+                    <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;"><code>&lt;div&gt;
+  This text creates an anonymous box
+  &lt;p&gt;This is a paragraph element&lt;/p&gt;
+  This text also creates an anonymous box
+&lt;/div&gt;</code></pre>
+                    <p style="margin-top: 15px; color: #666;">
+                        In the example above, the text "This text creates an anonymous box" and
+                        "This text also creates an anonymous box" are not wrapped in any HTML elements,
+                        so the browser automatically creates anonymous boxes around them.
+                    </p>
+                </div>
+
+                <div style="background: #e8f4f8; border: 2px solid #3498db; border-radius: 8px; padding: 20px; margin-top: 30px;">
+                    <h4 style="color: #2c3e50; margin-bottom: 15px;">💡 Key Insights</h4>
+                    <ul style="color: #2c3e50; line-height: 1.8;">
+                        <li><strong>Block Formatting Context:</strong> Anonymous boxes help maintain proper layout structure</li>
+                        <li><strong>Inherited Properties:</strong> They inherit all inheritable CSS properties from parent</li>
+                        <li><strong>No Direct Styling:</strong> You can't target them with CSS selectors</li>
+                        <li><strong>Automatic Creation:</strong> The browser creates them as needed during rendering</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Content Box Controls
+        const contentBoxControls = {
+            width: document.getElementById('width'),
+            height: document.getElementById('height'),
+            padding: document.getElementById('padding'),
+            border: document.getElementById('border'),
+            margin: document.getElementById('margin')
+        };
+
+        function updateContentBox() {
+            const width = parseInt(contentBoxControls.width.value);
+            const height = parseInt(contentBoxControls.height.value);
+            const padding = parseInt(contentBoxControls.padding.value);
+            const border = parseInt(contentBoxControls.border.value);
+            const margin = parseInt(contentBoxControls.margin.value);
+
+            document.getElementById('width-value').textContent = width + 'px';
+            document.getElementById('height-value').textContent = height + 'px';
+            document.getElementById('padding-value').textContent = padding + 'px';
+            document.getElementById('border-value').textContent = border + 'px';
+            document.getElementById('margin-value').textContent = margin + 'px';
+
+            const container = document.getElementById('content-box-model');
+            container.querySelector('.margin-box').style.setProperty('--margin', margin + 'px');
+            container.querySelector('.border-box').style.setProperty('--border', border + 'px');
+            container.querySelector('.padding-box').style.setProperty('--padding', padding + 'px');
+            container.querySelector('.content-box').style.setProperty('--width', width + 'px');
+            container.querySelector('.content-box').style.setProperty('--height', height + 'px');
+
+            // Calculations
+            const totalWidth = width + (padding * 2) + (border * 2);
+            const totalHeight = height + (padding * 2) + (border * 2);
+
+            document.getElementById('calc-content-width').textContent = width + 'px';
+            document.getElementById('calc-total-width').textContent = totalWidth + 'px';
+            document.getElementById('calc-content-height').textContent = height + 'px';
+            document.getElementById('calc-total-height').textContent = totalHeight + 'px';
+            document.getElementById('calc-formula').textContent =
+                `${width} + 2×${padding} + 2×${border} = ${totalWidth}px`;
+
+            // Update dimension labels
+            document.getElementById('cb-width-label').innerHTML =
+                `<span class="arrow-icon">↔</span> Width: ${totalWidth}px`;
+            document.getElementById('cb-height-label').innerHTML =
+                `<span class="arrow-icon">↕</span> Height: ${totalHeight}px`;
+        }
+
+        Object.values(contentBoxControls).forEach(control => {
+            control.addEventListener('input', updateContentBox);
+        });
+
+        document.getElementById('reset-content').addEventListener('click', () => {
+            contentBoxControls.width.value = 200;
+            contentBoxControls.height.value = 100;
+            contentBoxControls.padding.value = 20;
+            contentBoxControls.border.value = 10;
+            contentBoxControls.margin.value = 30;
+            updateContentBox();
+        });
+
+        // Border Box Controls
+        const borderBoxControls = {
+            width: document.getElementById('bb-width'),
+            height: document.getElementById('bb-height'),
+            padding: document.getElementById('bb-padding'),
+            border: document.getElementById('bb-border'),
+            margin: document.getElementById('bb-margin')
+        };
+
+        function updateBorderBox() {
+            const width = parseInt(borderBoxControls.width.value);
+            const height = parseInt(borderBoxControls.height.value);
+            const padding = parseInt(borderBoxControls.padding.value);
+            const border = parseInt(borderBoxControls.border.value);
+            const margin = parseInt(borderBoxControls.margin.value);
+
+            document.getElementById('bb-width-value').textContent = width + 'px';
+            document.getElementById('bb-height-value').textContent = height + 'px';
+            document.getElementById('bb-padding-value').textContent = padding + 'px';
+            document.getElementById('bb-border-value').textContent = border + 'px';
+            document.getElementById('bb-margin-value').textContent = margin + 'px';
+
+            const container = document.getElementById('border-box-model');
+            const outerBox = container.querySelector('.margin-box');
+            const borderBoxDiv = outerBox.querySelector('div');
+
+            outerBox.style.setProperty('--margin', margin + 'px');
+            borderBoxDiv.style.width = width + 'px';
+            borderBoxDiv.style.height = height + 'px';
+            borderBoxDiv.style.padding = padding + 'px';
+            borderBoxDiv.style.borderWidth = border + 'px';
+
+            // Calculations
+            const contentWidth = width - (padding * 2) - (border * 2);
+            const contentHeight = height - (padding * 2) - (border * 2);
+
+            document.getElementById('bb-calc-total-width').textContent = width + 'px';
+            document.getElementById('bb-calc-content-width').textContent = Math.max(0, contentWidth) + 'px';
+            document.getElementById('bb-calc-total-height').textContent = height + 'px';
+            document.getElementById('bb-calc-content-height').textContent = Math.max(0, contentHeight) + 'px';
+            document.getElementById('bb-calc-formula').textContent =
+                `${width} - 2×${padding} - 2×${border} = ${Math.max(0, contentWidth)}px`;
+
+            // Update dimension labels
+            document.getElementById('bb-width-label').innerHTML =
+                `<span class="arrow-icon">↔</span> Width: ${width}px`;
+            document.getElementById('bb-height-label').innerHTML =
+                `<span class="arrow-icon">↕</span> Height: ${height}px`;
+        }
+
+        Object.values(borderBoxControls).forEach(control => {
+            control.addEventListener('input', updateBorderBox);
+        });
+
+        document.getElementById('reset-border').addEventListener('click', () => {
+            borderBoxControls.width.value = 200;
+            borderBoxControls.height.value = 100;
+            borderBoxControls.padding.value = 20;
+            borderBoxControls.border.value = 10;
+            borderBoxControls.margin.value = 30;
+            updateBorderBox();
+        });
+
+        // Inline and Block Controls
+        const blockControls = {
+            width: document.getElementById('block-width'),
+            height: document.getElementById('block-height'),
+            padding: document.getElementById('block-padding'),
+            margin: document.getElementById('block-margin'),
+            border: document.getElementById('block-border')
+        };
+
+        const inlineControls = {
+            padding: document.getElementById('inline-padding'),
+            margin: document.getElementById('inline-margin'),
+            border: document.getElementById('inline-border')
+        };
+
+        function updateBlockElements() {
+            const width = parseInt(blockControls.width.value);
+            const height = parseInt(blockControls.height.value);
+            const padding = parseInt(blockControls.padding.value);
+            const margin = parseInt(blockControls.margin.value);
+            const border = parseInt(blockControls.border.value);
+
+            document.getElementById('block-width-value').textContent = width + 'px';
+            document.getElementById('block-height-value').textContent = height + 'px';
+            document.getElementById('block-padding-value').textContent = padding + 'px';
+            document.getElementById('block-margin-value').textContent = margin + 'px';
+            document.getElementById('block-border-value').textContent = border + 'px';
+
+            document.querySelectorAll('.block-element').forEach(el => {
+                el.style.setProperty('--block-width', width + 'px');
+                el.style.setProperty('--block-height', height + 'px');
+                el.style.setProperty('--block-padding', padding + 'px');
+                el.style.setProperty('--block-margin', margin + 'px');
+                el.style.setProperty('--block-border', border + 'px');
+            });
+        }
+
+        function updateInlineElements() {
+            const padding = parseInt(inlineControls.padding.value);
+            const margin = parseInt(inlineControls.margin.value);
+            const border = parseInt(inlineControls.border.value);
+
+            document.getElementById('inline-padding-value').textContent = padding + 'px';
+            document.getElementById('inline-margin-value').textContent = margin + 'px';
+            document.getElementById('inline-border-value').textContent = border + 'px';
+
+            document.querySelectorAll('.inline-element').forEach(el => {
+                el.style.setProperty('--inline-padding', padding + 'px');
+                el.style.setProperty('--inline-margin', `0 ${margin}px`);
+                el.style.setProperty('--inline-border', border + 'px');
+            });
+        }
+
+        Object.values(blockControls).forEach(control => {
+            control.addEventListener('input', updateBlockElements);
+        });
+
+        Object.values(inlineControls).forEach(control => {
+            control.addEventListener('input', updateInlineElements);
+        });
+
+        document.getElementById('reset-inline-block').addEventListener('click', () => {
+            blockControls.width.value = 300;
+            blockControls.height.value = 80;
+            blockControls.padding.value = 15;
+            blockControls.margin.value = 20;
+            blockControls.border.value = 3;
+            inlineControls.padding.value = 10;
+            inlineControls.margin.value = 5;
+            inlineControls.border.value = 2;
+            updateBlockElements();
+            updateInlineElements();
+        });
+
+        // Initialize all
+        updateContentBox();
+        updateBorderBox();
+        updateBlockElements();
+        updateInlineElements();
+    </script>
+</body>
+</html>

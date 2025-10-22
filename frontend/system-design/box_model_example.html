@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Box Model Demonstration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .box-example {
+            background-color: #e0e0e0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .box {
+            /* Content box - the actual content area */
+            width: 200px;
+            height: 150px;
+            background-color: #4CAF50;
+
+            /* Padding box - space between content and border */
+            padding: 30px;
+
+            /* Border box - the border around padding */
+            border: 10px solid #FF9800;
+
+            /* Margin box - space outside the border */
+            margin: 40px;
+
+            /* Visual enhancements */
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .labeled-box {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Visual labels for each layer */
+        .with-labels {
+            background-color: #FFC0CB;
+            padding: 50px;
+            position: relative;
+        }
+
+        .with-labels::before {
+            content: 'MARGIN';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            color: #FF1744;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .border-label {
+            background-color: #FFE082;
+            padding: 40px;
+            position: relative;
+            border: 15px dashed #F57C00;
+        }
+
+        .border-label::before {
+            content: 'BORDER';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            color: #F57C00;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .padding-label {
+            background-color: #B3E5FC;
+            padding: 35px;
+            position: relative;
+        }
+
+        .padding-label::before {
+            content: 'PADDING';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            color: #0277BD;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .content-label {
+            background-color: #C8E6C9;
+            width: 180px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            color: #1B5E20;
+            font-weight: bold;
+        }
+
+        .content-label::before {
+            content: 'CONTENT';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-size: 12px;
+        }
+
+        .info-section {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .info-section h2 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+
+        .layer-info {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .layer-info h3 {
+            margin-top: 0;
+            color: #2196F3;
+        }
+
+        code {
+            background-color: #e8e8e8;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .box-sizing-demo {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .demo-box {
+            text-align: center;
+        }
+
+        .content-box {
+            width: 200px;
+            height: 100px;
+            padding: 20px;
+            border: 10px solid #2196F3;
+            background-color: #BBDEFB;
+            box-sizing: content-box;
+        }
+
+        .border-box {
+            width: 200px;
+            height: 100px;
+            padding: 20px;
+            border: 10px solid #4CAF50;
+            background-color: #C8E6C9;
+            box-sizing: border-box;
+        }
+
+        .size-info {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>CSS Box Model Demonstration</h1>
+
+    <div class="info-section">
+        <h2>Understanding the Box Model</h2>
+        <p>Every element in CSS is represented as a rectangular box with four layers:</p>
+
+        <div class="layer-info">
+            <h3>1. Content Box (Green)</h3>
+            <p>The innermost layer where your actual content (text, images, etc.) is displayed.</p>
+            <p><code>width</code> and <code>height</code> properties control this area.</p>
+        </div>
+
+        <div class="layer-info">
+            <h3>2. Padding Box (Blue)</h3>
+            <p>Space between the content and the border. Creates breathing room inside the element.</p>
+            <p><code>padding: 20px;</code> or <code>padding-top, padding-right, padding-bottom, padding-left</code></p>
+        </div>
+
+        <div class="layer-info">
+            <h3>3. Border Box (Orange/Yellow)</h3>
+            <p>The border that wraps around the padding and content.</p>
+            <p><code>border: 10px solid #color;</code></p>
+        </div>
+
+        <div class="layer-info">
+            <h3>4. Margin Box (Pink)</h3>
+            <p>The outermost layer - space outside the border, separating this element from others.</p>
+            <p><code>margin: 20px;</code> or <code>margin-top, margin-right, margin-bottom, margin-left</code></p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="box-example">
+            <h3>Standard Box</h3>
+            <div class="box">
+                CONTENT BOX<br>
+                200px × 150px
+            </div>
+            <p>Padding: 30px<br>Border: 10px<br>Margin: 40px</p>
+        </div>
+
+        <div class="box-example">
+            <h3>Labeled Layers</h3>
+            <div class="labeled-box">
+                <div class="with-labels">
+                    <div class="border-label">
+                        <div class="padding-label">
+                            <div class="content-label">
+                                180px × 120px
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-section">
+        <h2>Box-Sizing Property</h2>
+        <p>The <code>box-sizing</code> property changes how width and height are calculated:</p>
+
+        <div class="box-sizing-demo">
+            <div class="demo-box">
+                <h3>content-box (default)</h3>
+                <div class="content-box">
+                    Content
+                </div>
+                <div class="size-info">
+                    Width: 200px<br>
+                    + Padding: 40px (20px × 2)<br>
+                    + Border: 20px (10px × 2)<br>
+                    <strong>Total: 260px</strong>
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <h3>border-box</h3>
+                <div class="border-box">
+                    Content
+                </div>
+                <div class="size-info">
+                    Width: 200px<br>
+                    (includes padding & border)<br>
+                    <strong>Total: 200px</strong>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px; padding: 20px; background-color: #FFF9C4; border-left: 4px solid #FBC02D;">
+            <strong>Pro Tip:</strong> Many developers use <code>box-sizing: border-box;</code> globally to make sizing more intuitive:
+            <pre style="margin-top: 10px;"><code>* {
+    box-sizing: border-box;
+}</code></pre>
+        </div>
+    </div>
+
+</body>
+</html>
