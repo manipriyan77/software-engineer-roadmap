@@ -1,3 +1,0 @@
-class LibraryManagement {
-  constructor() {}
-}
