@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Execution Context Visualizer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .code-display {
+            grid-column: 1 / -1;
+        }
+
+        .code-content {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.6;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .code-line {
+            display: flex;
+            padding: 2px 0;
+        }
+
+        .line-number {
+            color: #858585;
+            margin-right: 20px;
+            user-select: none;
+            min-width: 30px;
+            text-align: right;
+        }
+
+        .line-content {
+            flex: 1;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-variable {
+            color: #9cdcfe;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .code-operator {
+            color: #d4d4d4;
+        }
+
+        .executing-line {
+            background: rgba(255, 255, 0, 0.2);
+            border-left: 3px solid #ffd700;
+            margin-left: -5px;
+            padding-left: 5px;
+        }
+
+        .panel {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .panel-icon {
+            font-size: 2em;
+            margin-right: 15px;
+        }
+
+        .panel-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .code-examples {
+            grid-column: 1 / -1;
+        }
+
+        .example-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .example-btn {
+            padding: 15px 25px;
+            font-size: 1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .example-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .example-btn:active {
+            transform: translateY(0);
+        }
+
+        .call-stack {
+            min-height: 300px;
+        }
+
+        .stack-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .stack-item.popping {
+            animation: slideOut 0.3s ease;
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(20px);
+                opacity: 0;
+            }
+        }
+
+        .stack-item-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stack-item-type {
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+        }
+
+        .scope-chain {
+            min-height: 300px;
+        }
+
+        .scope-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .scope-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #764ba2;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .scope-arrow {
+            margin-left: 10px;
+            color: #667eea;
+        }
+
+        .scope-variables {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .scope-variable {
+            padding: 5px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .scope-variable:last-child {
+            border-bottom: none;
+        }
+
+        .var-name {
+            color: #e83e8c;
+            font-weight: bold;
+        }
+
+        .var-value {
+            color: #28a745;
+        }
+
+        .execution-context {
+            min-height: 300px;
+        }
+
+        .context-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .context-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .context-phase {
+            background: #e7f3ff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border-left: 3px solid #007bff;
+        }
+
+        .phase-title {
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 5px;
+        }
+
+        .phase-content {
+            font-size: 0.9em;
+            color: #333;
+            font-family: 'Courier New', monospace;
+        }
+
+        .console-output {
+            grid-column: 1 / -1;
+        }
+
+        .console-content {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            min-height: 150px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .console-line {
+            margin-bottom: 5px;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .console-log {
+            color: #4ec9b0;
+        }
+
+        .console-info {
+            color: #9cdcfe;
+        }
+
+        .console-warn {
+            color: #dcdcaa;
+        }
+
+        .console-error {
+            color: #f48771;
+        }
+
+        .controls {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .control-btn {
+            padding: 12px 30px;
+            font-size: 1em;
+            font-weight: 600;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            color: #667eea;
+        }
+
+        .control-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .speed-control label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .speed-control input {
+            width: 150px;
+        }
+
+        .legend {
+            grid-column: 1 / -1;
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #ffc107;
+        }
+
+        .legend-title {
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .legend-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 10px;
+            color: #856404;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-icon {
+            font-size: 1.5em;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #999;
+            padding: 40px;
+            font-style: italic;
+        }
+
+        .empty-state-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Execution Context Visualizer</h1>
+            <p>Watch how JavaScript executes code in real-time with Call Stack, Scope Chain, and Execution Context</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Code Examples -->
+            <div class="panel code-examples">
+                <div class="panel-header">
+                    <span class="panel-icon">💻</span>
+                    <span class="panel-title">Code Examples</span>
+                </div>
+                <div class="example-buttons">
+                    <button class="example-btn" onclick="runExample1()">Simple Function Call</button>
+                    <button class="example-btn" onclick="runExample2()">Nested Functions</button>
+                    <button class="example-btn" onclick="runExample3()">Closure Example</button>
+                    <button class="example-btn" onclick="runExample4()">Scope Chain Demo</button>
+                    <button class="example-btn" onclick="runExample5()">Hoisting Example</button>
+                    <button class="example-btn" onclick="runExample6()">Block Scope</button>
+                </div>
+            </div>
+
+            <!-- Code Display -->
+            <div class="panel code-display">
+                <div class="panel-header">
+                    <span class="panel-icon">📝</span>
+                    <span class="panel-title">Source Code</span>
+                </div>
+                <div class="code-content" id="codeDisplay">
+                    <div style="text-align: center; color: #999; padding: 40px;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">📝</div>
+                        <div>Select an example to view its source code</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call Stack -->
+            <div class="panel call-stack">
+                <div class="panel-header">
+                    <span class="panel-icon">📚</span>
+                    <span class="panel-title">Call Stack</span>
+                </div>
+                <div id="callStack">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📚</div>
+                        <div>Click an example to see the call stack</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Execution Context -->
+            <div class="panel execution-context">
+                <div class="panel-header">
+                    <span class="panel-icon">⚙️</span>
+                    <span class="panel-title">Current Execution Context</span>
+                </div>
+                <div id="executionContext">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚙️</div>
+                        <div>No execution context yet</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scope Chain -->
+            <div class="panel scope-chain">
+                <div class="panel-header">
+                    <span class="panel-icon">🔗</span>
+                    <span class="panel-title">Scope Chain</span>
+                </div>
+                <div id="scopeChain">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔗</div>
+                        <div>No scope chain to display</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Console Output -->
+            <div class="panel console-output">
+                <div class="panel-header">
+                    <span class="panel-icon">🖥️</span>
+                    <span class="panel-title">Console Output</span>
+                </div>
+                <div class="console-content" id="consoleOutput">
+                    <div class="console-line console-info">Ready to execute code...</div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <button class="control-btn" onclick="clearAll()">🗑️ Clear All</button>
+                <div class="speed-control">
+                    <label>⏱️ Speed:</label>
+                    <input type="range" id="speedControl" min="100" max="2000" value="800" step="100">
+                    <span id="speedValue">800ms</span>
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="legend">
+                <div class="legend-title">📖 How to Read This Visualization</div>
+                <div class="legend-content">
+                    <div class="legend-item">
+                        <span class="legend-icon">📚</span>
+                        <span><strong>Call Stack:</strong> Shows the order of function execution (LIFO)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-icon">⚙️</span>
+                        <span><strong>Execution Context:</strong> Shows creation and execution phases</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-icon">🔗</span>
+                        <span><strong>Scope Chain:</strong> Shows variable accessibility from inner to outer scopes</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-icon">🖥️</span>
+                        <span><strong>Console:</strong> Shows the actual output of the code</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let executionSpeed = 800;
+        let isExecuting = false;
+
+        // Update speed control
+        document.getElementById('speedControl').addEventListener('input', (e) => {
+            executionSpeed = parseInt(e.target.value);
+            document.getElementById('speedValue').value = executionSpeed + 'ms';
+        });
+
+        // Console logging
+        function logToConsole(message, type = 'log') {
+            const consoleOutput = document.getElementById('consoleOutput');
+            const line = document.createElement('div');
+            line.className = `console-line console-${type}`;
+            line.textContent = `> ${message}`;
+            consoleOutput.appendChild(line);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+
+        // Clear all visualizations
+        function clearAll() {
+            document.getElementById('callStack').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📚</div><div>Click an example to see the call stack</div></div>';
+            document.getElementById('executionContext').innerHTML = '<div class="empty-state"><div class="empty-state-icon">⚙️</div><div>No execution context yet</div></div>';
+            document.getElementById('scopeChain').innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔗</div><div>No scope chain to display</div></div>';
+            document.getElementById('consoleOutput').innerHTML = '<div class="console-line console-info">Console cleared. Ready for next execution...</div>';
+            document.getElementById('codeDisplay').innerHTML = '<div style="text-align: center; color: #999; padding: 40px;"><div style="font-size: 2em; margin-bottom: 10px;">📝</div><div>Select an example to view its source code</div></div>';
+        }
+
+        // Display code with syntax highlighting
+        function displayCode(code, currentLine = -1) {
+            const codeDisplay = document.getElementById('codeDisplay');
+            const lines = code.trim().split('\n');
+            
+            let html = '';
+            lines.forEach((line, index) => {
+                const lineNum = index + 1;
+                const isExecuting = lineNum === currentLine;
+                const highlightedLine = syntaxHighlight(line);
+                
+                html += `<div class="code-line ${isExecuting ? 'executing-line' : ''}">
+                    <span class="line-number">${lineNum}</span>
+                    <span class="line-content">${highlightedLine}</span>
+                </div>`;
+            });
+            
+            codeDisplay.innerHTML = html;
+            
+            // Scroll to executing line
+            if (currentLine > 0) {
+                const executingElement = codeDisplay.querySelector('.executing-line');
+                if (executingElement) {
+                    executingElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        // Simple syntax highlighter
+        function syntaxHighlight(line) {
+            // Escape HTML
+            line = line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            
+            // Comments
+            line = line.replace(/(\/\/.*$)/g, '<span class="code-comment">$1</span>');
+            
+            // Strings
+            line = line.replace(/(".*?"|'.*?'|`.*?`)/g, '<span class="code-string">$1</span>');
+            
+            // Keywords
+            const keywords = ['function', 'const', 'let', 'var', 'return', 'if', 'else', 'for', 'while', 'do', 'switch', 'case', 'break', 'continue', 'new', 'this', 'typeof', 'instanceof'];
+            keywords.forEach(keyword => {
+                const regex = new RegExp(`\\b(${keyword})\\b`, 'g');
+                line = line.replace(regex, '<span class="code-keyword">$1</span>');
+            });
+            
+            // Numbers
+            line = line.replace(/\b(\d+)\b/g, '<span class="code-number">$1</span>');
+            
+            // Function names (simple detection)
+            line = line.replace(/\b([a-zA-Z_$][a-zA-Z0-9_$]*)\s*\(/g, '<span class="code-function">$1</span>(');
+            
+            return line;
+        }
+
+        // Visualizer class
+        class ExecutionVisualizer {
+            constructor() {
+                this.callStack = [];
+                this.scopeChain = [];
+            }
+
+            async pushToStack(name, type = 'Function') {
+                this.callStack.push({ name, type });
+                await this.renderCallStack();
+                await this.sleep(executionSpeed);
+            }
+
+            async popFromStack() {
+                if (this.callStack.length > 0) {
+                    // Add popping animation
+                    const stackElement = document.getElementById('callStack');
+                    const lastItem = stackElement.lastElementChild;
+                    if (lastItem && lastItem.classList.contains('stack-item')) {
+                        lastItem.classList.add('popping');
+                        await this.sleep(300);
+                    }
+                    
+                    this.callStack.pop();
+                    await this.renderCallStack();
+                    await this.sleep(executionSpeed / 2);
+                }
+            }
+
+            async showExecutionContext(name, variables, phase = 'execution') {
+                const contextDiv = document.getElementById('executionContext');
+                
+                const phaseTitle = phase === 'creation' ? '1️⃣ Creation Phase' : '2️⃣ Execution Phase';
+                const phaseDesc = phase === 'creation' 
+                    ? 'Setting up memory, hoisting variables and functions'
+                    : 'Executing code line by line, assigning values';
+
+                let variablesHTML = '';
+                for (const [key, value] of Object.entries(variables)) {
+                    variablesHTML += `<div class="scope-variable"><span class="var-name">${key}</span>: <span class="var-value">${value}</span></div>`;
+                }
+
+                contextDiv.innerHTML = `
+                    <div class="context-item">
+                        <div class="context-name">${name} Execution Context</div>
+                        <div class="context-phase">
+                            <div class="phase-title">${phaseTitle}</div>
+                            <div class="phase-content">${phaseDesc}</div>
+                        </div>
+                        <div class="scope-variables">
+                            ${variablesHTML || '<div style="color: #999;">No variables yet</div>'}
+                        </div>
+                    </div>
+                `;
+                
+                await this.sleep(executionSpeed);
+            }
+
+            async updateScopeChain(scopes) {
+                this.scopeChain = scopes;
+                await this.renderScopeChain();
+                await this.sleep(executionSpeed / 2);
+            }
+
+            async renderCallStack() {
+                const stackDiv = document.getElementById('callStack');
+                
+                if (this.callStack.length === 0) {
+                    stackDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📚</div><div>Stack is empty</div></div>';
+                    return;
+                }
+
+                stackDiv.innerHTML = '';
+                
+                // Render in reverse order (top of stack at top)
+                for (let i = this.callStack.length - 1; i >= 0; i--) {
+                    const item = this.callStack[i];
+                    const stackItem = document.createElement('div');
+                    stackItem.className = 'stack-item';
+                    stackItem.innerHTML = `
+                        <div class="stack-item-name">${item.name}</div>
+                        <div class="stack-item-type">${item.type} Execution Context</div>
+                    `;
+                    stackDiv.appendChild(stackItem);
+                }
+            }
+
+            async renderScopeChain() {
+                const scopeDiv = document.getElementById('scopeChain');
+                
+                if (this.scopeChain.length === 0) {
+                    scopeDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔗</div><div>No scope chain to display</div></div>';
+                    return;
+                }
+
+                scopeDiv.innerHTML = '';
+                
+                this.scopeChain.forEach((scope, index) => {
+                    const scopeItem = document.createElement('div');
+                    scopeItem.className = 'scope-item';
+                    
+                    let variablesHTML = '';
+                    for (const [key, value] of Object.entries(scope.variables)) {
+                        variablesHTML += `<div class="scope-variable"><span class="var-name">${key}</span>: <span class="var-value">${value}</span></div>`;
+                    }
+                    
+                    const arrow = index < this.scopeChain.length - 1 ? '<span class="scope-arrow">↓ outer →</span>' : '';
+                    
+                    scopeItem.innerHTML = `
+                        <div class="scope-name">${scope.name} ${arrow}</div>
+                        <div class="scope-variables">
+                            ${variablesHTML}
+                        </div>
+                    `;
+                    scopeDiv.appendChild(scopeItem);
+                });
+            }
+
+            sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+        }
+
+        // Example 1: Simple Function Call
+        async function runExample1() {
+            if (isExecuting) return;
+            isExecuting = true;
+            clearAll();
+            
+            const viz = new ExecutionVisualizer();
+            
+            const code = `// Simple Function Call Example
+function greet() {
+    const message = "Hello, World!";
+    console.log(message);
+}
+
+// Global execution starts
+greet(); // Call the function`;
+            
+            displayCode(code);
+            logToConsole('=== Example 1: Simple Function Call ===', 'info');
+            
+            // Global Execution Context
+            await viz.pushToStack('Global', 'Global');
+            await viz.showExecutionContext('Global', {}, 'creation');
+            await viz.showExecutionContext('Global', { greet: 'function' }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'Global Scope', variables: { greet: 'function' } }
+            ]);
+            
+            logToConsole('Calling greet()...');
+            
+            // Function Execution Context
+            await viz.pushToStack('greet()', 'Function');
+            await viz.showExecutionContext('greet', {}, 'creation');
+            await viz.showExecutionContext('greet', { message: '"Hello, World!"' }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'greet() Scope', variables: { message: '"Hello, World!"' } },
+                { name: 'Global Scope', variables: { greet: 'function' } }
+            ]);
+            
+            logToConsole('Hello, World!', 'log');
+            
+            await viz.popFromStack();
+            await viz.showExecutionContext('Global', { greet: 'function' }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'Global Scope', variables: { greet: 'function' } }
+            ]);
+            
+            logToConsole('Function completed!', 'info');
+            
+            await viz.popFromStack();
+            
+            isExecuting = false;
+        }
+
+        // Example 2: Nested Functions
+        async function runExample2() {
+            if (isExecuting) return;
+            isExecuting = true;
+            clearAll();
+            
+            const viz = new ExecutionVisualizer();
+            
+            const code = `// Nested Functions Example
+function outer() {
+    const outerVar = "I am outer";
+    console.log("Inside outer function");
+    
+    function inner() {
+        const innerVar = "I am inner";
+        console.log("Inside inner function");
+        console.log(outerVar); // Access outer scope
+    }
+    
+    inner(); // Call inner function
+}
+
+outer(); // Call outer function`;
+            
+            displayCode(code);
+            logToConsole('=== Example 2: Nested Functions ===', 'info');
+            
+            // Global
+            await viz.pushToStack('Global', 'Global');
+            await viz.showExecutionContext('Global', { outer: 'function' }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'Global Scope', variables: { outer: 'function' } }
+            ]);
+            
+            logToConsole('Calling outer()...');
+            
+            // Outer function
+            await viz.pushToStack('outer()', 'Function');
+            await viz.showExecutionContext('outer', { outerVar: '"I am outer"', inner: 'function' }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'outer() Scope', variables: { outerVar: '"I am outer"', inner: 'function' } },
+                { name: 'Global Scope', variables: { outer: 'function' } }
+            ]);
+            
+            logToConsole('Inside outer function');
+            logToConsole('Calling inner()...');
+            
+            // Inner function
+            await viz.pushToStack('inner()', 'Function');
+            await viz.showExecutionContext('inner', { innerVar: '"I am inner"' }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'inner() Scope', variables: { innerVar: '"I am inner"' } },
+                { name: 'outer() Scope', variables: { outerVar: '"I am outer"', inner: 'function' } },
+                { name: 'Global Scope', variables: { outer: 'function' } }
+            ]);
+            
+            logToConsole('Inside inner function');
+            logToConsole('Can access: innerVar, outerVar (via scope chain)', 'info');
+            
+            await viz.popFromStack();
+            await viz.showExecutionContext('outer', { outerVar: '"I am outer"', inner: 'function' }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'outer() Scope', variables: { outerVar: '"I am outer"', inner: 'function' } },
+                { name: 'Global Scope', variables: { outer: 'function' } }
+            ]);
+            
+            logToConsole('Back to outer function');
+            
+            await viz.popFromStack();
+            await viz.showExecutionContext('Global', { outer: 'function' }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'Global Scope', variables: { outer: 'function' } }
+            ]);
+            
+            logToConsole('All functions completed!', 'info');
+            
+            await viz.popFromStack();
+            
+            isExecuting = false;
+        }
+
+        // Example 3: Closure
+        async function runExample3() {
+            if (isExecuting) return;
+            isExecuting = true;
+            clearAll();
+            
+            const viz = new ExecutionVisualizer();
+            
+            const code = `// Closure Example
+function createCounter() {
+    let count = 0; // Private variable
+    
+    return function increment() {
+        count++; // Access outer variable
+        console.log("Count:", count);
+    };
+}
+
+const counter = createCounter();
+counter(); // Count: 1
+counter(); // Count: 2
+// count is preserved in closure!`;
+            
+            displayCode(code);
+            logToConsole('=== Example 3: Closure Example ===', 'info');
+            
+            // Global
+            await viz.pushToStack('Global', 'Global');
+            await viz.showExecutionContext('Global', { createCounter: 'function' }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'Global Scope', variables: { createCounter: 'function' } }
+            ]);
+            
+            logToConsole('Calling createCounter()...');
+            
+            // createCounter function
+            await viz.pushToStack('createCounter()', 'Function');
+            await viz.showExecutionContext('createCounter', { count: '0', increment: 'function' }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'createCounter() Scope', variables: { count: '0', increment: 'function' } },
+                { name: 'Global Scope', variables: { createCounter: 'function' } }
+            ]);
+            
+            logToConsole('Created counter with count = 0');
+            logToConsole('Returning increment function (closure formed!)', 'warn');
+            
+            await viz.popFromStack();
+            await viz.showExecutionContext('Global', { createCounter: 'function', counter: 'function (closure)' }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'Global Scope', variables: { createCounter: 'function', counter: 'function (closure)' } }
+            ]);
+            
+            logToConsole('Calling counter() - first time...');
+            
+            // First increment call
+            await viz.pushToStack('counter() [closure]', 'Function');
+            await viz.showExecutionContext('counter', { count: '1 (from closure)' }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'counter() Scope', variables: { } },
+                { name: 'Closure Scope', variables: { count: '0 → 1' } },
+                { name: 'Global Scope', variables: { createCounter: 'function', counter: 'function' } }
+            ]);
+            
+            logToConsole('Count: 1', 'log');
+            logToConsole('Closure maintains access to count!', 'warn');
+            
+            await viz.popFromStack();
+            
+            logToConsole('Calling counter() - second time...');
+            
+            // Second increment call
+            await viz.pushToStack('counter() [closure]', 'Function');
+            await viz.showExecutionContext('counter', { count: '2 (from closure)' }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'counter() Scope', variables: { } },
+                { name: 'Closure Scope', variables: { count: '1 → 2' } },
+                { name: 'Global Scope', variables: { createCounter: 'function', counter: 'function' } }
+            ]);
+            
+            logToConsole('Count: 2', 'log');
+            logToConsole('Closure still has access to count!', 'warn');
+            
+            await viz.popFromStack();
+            await viz.popFromStack();
+            
+            isExecuting = false;
+        }
+
+        // Example 4: Scope Chain
+        async function runExample4() {
+            if (isExecuting) return;
+            isExecuting = true;
+            clearAll();
+            
+            const viz = new ExecutionVisualizer();
+            
+            const code = `// Scope Chain Demo
+const globalVar = "global";
+
+function level1() {
+    const level1Var = "level 1";
+    
+    function level2() {
+        const level2Var = "level 2";
+        
+        function level3() {
+            const level3Var = "level 3";
+            // Can access all outer scopes!
+            console.log(level3Var);
+            console.log(level2Var);
+            console.log(level1Var);
+            console.log(globalVar);
+        }
+        level3();
+    }
+    level2();
+}
+level1();`;
+            
+            displayCode(code);
+            logToConsole('=== Example 4: Scope Chain Demo ===', 'info');
+            
+            // Global
+            await viz.pushToStack('Global', 'Global');
+            await viz.showExecutionContext('Global', { globalVar: '"global"', level1: 'function' }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'Global Scope', variables: { globalVar: '"global"', level1: 'function' } }
+            ]);
+            
+            logToConsole('globalVar = "global"');
+            logToConsole('Calling level1()...');
+            
+            // Level 1
+            await viz.pushToStack('level1()', 'Function');
+            await viz.showExecutionContext('level1', { level1Var: '"level 1"', level2: 'function' }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'level1() Scope', variables: { level1Var: '"level 1"', level2: 'function' } },
+                { name: 'Global Scope', variables: { globalVar: '"global"', level1: 'function' } }
+            ]);
+            
+            logToConsole('level1Var = "level 1"');
+            logToConsole('Calling level2()...');
+            
+            // Level 2
+            await viz.pushToStack('level2()', 'Function');
+            await viz.showExecutionContext('level2', { level2Var: '"level 2"', level3: 'function' }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'level2() Scope', variables: { level2Var: '"level 2"', level3: 'function' } },
+                { name: 'level1() Scope', variables: { level1Var: '"level 1"', level2: 'function' } },
+                { name: 'Global Scope', variables: { globalVar: '"global"', level1: 'function' } }
+            ]);
+            
+            logToConsole('level2Var = "level 2"');
+            logToConsole('Calling level3()...');
+            
+            // Level 3
+            await viz.pushToStack('level3()', 'Function');
+            await viz.showExecutionContext('level3', { level3Var: '"level 3"' }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'level3() Scope', variables: { level3Var: '"level 3"' } },
+                { name: 'level2() Scope', variables: { level2Var: '"level 2"', level3: 'function' } },
+                { name: 'level1() Scope', variables: { level1Var: '"level 1"', level2: 'function' } },
+                { name: 'Global Scope', variables: { globalVar: '"global"', level1: 'function' } }
+            ]);
+            
+            logToConsole('level3Var = "level 3"');
+            logToConsole('Accessing all variables via scope chain:', 'info');
+            logToConsole('  - level3Var (own scope)', 'log');
+            logToConsole('  - level2Var (parent scope)', 'log');
+            logToConsole('  - level1Var (grandparent scope)', 'log');
+            logToConsole('  - globalVar (global scope)', 'log');
+            
+            // Unwind
+            await viz.popFromStack();
+            await viz.popFromStack();
+            await viz.popFromStack();
+            await viz.popFromStack();
+            
+            logToConsole('All scopes unwound!', 'info');
+            
+            isExecuting = false;
+        }
+
+        // Example 5: Hoisting
+        async function runExample5() {
+            if (isExecuting) return;
+            isExecuting = true;
+            clearAll();
+            
+            const viz = new ExecutionVisualizer();
+            
+            const code = `// Hoisting Example
+console.log(hoistedVar); // undefined
+console.log(hoistedFunc); // function
+
+var hoistedVar = "assigned";
+function hoistedFunc() {
+    return "I'm hoisted!";
+}
+
+// let/const in Temporal Dead Zone
+// console.log(letVar); // ReferenceError!
+let letVar = "let value";
+console.log(letVar); // "let value"`;
+            
+            displayCode(code);
+            logToConsole('=== Example 5: Hoisting Example ===', 'info');
+            
+            // Global - Creation Phase
+            await viz.pushToStack('Global', 'Global');
+            await viz.showExecutionContext('Global', { 
+                hoistedVar: 'undefined (hoisted)',
+                hoistedFunc: 'function (hoisted)',
+                letVar: '<uninitialized> (TDZ)'
+            }, 'creation');
+            await viz.updateScopeChain([
+                { name: 'Global Scope (Creation)', variables: { 
+                    hoistedVar: 'undefined',
+                    hoistedFunc: 'function',
+                    letVar: '<TDZ>'
+                }}
+            ]);
+            
+            logToConsole('CREATION PHASE:', 'warn');
+            logToConsole('  - var hoistedVar: undefined (hoisted)');
+            logToConsole('  - function hoistedFunc: fully hoisted');
+            logToConsole('  - let letVar: in Temporal Dead Zone');
+            
+            await viz.sleep(executionSpeed);
+            
+            // Global - Execution Phase
+            await viz.showExecutionContext('Global', { 
+                hoistedVar: 'undefined → "assigned"',
+                hoistedFunc: 'function',
+                letVar: '<TDZ> → "let value"'
+            }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'Global Scope (Execution)', variables: { 
+                    hoistedVar: '"assigned"',
+                    hoistedFunc: 'function',
+                    letVar: '"let value"'
+                }}
+            ]);
+            
+            logToConsole('EXECUTION PHASE:', 'warn');
+            logToConsole('console.log(hoistedVar) // undefined');
+            logToConsole('hoistedVar = "assigned"');
+            logToConsole('console.log(hoistedFunc) // function');
+            logToConsole('letVar = "let value" // TDZ ends here');
+            logToConsole('console.log(letVar) // "let value"');
+            
+            await viz.popFromStack();
+            
+            logToConsole('Hoisting demonstration complete!', 'info');
+            
+            isExecuting = false;
+        }
+
+        // Example 6: Block Scope
+        async function runExample6() {
+            if (isExecuting) return;
+            isExecuting = true;
+            clearAll();
+            
+            const viz = new ExecutionVisualizer();
+            
+            const code = `// Block Scope Example
+function blockScopeDemo() {
+    var varInFunction = "function scope";
+    
+    if (true) {
+        var blockVar = "leaked!";
+        let blockLet = "block scoped";
+        const blockConst = "also block scoped";
+    }
+    
+    console.log(blockVar); // "leaked!" ✓
+    // console.log(blockLet); // ReferenceError ✗
+    // console.log(blockConst); // ReferenceError ✗
+}
+
+blockScopeDemo();`;
+            
+            displayCode(code);
+            logToConsole('=== Example 6: Block Scope ===', 'info');
+            
+            // Global
+            await viz.pushToStack('Global', 'Global');
+            await viz.showExecutionContext('Global', { 
+                varVariable: 'undefined',
+                blockScopeDemo: 'function'
+            }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'Global Scope', variables: { 
+                    varVariable: 'undefined',
+                    blockScopeDemo: 'function'
+                }}
+            ]);
+            
+            logToConsole('Calling blockScopeDemo()...');
+            
+            // Function
+            await viz.pushToStack('blockScopeDemo()', 'Function');
+            await viz.showExecutionContext('blockScopeDemo', { 
+                varInFunction: '"function scope"'
+            }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'blockScopeDemo() Scope', variables: { 
+                    varInFunction: '"function scope"'
+                }},
+                { name: 'Global Scope', variables: { 
+                    varVariable: 'undefined',
+                    blockScopeDemo: 'function'
+                }}
+            ]);
+            
+            logToConsole('var varInFunction = "function scope"');
+            logToConsole('Entering if block...');
+            
+            await viz.sleep(executionSpeed);
+            
+            // Block Scope
+            await viz.showExecutionContext('blockScopeDemo', { 
+                varInFunction: '"function scope"',
+                'var blockVar': '"leaked!" (not block-scoped)',
+                'let blockLet': '"block scoped"',
+                'const blockConst': '"also block scoped"'
+            }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'Block Scope', variables: { 
+                    blockLet: '"block scoped"',
+                    blockConst: '"also block scoped"'
+                }},
+                { name: 'blockScopeDemo() Scope', variables: { 
+                    varInFunction: '"function scope"',
+                    blockVar: '"leaked!"'
+                }},
+                { name: 'Global Scope', variables: { 
+                    varVariable: 'undefined',
+                    blockScopeDemo: 'function'
+                }}
+            ]);
+            
+            logToConsole('Inside if block:');
+            logToConsole('  var blockVar = "leaked!" // NOT block-scoped', 'warn');
+            logToConsole('  let blockLet = "block scoped" // IS block-scoped');
+            logToConsole('  const blockConst = "also block scoped" // IS block-scoped');
+            
+            await viz.sleep(executionSpeed);
+            
+            // After block
+            await viz.showExecutionContext('blockScopeDemo', { 
+                varInFunction: '"function scope"',
+                blockVar: '"leaked!" (accessible!)'
+            }, 'execution');
+            await viz.updateScopeChain([
+                { name: 'blockScopeDemo() Scope', variables: { 
+                    varInFunction: '"function scope"',
+                    blockVar: '"leaked!" ✓',
+                    blockLet: 'ReferenceError ✗',
+                    blockConst: 'ReferenceError ✗'
+                }},
+                { name: 'Global Scope', variables: { 
+                    varVariable: 'undefined',
+                    blockScopeDemo: 'function'
+                }}
+            ]);
+            
+            logToConsole('After if block:');
+            logToConsole('console.log(blockVar) // "leaked!" ✓', 'log');
+            logToConsole('console.log(blockLet) // ReferenceError ✗', 'error');
+            logToConsole('console.log(blockConst) // ReferenceError ✗', 'error');
+            
+            await viz.popFromStack();
+            await viz.popFromStack();
+            
+            logToConsole('Block scope demonstration complete!', 'info');
+            
+            isExecuting = false;
+        }
+
+        // Initialize
+        logToConsole('Welcome! Click any example button to see execution context visualization.', 'info');
+    </script>
+</body>
+</html>
+

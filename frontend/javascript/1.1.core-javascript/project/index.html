@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Manager - Team Workspaces</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="js/script.js" type="module"></script>
+  </head>
+  <body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen active">
+      <div class="login-container">
+        <h1>Task Manager</h1>
+        <p class="subtitle">Team Workspace Collaboration</p>
+        <form id="login-form">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              placeholder="Enter your username"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="role">Role</label>
+            <select id="role" required>
+              <option value="Admin">Admin</option>
+              <option value="Member">Member</option>
+              <option value="Viewer">Viewer</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main Application Screen -->
+    <div id="app-screen" class="screen">
+      <!-- Header -->
+      <header class="app-header">
+        <div class="header-left">
+          <h1>Task Manager</h1>
+        </div>
+        <div class="header-right">
+          <span id="current-user" class="user-info"></span>
+          <button id="theme-toggle" class="btn btn-icon" title="Toggle Theme">
+            <span class="theme-icon">🌙</span>
+          </button>
+          <button id="logout-btn" class="btn btn-secondary">Logout</button>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <div class="sidebar-section">
+            <h2>Workspaces</h2>
+            <button id="create-workspace-btn" class="btn btn-primary btn-block">
+              + New Workspace
+            </button>
+            <div id="workspace-list" class="workspace-list">
+              <!-- DUMMY WORKSPACE ITEMS - Remove these and create from JS -->
+
+              <!-- END DUMMY WORKSPACE ITEMS -->
+            </div>
+          </div>
+
+          <div class="sidebar-section">
+            <h3>Filters</h3>
+            <div class="filter-group">
+              <label>Status</label>
+              <select id="filter-status" class="filter-select">
+                <option value="all">All</option>
+                <option value="todo">To Do</option>
+                <option value="in-progress">In Progress</option>
+                <option value="done">Done</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label>Priority</label>
+              <select id="filter-priority" class="filter-select">
+                <option value="all">All</option>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="content-area">
+          <!-- Workspace Header -->
+          <div id="workspace-header" class="workspace-header">
+            <div class="workspace-info">
+              <h2 id="workspace-name">Select a workspace</h2>
+              <span id="task-count" class="task-count"></span>
+            </div>
+            <div class="workspace-actions">
+              <button id="add-task-btn" class="btn btn-primary" disabled>
+                + Add Task
+              </button>
+              <button
+                id="manage-members-btn"
+                class="btn btn-secondary"
+                disabled
+              >
+                Manage Members
+              </button>
+            </div>
+          </div>
+
+          <!-- Task Grid -->
+          <div id="task-grid" class="task-grid">
+            <!-- DUMMY TASK CARDS - Remove these and create from JS -->
+            <!-- <div
+              class="task-card"
+              data-task-id="1"
+              data-priority="high"
+              data-status="todo"
+            >
+              <div class="task-header">
+                <h3 class="task-title">Create landing page design</h3>
+                <span class="task-priority priority-high">High</span>
+              </div>
+              <p class="task-description">
+                Design a new landing page for the product launch with modern UI
+                elements
+              </p>
+              <div class="task-meta">
+                <span class="task-assignee">👤 John Doe</span>
+                <span class="task-status status-todo">To Do</span>
+              </div>
+              <div class="task-actions">
+                <button class="btn-icon task-edit" title="Edit">✏️</button>
+                <button class="btn-icon task-delete" title="Delete">🗑️</button>
+              </div>
+            </div> -->
+
+            <!-- END DUMMY TASK CARDS -->
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Modal: Create Workspace -->
+    <div id="workspace-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Create New Workspace</h2>
+          <button class="modal-close">&times;</button>
+        </div>
+        <form id="workspace-form">
+          <div class="form-group">
+            <label for="workspace-name-input">Workspace Name</label>
+            <input
+              type="text"
+              id="workspace-name-input"
+              placeholder="e.g., Marketing Team"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="workspace-description">Description</label>
+            <textarea
+              id="workspace-description"
+              placeholder="What's this workspace for?"
+              rows="3"
+            ></textarea>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary modal-cancel">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Create Workspace
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Add/Edit Task -->
+    <div id="task-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="task-modal-title">Add New Task</h2>
+          <button class="modal-close">&times;</button>
+        </div>
+        <form id="task-form">
+          <div class="form-group">
+            <label for="task-title">Task Title</label>
+            <input
+              type="text"
+              id="task-title"
+              placeholder="Enter task title"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="task-description">Description</label>
+            <textarea
+              id="task-description"
+              placeholder="Task details..."
+              rows="3"
+            ></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="task-assignee">Assignee</label>
+              <input
+                type="text"
+                id="task-assignee"
+                placeholder="Assign to..."
+              />
+            </div>
+            <div class="form-group">
+              <label for="task-priority">Priority</label>
+              <select id="task-priority">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="task-status">Status</label>
+            <select id="task-status">
+              <option value="todo">To Do</option>
+              <option value="in-progress">In Progress</option>
+              <option value="done">Done</option>
+            </select>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary modal-cancel">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">Save Task</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Manage Members -->
+    <div id="members-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Manage Members</h2>
+          <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="add-member-form" class="member-form">
+            <div class="form-row">
+              <input
+                type="text"
+                id="member-name"
+                placeholder="Member name"
+                required
+              />
+              <select id="member-role">
+                <option value="Admin">Admin</option>
+                <option value="Member">Member</option>
+                <option value="Viewer">Viewer</option>
+              </select>
+              <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+          </form>
+          <div id="members-list" class="members-list"></div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary modal-cancel">Close</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
