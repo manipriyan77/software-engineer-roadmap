@@ -1,0 +1,4009 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Complete Frontend → Architect Roadmap</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", system-ui, sans-serif;
+        background: #0f1117;
+        color: #e2e8f0;
+        line-height: 1.6;
+      }
+
+      .hero {
+        background: linear-gradient(
+          135deg,
+          #1a1f2e 0%,
+          #0d1117 50%,
+          #1a1230 100%
+        );
+        padding: 60px 40px;
+        text-align: center;
+        border-bottom: 1px solid #2d3748;
+      }
+      .hero h1 {
+        font-size: 2.8rem;
+        font-weight: 800;
+        background: linear-gradient(90deg, #63b3ed, #a78bfa, #f093fb);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .hero p {
+        color: #94a3b8;
+        margin-top: 12px;
+        font-size: 1.1rem;
+      }
+
+      .timeline-path {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+
+      .phase {
+        position: relative;
+        margin-bottom: 50px;
+        border-radius: 16px;
+        border: 1px solid #2d3748;
+        overflow: hidden;
+      }
+      .phase-header {
+        padding: 22px 28px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        cursor: pointer;
+        user-select: none;
+      }
+      .phase-header:hover {
+        filter: brightness(1.1);
+      }
+      .phase-num {
+        font-size: 2rem;
+        font-weight: 900;
+        opacity: 0.15;
+        min-width: 48px;
+      }
+      .phase-title {
+        flex: 1;
+      }
+      .phase-title h2 {
+        font-size: 1.3rem;
+        font-weight: 700;
+      }
+      .phase-title span {
+        font-size: 0.85rem;
+        color: #94a3b8;
+      }
+      .badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .toggle-icon {
+        font-size: 1.2rem;
+        transition: transform 0.3s;
+      }
+      .phase-body {
+        padding: 0 28px 28px;
+      }
+
+      .section {
+        margin-top: 20px;
+      }
+      .section-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #64748b;
+        margin-bottom: 10px;
+      }
+
+      .topic-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 10px;
+      }
+      .topic-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid #2d3748;
+        border-radius: 10px;
+        padding: 12px 14px;
+        transition:
+          border-color 0.2s,
+          background 0.2s;
+      }
+      .topic-card:hover {
+        border-color: #4a5568;
+        background: rgba(255, 255, 255, 0.07);
+      }
+      .topic-name {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+      .topic-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      .link-btn {
+        font-size: 0.7rem;
+        padding: 2px 8px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: opacity 0.2s;
+      }
+      .link-btn:hover {
+        opacity: 0.8;
+      }
+      .lnk-yt {
+        background: #e53e3e22;
+        color: #fc8181;
+        border: 1px solid #e53e3e44;
+      }
+      .lnk-docs {
+        background: #2b6cb022;
+        color: #63b3ed;
+        border: 1px solid #2b6cb044;
+      }
+      .lnk-art {
+        background: #2f855a22;
+        color: #68d391;
+        border: 1px solid #2f855a44;
+      }
+      .lnk-course {
+        background: #6b46c122;
+        color: #b794f4;
+        border: 1px solid #6b46c144;
+      }
+      .lnk-int {
+        background: #c05621;
+        color: #fbd38d;
+        border: 1px solid #c0562144;
+      }
+
+      .new-badge {
+        font-size: 0.6rem;
+        background: #f6ad5533;
+        color: #f6ad55;
+        border: 1px solid #f6ad5566;
+        padding: 1px 6px;
+        border-radius: 4px;
+        margin-left: 6px;
+        vertical-align: middle;
+      }
+
+      .project-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px dashed #4a5568;
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-top: 16px;
+      }
+      .project-card h4 {
+        font-size: 0.95rem;
+        color: #f6e05e;
+        margin-bottom: 6px;
+      }
+      .project-card p {
+        font-size: 0.85rem;
+        color: #94a3b8;
+      }
+
+      .outcome {
+        margin-top: 16px;
+        padding: 10px 16px;
+        background: rgba(255, 255, 255, 0.04);
+        border-left: 3px solid currentColor;
+        border-radius: 0 8px 8px 0;
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+
+      /* Phase Colors */
+      .p1 {
+        background: linear-gradient(135deg, #1a2a1a, #0f1117);
+      }
+      .p1 .phase-header {
+        background: linear-gradient(90deg, #1a3a1a, transparent);
+      }
+      .p1 .phase-num,
+      .p1 .phase-title h2 {
+        color: #68d391;
+      }
+      .p1 .outcome {
+        color: #68d391;
+      }
+
+      .p2 {
+        background: linear-gradient(135deg, #1a1a2e, #0f1117);
+      }
+      .p2 .phase-header {
+        background: linear-gradient(90deg, #1a1a3e, transparent);
+      }
+      .p2 .phase-num,
+      .p2 .phase-title h2 {
+        color: #63b3ed;
+      }
+      .p2 .outcome {
+        color: #63b3ed;
+      }
+
+      .p3 {
+        background: linear-gradient(135deg, #1e1a2e, #0f1117);
+      }
+      .p3 .phase-header {
+        background: linear-gradient(90deg, #2e1a3e, transparent);
+      }
+      .p3 .phase-num,
+      .p3 .phase-title h2 {
+        color: #b794f4;
+      }
+      .p3 .outcome {
+        color: #b794f4;
+      }
+
+      .p4 {
+        background: linear-gradient(135deg, #2a1a1a, #0f1117);
+      }
+      .p4 .phase-header {
+        background: linear-gradient(90deg, #3e1a1a, transparent);
+      }
+      .p4 .phase-num,
+      .p4 .phase-title h2 {
+        color: #fc8181;
+      }
+      .p4 .outcome {
+        color: #fc8181;
+      }
+
+      .p5 {
+        background: linear-gradient(135deg, #1a1a1a, #0f1117);
+      }
+      .p5 .phase-header {
+        background: linear-gradient(90deg, #2a1a0a, transparent);
+      }
+      .p5 .phase-num,
+      .p5 .phase-title h2 {
+        color: #f6ad55;
+      }
+      .p5 .outcome {
+        color: #f6ad55;
+      }
+
+      .p6 {
+        background: linear-gradient(135deg, #1a1e1a, #0f1117);
+      }
+      .p6 .phase-header {
+        background: linear-gradient(90deg, #1a2e1a, transparent);
+      }
+      .p6 .phase-num,
+      .p6 .phase-title h2 {
+        color: #9ae6b4;
+      }
+      .p6 .outcome {
+        color: #9ae6b4;
+      }
+
+      .p7 {
+        background: linear-gradient(135deg, #1e1a1a, #0f1117);
+      }
+      .p7 .phase-header {
+        background: linear-gradient(90deg, #2e1a2e, transparent);
+      }
+      .p7 .phase-num,
+      .p7 .phase-title h2 {
+        color: #f093fb;
+      }
+      .p7 .outcome {
+        color: #f093fb;
+      }
+
+      .p8 {
+        background: linear-gradient(135deg, #1a1e20, #0f1117);
+      }
+      .p8 .phase-header {
+        background: linear-gradient(90deg, #1a2e30, transparent);
+      }
+      .p8 .phase-num,
+      .p8 .phase-title h2 {
+        color: #81e6d9;
+      }
+      .p8 .outcome {
+        color: #81e6d9;
+      }
+
+      .p9 {
+        background: linear-gradient(135deg, #1a2828, #0f1117);
+      }
+      .p9 .phase-header {
+        background: linear-gradient(90deg, #1a3838, transparent);
+      }
+      .p9 .phase-num,
+      .p9 .phase-title h2 {
+        color: #4dd0e1;
+      }
+      .p9 .outcome {
+        color: #4dd0e1;
+      }
+
+      .p10 {
+        background: linear-gradient(135deg, #1a1a30, #0f1117);
+      }
+      .p10 .phase-header {
+        background: linear-gradient(90deg, #1a1a40, transparent);
+      }
+      .p10 .phase-num,
+      .p10 .phase-title h2 {
+        color: #7986cb;
+      }
+      .p10 .outcome {
+        color: #7986cb;
+      }
+
+      .p11 {
+        background: linear-gradient(135deg, #0d2030, #0f1117);
+      }
+      .p11 .phase-header {
+        background: linear-gradient(90deg, #0d3040, transparent);
+      }
+      .p11 .phase-num,
+      .p11 .phase-title h2 {
+        color: #61dafb;
+      }
+      .p11 .outcome {
+        color: #61dafb;
+      }
+
+      .p12 {
+        background: linear-gradient(135deg, #1c1c1c, #0f1117);
+      }
+      .p12 .phase-header {
+        background: linear-gradient(90deg, #2c2c2c, transparent);
+      }
+      .p12 .phase-num,
+      .p12 .phase-title h2 {
+        color: #e2e8f0;
+      }
+      .p12 .outcome {
+        color: #e2e8f0;
+      }
+
+      .p13 {
+        background: linear-gradient(135deg, #182818, #0f1117);
+      }
+      .p13 .phase-header {
+        background: linear-gradient(90deg, #1a3a1a, transparent);
+      }
+      .p13 .phase-num,
+      .p13 .phase-title h2 {
+        color: #81c784;
+      }
+      .p13 .outcome {
+        color: #81c784;
+      }
+
+      .p14 {
+        background: linear-gradient(135deg, #2a1818, #0f1117);
+      }
+      .p14 .phase-header {
+        background: linear-gradient(90deg, #3a1818, transparent);
+      }
+      .p14 .phase-num,
+      .p14 .phase-title h2 {
+        color: #ef9a9a;
+      }
+      .p14 .outcome {
+        color: #ef9a9a;
+      }
+
+      .pf {
+        background: linear-gradient(135deg, #2a2a1a, #0f1117);
+      }
+      .pf .phase-header {
+        background: linear-gradient(90deg, #3a3a1a, transparent);
+      }
+      .pf .phase-num,
+      .pf .phase-title h2 {
+        color: #fbd38d;
+      }
+      .pf .outcome {
+        color: #fbd38d;
+      }
+
+      .skills-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 12px;
+        font-size: 0.85rem;
+      }
+      .skills-table th {
+        text-align: left;
+        padding: 8px 12px;
+        background: rgba(255, 255, 255, 0.06);
+        color: #94a3b8;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .skills-table td {
+        padding: 8px 12px;
+        border-top: 1px solid #1e2533;
+      }
+
+      .daily-routine {
+        background: linear-gradient(135deg, #1a1a2e, #0d1117);
+        border: 1px solid #2d3748;
+        border-radius: 16px;
+        padding: 30px;
+        margin-top: 40px;
+      }
+      .daily-routine h2 {
+        color: #63b3ed;
+        margin-bottom: 20px;
+        font-size: 1.3rem;
+      }
+      .routine-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .routine-block {
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 10px;
+        padding: 16px;
+        border: 1px solid #2d3748;
+      }
+      .routine-block h4 {
+        color: #a78bfa;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+      }
+      .routine-block li {
+        list-style: none;
+        font-size: 0.85rem;
+        color: #94a3b8;
+        padding: 3px 0;
+      }
+      .routine-block li::before {
+        content: "▸ ";
+        color: #a78bfa;
+      }
+
+      .golden-rules {
+        background: linear-gradient(135deg, #1a1500, #0d1117);
+        border: 1px solid #744210;
+        border-radius: 16px;
+        padding: 30px;
+        margin-top: 24px;
+      }
+      .golden-rules h2 {
+        color: #f6ad55;
+        margin-bottom: 16px;
+        font-size: 1.3rem;
+      }
+      .rule {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 10px;
+        align-items: flex-start;
+      }
+      .rule-num {
+        background: #f6ad5533;
+        color: #f6ad55;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .rule p {
+        font-size: 0.9rem;
+        color: #e2e8f0;
+      }
+
+      @media (max-width: 600px) {
+        .hero h1 {
+          font-size: 1.8rem;
+        }
+        .topic-grid {
+          grid-template-columns: 1fr;
+        }
+        .routine-grid {
+          grid-template-columns: 1fr;
+        }
+        .phase-header {
+          flex-wrap: wrap;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <h1>🗺️ Complete Roadmap: Frontend → Architect</h1>
+      <p>
+        Enhanced with missing topics, free learning resources, and project
+        guides for every phase
+      </p>
+    </div>
+
+    <div class="timeline-path">
+      <!-- PHASE 1 -->
+      <div class="phase p1">
+        <div class="phase-header">
+          <div class="phase-num">01</div>
+          <div class="phase-title">
+            <h2>🟢 Engineering Foundation</h2>
+            <span>Weeks 1–8 · Logic + Problem Solving Brain</span>
+          </div>
+          <div class="badge">Beginner → Logical Coder</div>
+        </div>
+        <div class="phase-body">
+          <div class="section">
+            <div class="section-label">📐 Complexity & Problem Solving</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Time & Space Complexity</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=Mo4vesaut8g"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://www.freecodecamp.org/news/big-o-notation-why-it-matters-and-why-it-doesnt-1674cfa8a23c/"
+                    target="_blank"
+                    >📖 fCC</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Recursion & Backtracking</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=IJDJ0kBx2LM"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://www.geeksforgeeks.org/recursion/"
+                    target="_blank"
+                    >📖 GFG</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Sliding Window / Two Pointer</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=MK-NZ4hN7rs"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://leetcode.com/explore/learn/"
+                    target="_blank"
+                    >📖 LeetCode</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🧱 Data Structures</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Arrays & Strings</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=eXFSXG_ZaYk"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                  <a
+                    class="link-btn lnk-course"
+                    href="https://www.coursera.org/learn/data-structures"
+                    target="_blank"
+                    >🎓 Coursera</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Hashmaps & Sets</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=KyUTuwz_b7Q"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://www.geeksforgeeks.org/hashing-data-structure/"
+                    target="_blank"
+                    >📖 GFG</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Stack & Queue</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=wjI1WNcIntg"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Linked List</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=Hj_rA0dhr2I"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://www.geeksforgeeks.org/linked-list-data-structure/"
+                    target="_blank"
+                    >📖 GFG</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Trees & Binary Search Tree</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=oSWTXtMglKE"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://www.geeksforgeeks.org/binary-tree-data-structure/"
+                    target="_blank"
+                    >📖 GFG</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Graph Basics (BFS/DFS)</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=tWVWeAqZ0WU"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <h4>🔨 Project: Logic Visualizer Tool</h4>
+            <p>
+              Build a UI that animates sorting algorithms (bubble, merge,
+              quick), recursion trees, and BFS/DFS graph traversal in real time.
+            </p>
+          </div>
+          <div class="outcome">
+            👉 Outcome: Logical thinking unlocked — you think in algorithms
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 2 -->
+      <div class="phase p2">
+        <div class="phase-header">
+          <div class="phase-num">02</div>
+          <div class="phase-title">
+            <h2>🟡 JavaScript Engineering</h2>
+            <span>Weeks 9–14 · Understand JS Like a Runtime Engineer</span>
+          </div>
+          <div class="badge">JS Internals Expert</div>
+        </div>
+        <div class="phase-body">
+          <div class="section">
+            <div class="section-label">⚙️ JS Runtime & Engine</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Execution Context & Call Stack</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=ByhtOgF6uYM"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this"
+                    target="_blank"
+                    >📖 MDN</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Event Loop & Task Queues</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=8aGhZQkoFbQ"
+                    target="_blank"
+                    >▶ Classic Talk</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Event_loop"
+                    target="_blank"
+                    >📖 MDN</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Closures & Scope Chain</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=3a0I8ICR1Vg"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://javascript.info/closure"
+                    target="_blank"
+                    >📖 JS.info</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Prototypes & Prototype Chain</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=wstwjQ1yqWQ"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://javascript.info/prototype-inheritance"
+                    target="_blank"
+                    >📖 JS.info</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Async: Promises, async/await</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=PoRJizFvM7s"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://javascript.info/async-await"
+                    target="_blank"
+                    >📖 JS.info</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Memory Leaks & Garbage Collection</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://developer.chrome.com/docs/devtools/memory-problems/"
+                    target="_blank"
+                    >📖 Chrome Docs</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=hliOMEQRqf8"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Hoisting & TDZ</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://javascript.info/var"
+                    target="_blank"
+                    >📖 JS.info</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Debounce & Throttle</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=cjIswDCKgu0"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://css-tricks.com/debouncing-throttling-explained-examples/"
+                    target="_blank"
+                    >📖 CSS-Tricks</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Functional Programming (map/reduce/compose)
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=e-5obm1G_FY"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://www.freecodecamp.org/news/functional-programming-in-javascript/"
+                    target="_blank"
+                    >📖 fCC</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Design Patterns in JS <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://www.patterns.dev/"
+                    target="_blank"
+                    >📖 Patterns.dev</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=tv-_1er1mWI"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Generators & Iterators <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://javascript.info/generators"
+                    target="_blank"
+                    >📖 JS.info</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  WeakMap / WeakSet / WeakRef <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap"
+                    target="_blank"
+                    >📖 MDN</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <h4>🔨 Project: JS Execution Simulator</h4>
+            <p>
+              Animate the call stack, microtask queue, macrotask queue and event
+              loop in real-time with step-through control.
+            </p>
+          </div>
+          <div class="outcome">
+            👉 Outcome: You understand JS engine internals — interview-ready at
+            the deepest level
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 3 -->
+      <div class="phase p3">
+        <div class="phase-header">
+          <div class="phase-num">03</div>
+          <div class="phase-title">
+            <h2>🔵 Browser Internals + Performance</h2>
+            <span>Weeks 15–22 · Become a Performance Engineer</span>
+          </div>
+          <div class="badge">Performance Specialist</div>
+        </div>
+        <div class="phase-body">
+          <div class="section">
+            <div class="section-label">🌐 Browser Internals</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">DOM Construction & CSSOM</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://web.dev/critical-rendering-path/"
+                    target="_blank"
+                    >📖 web.dev</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=SmE4OwHztCc"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Rendering Pipeline (Paint, Composite)
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://web.dev/rendering-performance/"
+                    target="_blank"
+                    >📖 web.dev</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Reflow, Repaint & Layout Thrashing</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://gist.github.com/paulirish/5d52fb081b3570c81e3a"
+                    target="_blank"
+                    >📖 Paul Irish</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=ZTnIxIA5KGw"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Browser Storage (cookies, localStorage, IndexedDB)
+                  <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API"
+                    target="_blank"
+                    >📖 MDN</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://web.dev/storage-for-the-web/"
+                    target="_blank"
+                    >📖 web.dev</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Service Workers & PWA <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://web.dev/service-workers-cache-storage/"
+                    target="_blank"
+                    >📖 web.dev</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=ksXwaWHCW6k"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Web Workers & Shared Workers
+                  <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API"
+                    target="_blank"
+                    >📖 MDN</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">⚡ Performance Mastery</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Core Web Vitals (LCP, CLS, INP)</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://web.dev/vitals/"
+                    target="_blank"
+                    >📖 web.dev</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=AQqFZ5t8uNc"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Lazy Loading & Code Splitting</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://web.dev/lazy-loading/"
+                    target="_blank"
+                    >📖 web.dev</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://webpack.js.org/guides/code-splitting/"
+                    target="_blank"
+                    >📖 Webpack</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Tree Shaking & Bundle Analysis</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://web.dev/reduce-javascript-payloads-with-tree-shaking/"
+                    target="_blank"
+                    >📖 web.dev</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://bundlephobia.com/"
+                    target="_blank"
+                    >🔧 Bundlephobia</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Virtualization (React Window / Virtual Scroll)
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://web.dev/virtualize-long-lists-react-window/"
+                    target="_blank"
+                    >📖 web.dev</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=QhPn6hLGljU"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Memoization & React.memo / useMemo</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://react.dev/reference/react/useMemo"
+                    target="_blank"
+                    >📖 React Docs</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=qySZIzZvZOY"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Image Optimization (WebP, AVIF, srcset)
+                  <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://web.dev/fast/#optimize-your-images"
+                    target="_blank"
+                    >📖 web.dev</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Font Loading Optimization <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://web.dev/optimize-webfont-loading/"
+                    target="_blank"
+                    >📖 web.dev</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  HTTP Caching (Cache-Control, ETag)
+                  <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://web.dev/http-cache/"
+                    target="_blank"
+                    >📖 web.dev</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching"
+                    target="_blank"
+                    >📖 MDN</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Preload, Prefetch, Preconnect
+                  <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://web.dev/preload-critical-assets/"
+                    target="_blank"
+                    >📖 web.dev</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Chrome DevTools Profiling <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://developer.chrome.com/docs/devtools/performance/"
+                    target="_blank"
+                    >📖 Chrome Docs</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=KWM5wxlDuis"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <h4>🔨 Project: Performance Optimization Lab</h4>
+            <p>
+              Take a deliberately slow React app → optimize it completely.
+              Measure LCP, TTI, bundle size before & after. Document everything.
+            </p>
+          </div>
+          <div class="outcome">
+            👉 Outcome: You can audit and optimize any frontend app like a pro
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 4 -->
+      <div class="phase p4">
+        <div class="phase-header">
+          <div class="phase-num">04</div>
+          <div class="phase-title">
+            <h2>🟣 Advanced Frontend Engineering</h2>
+            <span>Weeks 23–30 · Think Like a Frontend Architect</span>
+          </div>
+          <div class="badge">Senior Frontend Engineer</div>
+        </div>
+        <div class="phase-body">
+          <div class="section">
+            <div class="section-label">🏗️ Architecture</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">
+                  Component Architecture (Compound, HOC, Render Props)
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://www.patterns.dev/react"
+                    target="_blank"
+                    >📖 Patterns.dev</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=NPSSKxTbZAM"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Feature-Based Folder Structure</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://www.robinwieruch.de/react-folder-structure/"
+                    target="_blank"
+                    >📖 Robin Wieruch</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Design Systems & Component Libraries
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://storybook.js.org/tutorials/"
+                    target="_blank"
+                    >📖 Storybook</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=WoxTwoT0O3E"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Monorepo Patterns (Turborepo/Nx)</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://turbo.build/repo/docs"
+                    target="_blank"
+                    >📖 Turborepo</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=9iU_IE6vnJ8"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Micro-Frontends</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://micro-frontends.org/"
+                    target="_blank"
+                    >📖 micro-frontends.org</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=lKKsjpH09dU"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  State Architecture (Zustand / Redux Toolkit / Jotai)
+                  <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://zustand-demo.pmnd.rs/"
+                    target="_blank"
+                    >📖 Zustand</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://redux-toolkit.js.org/tutorials/overview"
+                    target="_blank"
+                    >📖 Redux Toolkit</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Server State (React Query / SWR)
+                  <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://tanstack.com/query/latest/docs/framework/react/overview"
+                    target="_blank"
+                    >📖 TanStack Query</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=novnyCaa7To"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Rendering Strategies (SSR, SSG, ISR, CSR)
+                  <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://web.dev/rendering-on-the-web/"
+                    target="_blank"
+                    >📖 web.dev</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://nextjs.org/docs/app/building-your-application/rendering"
+                    target="_blank"
+                    >📖 Next.js</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🔒 Security (Frontend)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">XSS (Cross-Site Scripting)</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://owasp.org/www-community/attacks/xss/"
+                    target="_blank"
+                    >📖 OWASP</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=EoaDgUgS6QA"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">CSRF (Cross-Site Request Forgery)</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://owasp.org/www-community/attacks/csrf"
+                    target="_blank"
+                    >📖 OWASP</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">CSP (Content Security Policy)</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP"
+                    target="_blank"
+                    >📖 MDN</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://web.dev/csp/"
+                    target="_blank"
+                    >📖 web.dev</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Token Storage (JWT, httpOnly cookies)
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://auth0.com/docs/secure/security-guidance/data-security/token-storage"
+                    target="_blank"
+                    >📖 Auth0</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Clickjacking & iframe sandboxing
+                  <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://developer.mozilla.org/en-US/docs/Web/Security/Types_of_attacks"
+                    target="_blank"
+                    >📖 MDN</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  OWASP Top 10 for Frontend <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://owasp.org/www-project-top-ten/"
+                    target="_blank"
+                    >📖 OWASP Top 10</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=rWHvp7rUe8w"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  HTTPS, HSTS, Secure Headers <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://securityheaders.com/"
+                    target="_blank"
+                    >🔧 securityheaders.com</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://developer.mozilla.org/en-US/docs/Web/Security/Practical_implementation_guides"
+                    target="_blank"
+                    >📖 MDN</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Subresource Integrity (SRI) <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity"
+                    target="_blank"
+                    >📖 MDN</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">
+              ♿ Accessibility (A11y) <span class="new-badge">NEW SECTION</span>
+            </div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">WCAG 2.1/2.2 Guidelines</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://www.w3.org/WAI/WCAG22/quickref/"
+                    target="_blank"
+                    >📖 W3C Quick Ref</a
+                  >
+                  <a
+                    class="link-btn lnk-course"
+                    href="https://web.dev/accessibility/"
+                    target="_blank"
+                    >🎓 web.dev</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">ARIA Roles & Semantic HTML</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://developer.mozilla.org/en-US/docs/Learn/Accessibility/WAI-ARIA_basics"
+                    target="_blank"
+                    >📖 MDN</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Keyboard Navigation & Focus Management
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://web.dev/accessible/"
+                    target="_blank"
+                    >📖 web.dev</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Color Contrast & Screen Readers</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://webaim.org/resources/contrastchecker/"
+                    target="_blank"
+                    >🔧 Contrast Checker</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🧪 Testing</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Unit Testing (Vitest / Jest)</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://vitest.dev/guide/"
+                    target="_blank"
+                    >📖 Vitest</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=7r4xVDI2vho"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Integration Testing (React Testing Library)
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://testing-library.com/docs/react-testing-library/intro/"
+                    target="_blank"
+                    >📖 RTL Docs</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">E2E Testing (Playwright / Cypress)</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://playwright.dev/docs/intro"
+                    target="_blank"
+                    >📖 Playwright</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=iDlBzfUpdaE"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Visual Regression (Percy / Chromatic)
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://www.chromatic.com/docs/"
+                    target="_blank"
+                    >📖 Chromatic</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Testing Best Practices (Mocking, Coverage)
+                  <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://kentcdodds.com/blog/common-mistakes-with-react-testing-library"
+                    target="_blank"
+                    >📖 Kent C. Dodds</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">
+              🌐 CSS Architecture & Advanced Styling
+              <span class="new-badge">NEW SECTION</span>
+            </div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">
+                  CSS Architecture (BEM, OOCSS, SMACSS)
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://css-tricks.com/bem-101/"
+                    target="_blank"
+                    >📖 CSS-Tricks BEM</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  CSS Custom Properties & Design Tokens
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties"
+                    target="_blank"
+                    >📖 MDN</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">CSS Grid & Flexbox Mastery</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://cssgridgarden.com/"
+                    target="_blank"
+                    >🔧 Grid Garden</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://flexboxfroggy.com/"
+                    target="_blank"
+                    >🔧 Flexbox Froggy</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">CSS Animations & Transitions</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animations/Using_CSS_animations"
+                    target="_blank"
+                    >📖 MDN</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://www.joshwcomeau.com/animation/css-transitions/"
+                    target="_blank"
+                    >📖 Josh W Comeau</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <h4>🔨 Project: Enterprise Dashboard</h4>
+            <p>
+              Full auth system, role-based access, caching, logging, error
+              boundaries, design system components, fully accessible and tested.
+            </p>
+          </div>
+          <div class="outcome">
+            👉 Outcome: You build production-grade frontend apps — senior
+            engineer level
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 09: JavaScript Mastery -->
+      <div class="phase p9">
+        <div class="phase-header">
+          <div class="phase-num">09</div>
+          <div class="phase-title">
+            <h2>🟦 JavaScript Mastery</h2>
+            <span>Plan.md Modules 1.1–1.7 · Until Mastery</span>
+          </div>
+          <div class="badge">JS Deep Expertise</div>
+        </div>
+        <div class="phase-body">
+
+          <div class="section">
+            <div class="section-label">⚙️ Core Fundamentals & Scope (Module 1.1)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Variables: var, let, const</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/var" target="_blank">📖 MDN var</a>
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/let" target="_blank">📖 MDN let</a>
+                  <a class="link-btn lnk-art" href="https://javascript.info/variables" target="_blank">📖 JS.info</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Data Types: Primitives vs Reference</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Data_structures" target="_blank">📖 MDN</a>
+                  <a class="link-btn lnk-art" href="https://javascript.info/types" target="_blank">📖 JS.info</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Type Coercion & Conversion</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Glossary/Type_coercion" target="_blank">📖 MDN</a>
+                  <a class="link-btn lnk-art" href="https://javascript.info/type-conversions" target="_blank">📖 JS.info</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Global, Function & Block Scope</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://javascript.info/closure#lexical-environment" target="_blank">📖 JS.info</a>
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Guide/Grammar_and_types#block-level_scope" target="_blank">📖 MDN</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Variable Hoisting & Temporal Dead Zone</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Glossary/Hoisting" target="_blank">📖 MDN Hoisting</a>
+                  <a class="link-btn lnk-art" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/let#temporal_dead_zone" target="_blank">📖 MDN TDZ</a>
+                  <a class="link-btn lnk-art" href="https://javascript.info/var#var-hoisting" target="_blank">📖 JS.info</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Execution Context Stack</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://www.javascripttutorial.net/javascript-execution-context/" target="_blank">📖 JS Tutorial</a>
+                  <a class="link-btn lnk-yt" href="https://www.youtube.com/watch?v=8aGhZQkoFbQ" target="_blank">▶ Event Loop Talk</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Lexical Environment & Scope Chain</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://javascript.info/closure#lexical-environment" target="_blank">📖 JS.info</a>
+                  <a class="link-btn lnk-art" href="https://medium.com/swlh/lexical-environment-ecmascript-concepts-7d5d53698ef4" target="_blank">📖 Medium</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🔑 this Keyword Mastery</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Implicit Binding (Object Methods)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/this" target="_blank">📖 MDN</a>
+                  <a class="link-btn lnk-art" href="https://javascript.info/object-methods#this" target="_blank">📖 JS.info</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Explicit Binding: call, apply, bind</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Function/call" target="_blank">📖 MDN</a>
+                  <a class="link-btn lnk-art" href="https://javascript.info/object-methods#method-borrowing" target="_blank">📖 JS.info</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">new Binding & Constructor Functions</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://javascript.info/constructor-new" target="_blank">📖 JS.info</a>
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/new" target="_blank">📖 MDN</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Arrow Functions & this</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://javascript.info/arrow-functions#arrow-functions-have-no-this" target="_blank">📖 JS.info</a>
+                  <a class="link-btn lnk-art" href="https://dmitripavlutin.com/gentle-explanation-of-this-in-javascript/" target="_blank">📖 Pavlutin</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🔒 Closures & Module Pattern</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Closures Deep Dive</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://javascript.info/closure" target="_blank">📖 JS.info</a>
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Closures" target="_blank">📖 MDN</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Practical Closure Use Cases</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://dmitripavlutin.com/simple-explanation-of-javascript-closures/" target="_blank">📖 Pavlutin</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Module Pattern & Private Variables</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://toddmotto.com/mastering-the-module-pattern/" target="_blank">📖 Todd Motto</a>
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Closures#using_closures_in_this_way" target="_blank">📖 MDN</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Memory Considerations in Closures</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Memory_Management" target="_blank">📖 MDN</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🧩 Functions Deep Dive (Module 1.2)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Higher-Order Functions & Callbacks</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://eloquentjavascript.net/05_higher_order.html" target="_blank">📖 Eloquent JS</a>
+                  <a class="link-btn lnk-art" href="https://javascript.info/callbacks" target="_blank">📖 JS.info</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Currying & Partial Application</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://javascript.info/currying-partials" target="_blank">📖 JS.info</a>
+                  <a class="link-btn lnk-art" href="https://www.geeksforgeeks.org/partial-function-application-in-javascript/" target="_blank">📖 GFG</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Function Composition & Pipe</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://medium.com/dailyjs/functional-js-why-you-should-use-pipe-and-compose-5b29b9bb0c75" target="_blank">📖 Medium</a>
+                  <a class="link-btn lnk-art" href="https://mostly-adequate.gitbook.io/mostly-adequate-guide" target="_blank">📖 Mostly Adequate</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Recursion & Tail Call Optimization</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://javascript.info/recursion" target="_blank">📖 JS.info</a>
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Glossary/Recursion" target="_blank">📖 MDN</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Debouncing (from scratch)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://www.freecodecamp.org/news/javascript-debounce-example/" target="_blank">📖 fCC</a>
+                  <a class="link-btn lnk-art" href="https://davidwalsh.name/javascript-debounce-function" target="_blank">📖 David Walsh</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Throttling (from scratch)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://css-tricks.com/debouncing-throttling-explained-examples/" target="_blank">📖 CSS-Tricks</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Memoization (from scratch)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://www.freecodecamp.org/news/understanding-memoization-in-javascript/" target="_blank">📖 fCC</a>
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map" target="_blank">📖 MDN Map</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">IIFE Pattern</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Glossary/IIFE" target="_blank">📖 MDN</a>
+                  <a class="link-btn lnk-art" href="https://javascript.info/function-expressions#immediately-called-function-expression" target="_blank">📖 JS.info</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🏛️ Objects, Prototypes & OOP (Modules 1.3–1.4)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Object Creation & Property Descriptors</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://javascript.info/object" target="_blank">📖 JS.info</a>
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank">📖 MDN defineProperty</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Prototype Chain & __proto__ vs prototype</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://javascript.info/prototype-inheritance" target="_blank">📖 JS.info</a>
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank">📖 MDN</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Constructor Functions & Object.create()</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://javascript.info/constructor-new" target="_blank">📖 JS.info</a>
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/create" target="_blank">📖 MDN</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">ES6 Classes & Private Fields (#)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://javascript.info/class" target="_blank">📖 JS.info</a>
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Classes/Private_class_fields" target="_blank">📖 MDN</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">OOP: Inheritance & extends/super</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://javascript.info/class-inheritance" target="_blank">📖 JS.info</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">SOLID Principles in JS</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://medium.com/swlh/solid-principles-with-javascript" target="_blank">📖 Medium</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Design Patterns (Factory, Observer, Strategy…)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://addyosmani.com/resources/essentialjsdesignpatterns/book/" target="_blank">📖 Addy Osmani</a>
+                  <a class="link-btn lnk-art" href="https://www.patterns.dev/posts" target="_blank">📖 Patterns.dev</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Composition vs Inheritance & Mixins</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://javascript.info/mixins" target="_blank">📖 JS.info</a>
+                  <a class="link-btn lnk-art" href="https://www.patterns.dev/posts/mixin-pattern/" target="_blank">📖 Patterns.dev</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">⏳ Asynchronous JavaScript (Module 1.5)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Callbacks & Callback Hell</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Glossary/Callback_function" target="_blank">📖 MDN</a>
+                  <a class="link-btn lnk-art" href="https://javascript.info/callbacks#pyramid-of-doom" target="_blank">📖 JS.info</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Promises: States, Chaining, Error Handling</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank">📖 MDN</a>
+                  <a class="link-btn lnk-art" href="https://javascript.info/promise-basics" target="_blank">📖 JS.info</a>
+                  <a class="link-btn lnk-art" href="https://javascript.info/promise-chaining" target="_blank">📖 Chaining</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Promise.all / race / allSettled / any</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise/all" target="_blank">📖 Promise.all</a>
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise/allSettled" target="_blank">📖 allSettled</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Async/Await & Error Handling</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/async_function" target="_blank">📖 MDN</a>
+                  <a class="link-btn lnk-art" href="https://javascript.info/async-await" target="_blank">📖 JS.info</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Event Loop: Microtask vs Macrotask</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/" target="_blank">📖 Jake Archibald</a>
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/API/HTML_DOM_API/Microtask_guide" target="_blank">📖 MDN</a>
+                  <a class="link-btn lnk-art" href="https://www.jsv9000.app" target="_blank">🔧 Visualizer</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Generators & Iterators (function*)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function*" target="_blank">📖 MDN</a>
+                  <a class="link-btn lnk-art" href="https://javascript.info/generators" target="_blank">📖 JS.info</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Async Patterns: retry, timeout, pool</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://javascript.info/promisify" target="_blank">📖 Promisify</a>
+                  <a class="link-btn lnk-art" href="https://dmitripavlutin.com/timeout-promise/" target="_blank">📖 Timeout</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🔀 Functional Programming (Module 1.6)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Pure Functions & Side Effects</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/en-US/docs/Glossary/Pure_function" target="_blank">📖 MDN</a>
+                  <a class="link-btn lnk-art" href="https://www.freecodecamp.org/news/what-are-pure-functions/" target="_blank">📖 fCC</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Immutability Patterns</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://redux.js.org/usage/structuring-reducers/immutable-update-patterns" target="_blank">📖 Redux Docs</a>
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/en-US/docs/Web/API/structuredClone" target="_blank">📖 structuredClone</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">map, filter, reduce (implement from scratch)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map" target="_blank">📖 MDN map</a>
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce" target="_blank">📖 MDN reduce</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Declarative vs Imperative Programming</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://ui.dev/imperative-vs-declarative-programming" target="_blank">📖 ui.dev</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Immer & Immutable.js Concepts</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://immerjs.github.io/immer/" target="_blank">📖 Immer.js</a>
+                  <a class="link-btn lnk-art" href="https://immutable-js.com/" target="_blank">📖 Immutable.js</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Transducers & Monads (Advanced)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://dev.to/rametta/monads-in-javascript-for-dummies-4g58" target="_blank">📖 Monads</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">✨ ES6+ Modern Features (Module 1.7)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Destructuring & Rest/Spread</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment" target="_blank">📖 MDN</a>
+                  <a class="link-btn lnk-art" href="https://javascript.info/destructuring-assignment" target="_blank">📖 JS.info</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Template Literals & Tagged Templates</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Template_literals" target="_blank">📖 MDN</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Symbols & Well-Known Symbols</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Symbol" target="_blank">📖 MDN</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Custom Iterables & Generators</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Guide/Iterators_and_Generators" target="_blank">📖 MDN</a>
+                  <a class="link-btn lnk-art" href="https://javascript.info/iterable" target="_blank">📖 JS.info</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Proxy & Reflect API</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Proxy" target="_blank">📖 MDN Proxy</a>
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Reflect" target="_blank">📖 MDN Reflect</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Map, Set, WeakMap, WeakSet</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map" target="_blank">📖 MDN Map</a>
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/WeakMap" target="_blank">📖 MDN WeakMap</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">ES Modules: import/export, Dynamic import</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Guide/Modules" target="_blank">📖 MDN</a>
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/import" target="_blank">📖 Dynamic import</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <h4>🔨 Projects: JS Mastery Milestones</h4>
+            <p>Library Management System (OOP) · Game Character System (polymorphism/composition) · Payment Processing (strategy pattern) · Notification System (observer) · Undo/Redo (command pattern) · Build your own Promise, debounce, throttle, curry, compose from scratch.</p>
+          </div>
+          <div class="outcome">
+            👉 Outcome: Deep JS expertise — you understand the language at engine level
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 10: TypeScript Mastery -->
+      <div class="phase p10">
+        <div class="phase-header">
+          <div class="phase-num">10</div>
+          <div class="phase-title">
+            <h2>🔷 TypeScript Mastery</h2>
+            <span>Plan.md Modules 2.1–2.4 · Until Mastery</span>
+          </div>
+          <div class="badge">Type-Safe Engineering</div>
+        </div>
+        <div class="phase-body">
+
+          <div class="section">
+            <div class="section-label">⚙️ Setup & Fundamentals (Module 2.1)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Installing TS & Basic CLI</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html" target="_blank">📖 TS Handbook</a>
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/compiler-options.html" target="_blank">📖 Compiler Options</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">tsconfig.json Deep Dive</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/tsconfig" target="_blank">📖 tsconfig Reference</a>
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/tsconfig#strict" target="_blank">📖 Strict Mode</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Primitive Types: string, number, boolean</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">📖 Basic Types</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Arrays, Tuples & Enums</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/basic-types.html#array" target="_blank">📖 Arrays</a>
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/enums.html" target="_blank">📖 Enums</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">any, unknown, never, void</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/basic-types.html#any" target="_blank">📖 any</a>
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/basic-types.html#never" target="_blank">📖 never</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Type Inference & Annotations</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/type-inference.html" target="_blank">📖 Inference</a>
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/declaration-files/do-s-and-don-ts.html" target="_blank">📖 Best Practices</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Project References & Path Mapping</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/project-references.html" target="_blank">📖 Project References</a>
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/tsconfig#paths" target="_blank">📖 Path Mapping</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🔗 Type System: Unions, Intersections & Literals (Module 2.1)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Union Types (A | B)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#union-types" target="_blank">📖 TS Handbook</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Intersection Types (A & B)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#intersection-types" target="_blank">📖 TS Handbook</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Discriminated Unions</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminating-unions" target="_blank">📖 TS Handbook</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Literal & Template Literal Types</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#literal-types" target="_blank">📖 Literal Types</a>
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html" target="_blank">📖 Template Literals</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Type Guards & Narrowing</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html" target="_blank">📖 Narrowing</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🏗️ Interfaces, Classes & Generics (Module 2.2)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Interfaces: Optional, Readonly, Index Signatures</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/interfaces.html" target="_blank">📖 TS Handbook</a>
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/2/objects.html#index-signatures" target="_blank">📖 Index Signatures</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Interface vs Type Alias</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/2/types-from-types.html" target="_blank">📖 TS Handbook</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Classes: Access Modifiers, Abstract, Static</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/classes.html" target="_blank">📖 TS Classes</a>
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/classes.html#abstract-classes" target="_blank">📖 Abstract Classes</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Function Overloads & this Parameter</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/2/functions.html#overloads" target="_blank">📖 Overloads</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Generics: Functions, Classes, Constraints</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/2/generics.html" target="_blank">📖 Generics</a>
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints" target="_blank">📖 Constraints</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🔬 Advanced Types (Module 2.3)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Utility Types: Partial, Required, Pick, Omit…</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/utility-types.html" target="_blank">📖 Utility Types</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Mapped Types & Key Remapping</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/2/mapped-types.html" target="_blank">📖 Mapped Types</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Conditional Types & infer Keyword</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/2/conditional-types.html" target="_blank">📖 Conditional Types</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">keyof, typeof, Indexed Access Types</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/2/keyof-types.html" target="_blank">📖 keyof</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Declaration Merging & Module Augmentation</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/declaration-merging.html" target="_blank">📖 Declaration Merging</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Decorators (class, method, property)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/decorators.html" target="_blank">📖 Decorators</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🎯 TypeScript OOP & FP Patterns (Module 2.4)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">SOLID Principles with TypeScript</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://medium.com/swlh/solid-principles-in-typescript-2a59a18dcf15" target="_blank">📖 Medium</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Type-Safe Function Composition</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://www.typescriptlang.org/docs/handbook/functions.html#higher-order-functions" target="_blank">📖 TS Handbook</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Generic Data Structures (Stack, Queue, Tree)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://refactoring.guru/design-patterns/typescript" target="_blank">📖 Refactoring Guru</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Functional Error Handling: Option & Either Types</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://dev.to/gcanti/introduction-to-fp-ts-2bj" target="_blank">📖 fp-ts intro</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <h4>🔨 Projects: TypeScript Mastery</h4>
+            <p>Type-safe State Machine · API Client with full type coverage · Form Validation System (complex generics) · Plugin Architecture (advanced generics) · Type-safe Event Emitter</p>
+          </div>
+          <div class="outcome">
+            👉 Outcome: TypeScript catches your bugs at compile time — you write type-safe APIs confidently
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 11: React Mastery -->
+      <div class="phase p11">
+        <div class="phase-header">
+          <div class="phase-num">11</div>
+          <div class="phase-title">
+            <h2>⚛️ React Mastery</h2>
+            <span>Plan.md Modules 4.1–4.5 · Until Mastery</span>
+          </div>
+          <div class="badge">React Expert</div>
+        </div>
+        <div class="phase-body">
+
+          <div class="section">
+            <div class="section-label">🌱 React Fundamentals (Module 4.1)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">JSX, Virtual DOM & Reconciliation</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/introducing-jsx.html" target="_blank">📖 React Docs</a>
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/rendering-elements.html" target="_blank">📖 Rendering</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Functional Components & Props</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/components-and-props.html" target="_blank">📖 React Docs</a>
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/jsx-in-depth.html" target="_blank">📖 JSX in Depth</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Lists, Keys & Conditional Rendering</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/lists-and-keys.html" target="_blank">📖 Lists & Keys</a>
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/conditional-rendering.html" target="_blank">📖 Conditional</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">useState & State Batching</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/hooks-state.html" target="_blank">📖 useState</a>
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/state-and-lifecycle.html" target="_blank">📖 State & Lifecycle</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Controlled vs Uncontrolled Forms</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/forms.html" target="_blank">📖 Forms</a>
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/uncontrolled-components.html" target="_blank">📖 Uncontrolled</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Synthetic Events & Event Handling</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/handling-events.html" target="_blank">📖 Events</a>
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/events.html" target="_blank">📖 Synthetic Events</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🪝 Hooks Deep Dive (Module 4.2)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">useEffect: Cleanup, Dependencies & Pitfalls</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/hooks-effect.html" target="_blank">📖 useEffect</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">useContext & Context API</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/context.html" target="_blank">📖 Context</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">useReducer & Complex State Logic</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/hooks-reference.html#usereducer" target="_blank">📖 useReducer</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">useRef, forwardRef & useImperativeHandle</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/hooks-reference.html#useref" target="_blank">📖 useRef</a>
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/refs-and-the-dom.html" target="_blank">📖 Refs & DOM</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">useMemo & useCallback</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/hooks-reference.html#usememo" target="_blank">📖 useMemo</a>
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/hooks-reference.html#usecallback" target="_blank">📖 useCallback</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Custom Hooks: useToggle, useFetch, useDebounce…</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/hooks-custom.html" target="_blank">📖 Custom Hooks</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Rules of Hooks & useLayoutEffect</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/hooks-rules.html" target="_blank">📖 Rules of Hooks</a>
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/hooks-reference.html#uselayouteffect" target="_blank">📖 useLayoutEffect</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🎨 Advanced Patterns (Module 4.3)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Compound Components Pattern</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/context.html" target="_blank">📖 React Context</a>
+                  <a class="link-btn lnk-art" href="https://www.patterns.dev/react/compound-pattern" target="_blank">📖 Patterns.dev</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Render Props Pattern</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/render-props.html" target="_blank">📖 React Docs</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Higher-Order Components (withAuth, withLoading)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/higher-order-components.html" target="_blank">📖 React Docs</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">React.memo & Performance Optimization</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/react-api.html#reactmemo" target="_blank">📖 React.memo</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Code Splitting: React.lazy & Suspense</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/code-splitting.html" target="_blank">📖 Code Splitting</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">List Virtualization (react-window)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://react-window.vercel.app/#/examples/list/variable-size" target="_blank">📖 react-window</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Error Boundaries & Portals</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/error-boundaries.html" target="_blank">📖 Error Boundaries</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🗂️ State Management Ecosystem (Module 4.4)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Context + useReducer for Global State</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/context.html" target="_blank">📖 Context</a>
+                  <a class="link-btn lnk-docs" href="https://reactjs.org/docs/hooks-reference.html#usereducer" target="_blank">📖 useReducer</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Redux Toolkit: slices, thunks, selectors</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://redux-toolkit.js.org/introduction/getting-started" target="_blank">📖 RTK Docs</a>
+                  <a class="link-btn lnk-docs" href="https://redux-toolkit.js.org/api/createAsyncThunk" target="_blank">📖 createAsyncThunk</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Zustand: Simple Global State</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://zustand-demo.pmnd.rs/" target="_blank">📖 Zustand</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Jotai / Recoil: Atomic State</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://jotai.org/" target="_blank">📖 Jotai</a>
+                  <a class="link-btn lnk-docs" href="https://recoiljs.org/" target="_blank">📖 Recoil</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">TanStack Query: Server State, Caching, Mutations</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://tanstack.com/query/v4/docs/overview" target="_blank">📖 TanStack Query</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🔷 React + TypeScript (Module 4.5)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Typed Props, Children & Event Handlers</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/function_components/" target="_blank">📖 TS Cheatsheet</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Typed Hooks: useState, useReducer, useRef, useContext</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://react-typescript-cheatsheet.netlify.app/docs/basic/hooks/" target="_blank">📖 Hooks Cheatsheet</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Generic & Typed HOCs / Render Props</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://react-typescript-cheatsheet.netlify.app/" target="_blank">📖 React TS Cheatsheet</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Common Types: ReactNode, CSSProperties, Ref types</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/basic_type_example/" target="_blank">📖 TS Cheatsheet</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <h4>🔨 Projects: React Mastery</h4>
+            <p>Fully typed dashboard with Redux Toolkit + TanStack Query · Custom hooks library · Design system with compound components · Form wizard with validation · Virtualized data table</p>
+          </div>
+          <div class="outcome">
+            👉 Outcome: You build production-grade React apps with full TypeScript type safety
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 12: Next.js Mastery -->
+      <div class="phase p12">
+        <div class="phase-header">
+          <div class="phase-num">12</div>
+          <div class="phase-title">
+            <h2>▲ Next.js Mastery</h2>
+            <span>Plan.md Modules 5.1–5.4 · Until Mastery</span>
+          </div>
+          <div class="badge">Full-Stack React</div>
+        </div>
+        <div class="phase-body">
+
+          <div class="section">
+            <div class="section-label">🗂️ App Router Fundamentals (Module 5.1)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Project Setup & App Router vs Pages Router</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://nextjs.org/docs/getting-started" target="_blank">📖 Next.js Docs</a>
+                  <a class="link-btn lnk-docs" href="https://nextjs.org/docs/app/building-your-application/routing" target="_blank">📖 App Router</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">File-Based Routing: Dynamic, Catch-All, Groups</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://nextjs.org/docs/routing/introduction" target="_blank">📖 Routing</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Layouts, Templates & Nested Layouts</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts" target="_blank">📖 Layouts</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Loading UI, Skeleton & Suspense Streaming</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://nextjs.org/docs/app/building-your-application/loading" target="_blank">📖 Loading UI</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Error Handling: error.tsx, not-found.tsx</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://nextjs.org/docs/app/building-your-application/error-handling" target="_blank">📖 Error Handling</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Server vs Client Components ("use client")</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://nextjs.org/docs/app/building-your-application/routing/server-and-client-components" target="_blank">📖 Server & Client</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">📡 Data Fetching & Rendering (Module 5.2)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">SSR, SSG, ISR & CSR Strategies</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://web.dev/rendering-on-the-web/" target="_blank">📖 web.dev</a>
+                  <a class="link-btn lnk-docs" href="https://nextjs.org/docs/app/building-your-application/rendering" target="_blank">📖 Next.js Rendering</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">fetch in Server Components & Deduplication</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating" target="_blank">📖 Data Fetching</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Server Actions & Progressive Enhancement</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations" target="_blank">📖 Server Actions</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Route Handlers (API Routes in App Router)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://nextjs.org/docs/app/building-your-application/routing/route-handlers" target="_blank">📖 Route Handlers</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Caching: Request, Data, Route & Router Cache</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://nextjs.org/docs/app/building-your-application/caching" target="_blank">📖 Caching</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🚀 Advanced Features (Module 5.3)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Metadata API & SEO (OG images, sitemap)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://nextjs.org/docs/app/building-your-application/optimizing/metadata" target="_blank">📖 Metadata</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">next/image & next/font Optimization</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://nextjs.org/docs/app/building-your-application/optimizing/images" target="_blank">📖 Images</a>
+                  <a class="link-btn lnk-docs" href="https://nextjs.org/docs/app/building-your-application/optimizing/fonts" target="_blank">📖 Fonts</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Middleware: Auth, Redirects, A/B Testing</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://nextjs.org/docs/app/building-your-application/routing/middleware" target="_blank">📖 Middleware</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Authentication with NextAuth / Auth.js</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://authjs.dev/" target="_blank">📖 Auth.js</a>
+                  <a class="link-btn lnk-docs" href="https://jwt.io/introduction/" target="_blank">📖 JWT Guide</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Internationalization (i18n)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://nextjs.org/docs/app/building-your-application/routing/internationalization" target="_blank">📖 i18n</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">revalidatePath & revalidateTag (On-demand ISR)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://nextjs.org/docs/app/api-reference/functions/revalidatePath" target="_blank">📖 revalidatePath</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">📦 Performance & Production (Module 5.4)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Bundle Analysis & Code Splitting</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://nextjs.org/docs/app/building-your-application/optimizing/bundle-analyzer" target="_blank">📖 Bundle Analyzer</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Core Web Vitals in Next.js</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://nextjs.org/docs/app/building-your-application/optimizing/analytics" target="_blank">📖 Next.js Analytics</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Vercel Deployment & Edge Functions</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://vercel.com/docs" target="_blank">📖 Vercel Docs</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Docker & Self-Hosted Deployment</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://nextjs.org/docs/app/building-your-application/deploying" target="_blank">📖 Deploying</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <h4>🔨 Projects: Next.js Mastery</h4>
+            <p>Full-stack e-commerce with SSG product pages + SSR cart · Blog with MDX + ISR · Dashboard with Server Actions and optimistic updates · Multi-tenant SaaS app with Auth.js + middleware</p>
+          </div>
+          <div class="outcome">
+            👉 Outcome: You build full-stack production apps with Next.js confidently
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 13: Testing Mastery -->
+      <div class="phase p13">
+        <div class="phase-header">
+          <div class="phase-num">13</div>
+          <div class="phase-title">
+            <h2>🧪 Testing Mastery</h2>
+            <span>Plan.md Modules 6.1–6.2 · Until Mastery</span>
+          </div>
+          <div class="badge">Quality Engineering</div>
+        </div>
+        <div class="phase-body">
+
+          <div class="section">
+            <div class="section-label">🔬 Unit Testing: Jest + React Testing Library (Module 6.1)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Jest Setup & Test Structure (describe, it, expect)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://jestjs.io/docs/getting-started" target="_blank">📖 Jest Docs</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Mocking: jest.fn, jest.mock, jest.spyOn</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://jestjs.io/docs/mock-functions" target="_blank">📖 Mock Functions</a>
+                  <a class="link-btn lnk-docs" href="https://jestjs.io/docs/jest-object#jestmockmodulename-factory-options" target="_blank">📖 jest.mock</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Async Testing & Timer Mocks</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://jestjs.io/docs/asynchronous" target="_blank">📖 Async Tests</a>
+                  <a class="link-btn lnk-docs" href="https://jestjs.io/docs/timer-mocks" target="_blank">📖 Timer Mocks</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">React Testing Library: Render, Queries, userEvent</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://testing-library.com/docs/react-testing-library/intro/" target="_blank">📖 RTL Docs</a>
+                  <a class="link-btn lnk-docs" href="https://testing-library.com/docs/user-event/intro" target="_blank">📖 userEvent</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Testing Async UI: waitFor, findBy queries</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://testing-library.com/docs/dom-testing-library/api-async" target="_blank">📖 Async Utilities</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Mock Service Worker (MSW) for API Mocking</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://mswjs.io/docs/" target="_blank">📖 MSW Docs</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Testing Custom Hooks, Redux & Context Providers</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://testing-library.com/docs/react-testing-library/api/#renderhook" target="_blank">📖 renderHook</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Code Coverage & TDD Practice</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://jestjs.io/docs/configuration#collectcoverage-boolean" target="_blank">📖 Coverage Config</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🎭 Integration & E2E Testing (Module 6.2)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Playwright: Setup, Locators & Assertions</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://playwright.dev/docs/intro" target="_blank">📖 Playwright Docs</a>
+                  <a class="link-btn lnk-docs" href="https://playwright.dev/docs/locators" target="_blank">📖 Locators</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Page Object Model (POM)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://playwright.dev/docs/pom" target="_blank">📖 POM</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Network Interception & API Mocking</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://playwright.dev/docs/network" target="_blank">📖 Network</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Cross-Browser Testing & CI/CD Integration</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://playwright.dev/docs/ci" target="_blank">📖 CI Docs</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Cypress: Commands, Fixtures & Visual Regression</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://docs.cypress.io/guides/getting-started/installing-cypress" target="_blank">📖 Cypress Docs</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Test Pyramid, AAA Pattern & Best Practices</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://kentcdodds.com/blog/write-tests" target="_blank">📖 Kent C. Dodds</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <h4>🔨 Testing Projects</h4>
+            <p>Full test suite for a React form app (unit + integration) · E2E test suite for an e-commerce flow with Playwright · Mock Service Worker setup for a REST API consumer · TDD kata: implement features test-first</p>
+          </div>
+          <div class="outcome">
+            👉 Outcome: You ship code with confidence — comprehensive unit, integration & E2E test coverage
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 14: Frontend Security -->
+      <div class="phase p14">
+        <div class="phase-header">
+          <div class="phase-num">14</div>
+          <div class="phase-title">
+            <h2>🔐 Frontend Security Mastery</h2>
+            <span>Security.md · 9-Day Daily Roadmap</span>
+          </div>
+          <div class="badge">Security-Conscious Dev</div>
+        </div>
+        <div class="phase-body">
+
+          <div class="section">
+            <div class="section-label">🌐 Web Security Fundamentals (Day 1)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">OWASP Top 10 Vulnerabilities</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://owasp.org/www-project-top-ten/" target="_blank">📖 OWASP Top 10</a>
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/Security" target="_blank">📖 MDN Security</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">CIA Triad & Authentication vs Authorization</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://www.geeksforgeeks.org/cia-triad-in-information-security/" target="_blank">📖 CIA Triad</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">💉 XSS: Cross-Site Scripting (Day 2)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Stored, Reflected & DOM-based XSS</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://owasp.org/www-community/attacks/xss/" target="_blank">📖 OWASP XSS</a>
+                  <a class="link-btn lnk-art" href="https://javascript.info/xss" target="_blank">📖 JS.info</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Safe DOM Manipulation: textContent vs innerHTML</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/API/Node/textContent" target="_blank">📖 MDN textContent</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🔄 CSRF & Content Security Policy (Days 3–4)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">CSRF Attacks & Token Protection</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://owasp.org/www-community/attacks/csrf" target="_blank">📖 OWASP CSRF</a>
+                  <a class="link-btn lnk-art" href="https://javascript.info/fetch-crossorigin" target="_blank">📖 JS.info</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">SameSite Cookie Attribute</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://web.dev/samesite-cookies-explained/" target="_blank">📖 web.dev</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Content Security Policy (CSP): script-src, nonce</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/HTTP/CSP" target="_blank">📖 MDN CSP</a>
+                  <a class="link-btn lnk-art" href="https://web.dev/content-security-policy/" target="_blank">📖 web.dev CSP</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🔑 Secure Authentication & Authorization (Day 5)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">JWT-Based Authentication</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://jwt.io/introduction/" target="_blank">📖 JWT Guide</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">OAuth 2.0 Frontend Flow</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://auth0.com/docs/authorization/flows" target="_blank">📖 Auth0 Docs</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">localStorage vs httpOnly Cookies for Tokens</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/API/Window/localStorage" target="_blank">📖 MDN localStorage</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🛡️ Browser Security Mechanisms (Day 6)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Same-Origin Policy (SOP)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/Security/Same-origin_policy" target="_blank">📖 MDN SOP</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">CORS: Preflight, Headers & Configuration</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/HTTP/CORS" target="_blank">📖 MDN CORS</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Subresource Integrity (SRI)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-docs" href="https://developer.mozilla.org/docs/Web/Security/Subresource_Integrity" target="_blank">📖 MDN SRI</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">✅ Secure Coding & Best Practices (Days 7–9)</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Input Validation & Sanitization</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://cheatsheetseries.owasp.org/" target="_blank">📖 OWASP Cheat Sheets</a>
+                  <a class="link-btn lnk-art" href="https://owasp.org/www-project-cheat-sheets/cheatsheets/Input_Validation_Cheat_Sheet.html" target="_blank">📖 Input Validation</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Dependency Vulnerabilities (npm audit, Snyk)</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://docs.npmjs.com/cli/v10/commands/npm-audit" target="_blank">📖 npm audit</a>
+                  <a class="link-btn lnk-art" href="https://snyk.io/" target="_blank">📖 Snyk</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">WebAuthn & FIDO2 Passwordless Login</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://webauthn.guide/" target="_blank">📖 WebAuthn Guide</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">OWASP ZAP: Frontend Security Scanning</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://owasp.org/www-project-zap/" target="_blank">📖 OWASP ZAP</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">WebSockets Security & Threat Modeling</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://owasp.org/www-project-cheat-sheets/cheatsheets/WebSockets_Security_Cheat_Sheet.html" target="_blank">📖 WS Security</a>
+                  <a class="link-btn lnk-art" href="https://owasp.org/www-community/Threat_Modeling" target="_blank">📖 Threat Modeling</a>
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Frontend Security Checklist</div>
+                <div class="topic-links">
+                  <a class="link-btn lnk-art" href="https://owasp.org/www-project-cheat-sheets/cheatsheets/Frontend_Security_Cheat_Sheet.html" target="_blank">📖 OWASP Checklist</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <h4>🔨 Security Projects</h4>
+            <p>Audit a React/Next.js app for XSS vulnerabilities · Implement JWT + refresh token flow with httpOnly cookies · Add strict CSP to a Next.js app · Run npm audit + Snyk on a dependency-heavy project · Implement WebAuthn passwordless demo</p>
+          </div>
+          <div class="outcome">
+            👉 Outcome: You build with a security-first mindset — audit, prevent, and respond to frontend security threats
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 5 -->
+      <div class="phase p5">
+        <div class="phase-header">
+          <div class="phase-num">05</div>
+          <div class="phase-title">
+            <h2>🔴 System Design Thinking</h2>
+            <span>Weeks 31–38 · Become a Solution Architect Thinker</span>
+          </div>
+          <div class="badge">Architectural Thinking</div>
+        </div>
+        <div class="phase-body">
+          <div class="section">
+            <div class="section-label">🏛️ Core Concepts</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Scalability & Load Balancing</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-course"
+                    href="https://www.youtube.com/watch?v=UzEBDkbfzAc"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://github.com/donnemartin/system-design-primer"
+                    target="_blank"
+                    >📖 System Design Primer</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Caching Strategies (CDN, Redis, In-memory)
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://github.com/donnemartin/system-design-primer#cache"
+                    target="_blank"
+                    >📖 Primer</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Rate Limiting</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://www.cloudflare.com/learning/bots/what-is-rate-limiting/"
+                    target="_blank"
+                    >📖 Cloudflare</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">DB Scaling, Replication & Sharding</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://github.com/donnemartin/system-design-primer#database"
+                    target="_blank"
+                    >📖 Primer</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=5faMjKuB9bc"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Event-Driven Systems & Message Queues
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=oUJbuFMyBDk"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  API Design (REST, GraphQL, gRPC)
+                  <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://restfulapi.net/"
+                    target="_blank"
+                    >📖 RESTful API</a
+                  >
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://graphql.org/learn/"
+                    target="_blank"
+                    >📖 GraphQL</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Websockets & Real-time (Socket.io, SSE)
+                  <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://socket.io/docs/v4/"
+                    target="_blank"
+                    >📖 Socket.io</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=1BfCnjr_Vjg"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">🧩 Practice: Design These Systems</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Chat App (WhatsApp)</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=vvhC64hQZMk"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Video Streaming (Netflix)</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=psQzyFfsUGU"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">URL Shortener</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=fMZMm_0ZhK4"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Notification System</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=bBTPZ9NdSk8"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">File Upload Service</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=jLM1vGiX9yE"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+            </div>
+            <div style="margin-top: 10px; font-size: 0.85rem; color: #94a3b8">
+              Full free course:
+              <a
+                href="https://www.youtube.com/watch?v=F2FmTdLtb_4"
+                target="_blank"
+                style="color: #63b3ed"
+                >▶ Grokking System Design on YouTube</a
+              >
+            </div>
+          </div>
+
+          <div class="project-card">
+            <h4>🔨 Project: System Design Simulator</h4>
+            <p>
+              Build a drag-and-drop architecture diagram tool where users can
+              place servers, DBs, caches, CDN, and connect them with labeled
+              edges.
+            </p>
+          </div>
+          <div class="outcome">
+            👉 Outcome: You can design scalable systems and explain tradeoffs
+            confidently
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 6 -->
+      <div class="phase p6">
+        <div class="phase-header">
+          <div class="phase-num">06</div>
+          <div class="phase-title">
+            <h2>🟤 DevOps Foundation</h2>
+            <span>Weeks 39–46 · Learn the Infrastructure Layer</span>
+          </div>
+          <div class="badge">DevOps Engineer</div>
+        </div>
+        <div class="phase-body">
+          <div class="section">
+            <div class="section-label">🐧 Linux & Networking</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">
+                  Linux CLI (filesystem, permissions, processes)
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-course"
+                    href="https://linuxjourney.com/"
+                    target="_blank"
+                    >🎓 Linux Journey</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=ZtqBQ68cfJc"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">HTTP / DNS / TCP / UDP / TLS</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview"
+                    target="_blank"
+                    >📖 MDN HTTP</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=aamG4-tH_m8"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">CDN & Reverse Proxy (Nginx)</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://nginx.org/en/docs/beginners_guide.html"
+                    target="_blank"
+                    >📖 Nginx Docs</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=7VAI73roXaY"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="section">
+            <div class="section-label">🐳 Docker</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Docker Images, Containers, Volumes</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://docs.docker.com/get-started/"
+                    target="_blank"
+                    >📖 Docker Docs</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=pg19Z8LL06w"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Docker Compose & Networking</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://docs.docker.com/compose/"
+                    target="_blank"
+                    >📖 Compose Docs</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Multi-Stage Builds</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://docs.docker.com/build/building/multi-stage/"
+                    target="_blank"
+                    >📖 Docker Docs</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Kubernetes Basics <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://kubernetes.io/docs/tutorials/kubernetes-basics/"
+                    target="_blank"
+                    >📖 k8s Docs</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=s_o8dwzRlu4"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <h4>🔨 Project: Containerized App Deployment</h4>
+            <p>
+              Dockerize your enterprise dashboard with multi-stage builds. Add
+              Docker Compose with a DB + Redis + app container stack.
+            </p>
+          </div>
+          <div class="outcome">
+            👉 Outcome: You understand and own the infrastructure your code runs
+            on
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 7 -->
+      <div class="phase p7">
+        <div class="phase-header">
+          <div class="phase-num">07</div>
+          <div class="phase-title">
+            <h2>⚫ Cloud Engineering</h2>
+            <span>Weeks 47–56 · Build Cloud Architecture Skills</span>
+          </div>
+          <div class="badge">Cloud Engineer</div>
+        </div>
+        <div class="phase-body">
+          <div class="section">
+            <div class="section-label">☁️ Cloud Core</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">
+                  AWS Fundamentals (EC2, S3, RDS, VPC)
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-course"
+                    href="https://aws.amazon.com/training/digital/aws-cloud-practitioner-essentials/"
+                    target="_blank"
+                    >🎓 AWS Free</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=a9__D53WsUs"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Auto Scaling & Load Balancers</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html"
+                    target="_blank"
+                    >📖 AWS Docs</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">IAM & Cloud Security</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://aws.amazon.com/iam/getting-started/"
+                    target="_blank"
+                    >📖 AWS IAM</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Serverless (Lambda, Edge Functions)
+                  <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://aws.amazon.com/lambda/getting-started/"
+                    target="_blank"
+                    >📖 AWS Lambda</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=97q30JjEq9Y"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="section">
+            <div class="section-label">🏗️ Infrastructure as Code & CI/CD</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Terraform</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://developer.hashicorp.com/terraform/tutorials/aws-get-started"
+                    target="_blank"
+                    >📖 Terraform Docs</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=SLB_c_ayRMo"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">GitHub Actions (CI/CD Pipelines)</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://docs.github.com/en/actions/learn-github-actions"
+                    target="_blank"
+                    >📖 GitHub Docs</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=R8_veQiYBjI"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Monitoring & Observability (Grafana, CloudWatch)
+                  <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://grafana.com/tutorials/"
+                    target="_blank"
+                    >📖 Grafana</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <h4>🔨 Project: Production Deployment System</h4>
+            <p>
+              Deploy your app on AWS with load balancer, auto scaling, RDS
+              database, CloudWatch monitoring, and GitHub Actions CI/CD
+              pipeline.
+            </p>
+          </div>
+          <div class="outcome">
+            👉 Outcome: You can deploy and maintain production cloud
+            infrastructure
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 8 -->
+      <div class="phase p8">
+        <div class="phase-header">
+          <div class="phase-num">08</div>
+          <div class="phase-title">
+            <h2>⚪ Advanced Systems + Distributed Thinking</h2>
+            <span>Weeks 57–68 · Distributed Systems Mastery</span>
+          </div>
+          <div class="badge">Distributed Systems Engineer</div>
+        </div>
+        <div class="phase-body">
+          <div class="section">
+            <div class="section-label">🌐 Distributed Systems Theory</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">CAP Theorem</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://www.ibm.com/topics/cap-theorem"
+                    target="_blank"
+                    >📖 IBM</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=k-Yaq8AHlFA"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Distributed Caching & Consistency</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://redis.io/docs/manual/client-side-caching/"
+                    target="_blank"
+                    >📖 Redis</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Message Queues (Kafka, RabbitMQ)</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://kafka.apache.org/documentation/"
+                    target="_blank"
+                    >📖 Kafka Docs</a
+                  >
+                  <a
+                    class="link-btn lnk-yt"
+                    href="https://www.youtube.com/watch?v=Ch5VhJzaoaI"
+                    target="_blank"
+                    >▶ YouTube</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Circuit Breakers & Fault Tolerance</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://martinfowler.com/bliki/CircuitBreaker.html"
+                    target="_blank"
+                    >📖 Martin Fowler</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Streaming (Kafka Streams)</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://kafka.apache.org/documentation/streams/"
+                    target="_blank"
+                    >📖 Kafka Streams</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">
+                  Observability (Logs, Metrics, Traces)
+                  <span class="new-badge">NEW</span>
+                </div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://opentelemetry.io/docs/"
+                    target="_blank"
+                    >📖 OpenTelemetry</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <h4>🔨 Project: Realtime Distributed Dashboard</h4>
+            <p>
+              Handle live updates via WebSockets/SSE, simulate network failures,
+              implement retry logic, offline state with service workers, and
+              dead letter queues.
+            </p>
+          </div>
+          <div class="outcome">
+            👉 Outcome: You understand and build resilient distributed systems
+          </div>
+        </div>
+      </div>
+
+      <!-- FINAL PHASE -->
+      <div class="phase pf">
+        <div class="phase-header">
+          <div class="phase-num">🏆</div>
+          <div class="phase-title">
+            <h2>🏆 Architect Level — Final Phase</h2>
+            <span>Weeks 69–80 · Master Engineer + Architect Mindset</span>
+          </div>
+          <div class="badge">🏆 Architect</div>
+        </div>
+        <div class="phase-body">
+          <div class="section">
+            <div class="section-label">🧠 Master Skills</div>
+            <div class="topic-grid">
+              <div class="topic-card">
+                <div class="topic-name">Production Debugging & RCA</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://developer.chrome.com/docs/devtools/"
+                    target="_blank"
+                    >📖 DevTools</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Performance Bottleneck Detection</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://developer.chrome.com/docs/devtools/performance/"
+                    target="_blank"
+                    >📖 Chrome Profiler</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Cost Optimization (Cloud)</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://aws.amazon.com/aws-cost-management/"
+                    target="_blank"
+                    >📖 AWS Cost Tools</a
+                  >
+                </div>
+              </div>
+              <div class="topic-card">
+                <div class="topic-name">Architecture Tradeoff Analysis</div>
+                <div class="topic-links">
+                  <a
+                    class="link-btn lnk-art"
+                    href="https://github.com/donnemartin/system-design-primer"
+                    target="_blank"
+                    >📖 System Design Primer</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <h4>🔨 Capstone: Production Simulation Platform</h4>
+            <p>
+              Simulate 100k users, introduce random network failures, slow DB
+              queries, API crashes, and memory leaks — and have your system
+              handle everything gracefully with auto-recovery, alerting, and
+              graceful degradation.
+            </p>
+          </div>
+
+          <div class="section" style="margin-top: 20px">
+            <div class="section-label">📊 Skill Progression Summary</div>
+            <table class="skills-table">
+              <tr>
+                <th>Phase</th>
+                <th>You Become</th>
+                <th>Timeline</th>
+              </tr>
+              <tr>
+                <td>1 — Foundation</td>
+                <td>Logical Coder</td>
+                <td>Weeks 1–8</td>
+              </tr>
+              <tr>
+                <td>2 — JS Engineering</td>
+                <td>JS Internals Expert</td>
+                <td>Weeks 9–14</td>
+              </tr>
+              <tr>
+                <td>3 — Browser + Perf</td>
+                <td>Performance Specialist</td>
+                <td>Weeks 15–22</td>
+              </tr>
+              <tr>
+                <td>4 — Advanced Frontend</td>
+                <td>Senior Frontend Engineer</td>
+                <td>Weeks 23–30</td>
+              </tr>
+              <tr>
+                <td>5 — System Design</td>
+                <td>Architectural Thinker</td>
+                <td>Weeks 31–38</td>
+              </tr>
+              <tr>
+                <td>6 — DevOps</td>
+                <td>Infrastructure Engineer</td>
+                <td>Weeks 39–46</td>
+              </tr>
+              <tr>
+                <td>7 — Cloud</td>
+                <td>Cloud Engineer</td>
+                <td>Weeks 47–56</td>
+              </tr>
+              <tr>
+                <td>8 — Distributed</td>
+                <td>Distributed Systems Engineer</td>
+                <td>Weeks 57–68</td>
+              </tr>
+              <tr>
+                <td>Final</td>
+                <td>🏆 Architect</td>
+                <td>Weeks 69–80</td>
+              </tr>
+            </table>
+          </div>
+          <div class="outcome">
+            👉 Outcome: You can design, build, deploy, debug, and scale any
+            system at any company
+          </div>
+        </div>
+      </div>
+
+      <!-- Daily Routine -->
+      <div class="daily-routine">
+        <h2>📅 Daily Study Routine</h2>
+        <div class="routine-grid">
+          <div class="routine-block">
+            <h4>⏰ Weekdays (2 hrs/day)</h4>
+            <ul>
+              <li>1 hr — DSA problems (2 easy + 1 medium)</li>
+              <li>1 hr — Current phase topic</li>
+              <li>Review yesterday's learning</li>
+            </ul>
+          </div>
+          <div class="routine-block">
+            <h4>🏗️ Weekends (4–6 hrs/day)</h4>
+            <ul>
+              <li>Build phase project</li>
+              <li>Debug, break, and fix code</li>
+              <li>Measure and optimize</li>
+              <li>Write what you learned</li>
+            </ul>
+          </div>
+          <div class="routine-block">
+            <h4>🎯 Realistic Timeline</h4>
+            <ul>
+              <li>6 months → Strong engineer</li>
+              <li>12 months → Senior level</li>
+              <li>18 months → Architect mindset</li>
+            </ul>
+          </div>
+          <div class="routine-block">
+            <h4>🔧 Essential Free Tools</h4>
+            <ul>
+              <li>
+                <a
+                  href="https://leetcode.com"
+                  target="_blank"
+                  style="color: #63b3ed"
+                  >LeetCode</a
+                >
+                — DSA practice
+              </li>
+              <li>
+                <a
+                  href="https://javascript.info"
+                  target="_blank"
+                  style="color: #63b3ed"
+                  >JavaScript.info</a
+                >
+                — JS Bible
+              </li>
+              <li>
+                <a href="https://web.dev" target="_blank" style="color: #63b3ed"
+                  >web.dev</a
+                >
+                — Performance
+              </li>
+              <li>
+                <a
+                  href="https://roadmap.sh"
+                  target="_blank"
+                  style="color: #63b3ed"
+                  >roadmap.sh</a
+                >
+                — Visual roadmaps
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Golden Rules -->
+      <div class="golden-rules">
+        <h2>🧠 Golden Rules — Follow Strictly</h2>
+        <div class="rule">
+          <div class="rule-num">1</div>
+          <p>
+            <strong>Never skip fundamentals.</strong> Shaky foundations collapse
+            at scale. Phase 1 is non-negotiable.
+          </p>
+        </div>
+        <div class="rule">
+          <div class="rule-num">2</div>
+          <p>
+            <strong>Build while learning.</strong> Every concept needs a
+            project. No project = no retention.
+          </p>
+        </div>
+        <div class="rule">
+          <div class="rule-num">3</div>
+          <p>
+            <strong>Break your own code.</strong> Introduce bugs, simulate
+            failures, then fix them. This is how you get good fast.
+          </p>
+        </div>
+        <div class="rule">
+          <div class="rule-num">4</div>
+          <p>
+            <strong>Measure performance always.</strong> Don't guess. Use
+            DevTools, Lighthouse, and monitoring tools to prove improvements.
+          </p>
+        </div>
+        <div class="rule">
+          <div class="rule-num">5</div>
+          <p>
+            <strong>Concepts over tools.</strong> Tools change every year. Deep
+            concepts last forever. Understand why before you learn how.
+          </p>
+        </div>
+        <div class="rule">
+          <div class="rule-num">6</div>
+          <p>
+            <strong>Teach what you learn.</strong> Write about it, make videos,
+            explain to others. Teaching is the fastest path to mastery.
+          </p>
+        </div>
+      </div>
+
+      <div
+        style="
+          text-align: center;
+          padding: 40px;
+          color: #4a5568;
+          font-size: 0.85rem;
+        "
+      >
+        🗺️ Complete Roadmap — Frontend → Architect &nbsp;|&nbsp; All links are
+        free resources &nbsp;|&nbsp;
+        <span style="color: #f6ad55">🟡 NEW</span> = added beyond original
+        roadmap
+      </div>
+    </div>
+  </body>
+</html>

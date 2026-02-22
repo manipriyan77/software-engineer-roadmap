@@ -3678,3 +3678,2130 @@ By the end of this module, you should be able to:
 - Implement loading skeletons and error handling
 - Mix server and client components properly
 - Ensure all routing and layout patterns are applied correctly
+
+---
+
+# The Complete Frontend Mastery Plan
+
+## Phase 1: JavaScript Fundamentals Mastery
+
+### Module 1.1: Core JavaScript (Until Mastery)
+
+#### Fundamentals:
+- Variables: `var`, `let`, `const` (scope differences)
+- Data types: primitives vs reference types
+- Type coercion and conversion
+- Operators and expressions
+- Conditionals and loops
+- Functions: declarations, expressions, arrow functions
+
+#### Execution Context & Scope:
+- Global, function, and block scope
+- Execution context stack
+- Variable hoisting
+- Temporal Dead Zone
+- Lexical environment
+- Scope chain
+
+#### The this Keyword:
+- Implicit binding
+- Explicit binding (call, apply, bind)
+- new binding
+- Arrow functions and this
+- this in different contexts (global, function, method, event handler)
+
+#### Closures:
+- What closures are and how they work
+- Practical use cases
+- Module pattern using closures
+- Private variables
+- Memory considerations
+
+#### Exit Criteria:
+- Explain execution context to someone clearly
+- Predict this value in any context without running code
+- Implement closures for practical problems
+- Debug scope-related issues confidently
+
+---
+
+### Module 1.2: Functions Deep Dive (Until Mastery)
+
+#### Function Concepts:
+- First-class functions
+- Higher-order functions
+- Callback functions
+- IIFE (Immediately Invoked Function Expressions)
+- Function parameters: default, rest, spread
+
+#### Advanced Function Patterns:
+- Currying (manual and using bind)
+- Partial application
+- Function composition
+- Pipe function implementation
+- Recursive functions and tail call optimization
+
+#### Practical Implementations:
+- Implement your own: map, filter, reduce, forEach
+- Debouncing (implement from scratch)
+- Throttling (implement from scratch)
+- Memoization (implement from scratch)
+- Once function (execute only once)
+
+#### Exit Criteria:
+- Write curry and compose functions from scratch
+- Implement debounce/throttle without looking at references
+- Solve recursive problems confidently
+- Explain when to use each pattern
+
+---
+
+### Module 1.3: Objects & Prototypes (Until Mastery)
+
+#### Objects:
+- Object creation methods
+- Property descriptors (writable, enumerable, configurable)
+- Object methods: Object.keys, values, entries, freeze, seal
+- Property accessors (getters/setters)
+- Object destructuring and spread
+
+#### Prototypes:
+- What prototypes are
+- `__proto__` vs `prototype`
+- Prototype chain
+- Constructor functions
+- `Object.create()` for inheritance
+- `instanceof` operator and how it works
+- `hasOwnProperty` vs `in` operator
+
+#### Prototypal Inheritance:
+- Classical inheritance pattern using prototypes
+- Constructor stealing
+- Parasitic inheritance
+- Prototypal inheritance patterns
+
+#### Exit Criteria:
+- Draw and explain the prototype chain
+- Implement inheritance without ES6 classes
+- Debug prototype-related issues
+- Explain prototype lookup mechanism
+
+---
+
+### Module 1.4: OOP in JavaScript (Until Mastery)
+
+#### ES6 Classes:
+- Class declarations and expressions
+- Constructor methods
+- Instance methods and properties
+- Static methods and properties
+- Class fields (public)
+- Private fields and methods (#syntax)
+- Getters and setters in classes
+
+#### The Four Pillars:
+
+**1. Encapsulation:**
+- Data hiding with private fields
+- Closures for encapsulation
+- Module pattern
+- Revealing module pattern
+- Information hiding principles
+
+**2. Inheritance:**
+- extends keyword
+- super() in constructor and methods
+- Method overriding
+- Inheritance chain
+- When to use inheritance
+- Problems with deep inheritance hierarchies
+
+**3. Polymorphism:**
+- Method overriding (runtime polymorphism)
+- Duck typing in JavaScript
+- Polymorphic behavior through inheritance
+- Interface-like patterns
+
+**4. Abstraction:**
+- Abstract class patterns (JavaScript doesn't have true abstract classes)
+- Hiding implementation details
+- Creating clean interfaces
+- Separation of concerns
+
+#### SOLID Principles:
+- **S**ingle Responsibility Principle (one class, one job)
+- **O**pen/Closed Principle (open for extension, closed for modification)
+- **L**iskov Substitution Principle (subclass should work where parent works)
+- **I**nterface Segregation Principle (many specific interfaces > one general)
+- **D**ependency Inversion Principle (depend on abstractions, not concretions)
+
+#### Composition vs Inheritance:
+- When to use composition
+- When to use inheritance
+- Mixins and traits
+- Favor composition over inheritance principle
+- Practical examples of both
+
+#### Design Patterns (OOP-focused):
+- Factory Pattern
+- Constructor Pattern
+- Singleton Pattern
+- Module Pattern
+- Observer Pattern (Pub/Sub)
+- Strategy Pattern
+- Decorator Pattern
+- Facade Pattern
+- Proxy Pattern
+- Command Pattern
+
+#### Practice Projects:
+1. Library Management System (inheritance, encapsulation)
+2. Game Character System (polymorphism, composition)
+3. Payment Processing System (strategy pattern, abstraction)
+4. Notification System (observer pattern)
+5. Shape Calculator (inheritance, polymorphism)
+6. Plugin Architecture (factory pattern, composition)
+7. Undo/Redo System (command pattern)
+8. Access Control System (proxy pattern)
+
+#### Exit Criteria:
+- Explain all four OOP pillars with examples
+- Implement all SOLID principles in practice
+- Choose between composition and inheritance appropriately
+- Implement at least 8 design patterns from scratch
+- Refactor procedural code to OOP and vice versa
+- Explain trade-offs of different patterns
+
+---
+
+### Module 1.5: Asynchronous JavaScript (Until Mastery)
+
+#### Callbacks:
+- Callback pattern
+- Callback hell and pyramid of doom
+- Error-first callbacks
+- Callback limitations
+
+#### Promises:
+- Creating promises (new Promise)
+- Promise states: pending, fulfilled, rejected
+- then, catch, finally methods
+- Promise chaining
+- Error handling in promise chains
+- `Promise.all` (parallel execution, fails fast)
+- `Promise.race` (first to settle)
+- `Promise.allSettled` (wait for all, get all results)
+- `Promise.any` (first fulfilled)
+
+#### Async/Await:
+- async function syntax
+- await keyword
+- Error handling with try/catch
+- Parallel execution with async/await
+- Sequential vs parallel patterns
+- Top-level await
+
+#### Event Loop:
+- Call stack
+- Web APIs / Browser APIs
+- Callback queue (macrotask queue)
+- Microtask queue (Promise queue)
+- Event loop phases
+- Microtask vs macrotask priority
+- Visualization of execution order
+
+#### Advanced Async Patterns:
+- Promisifying callback-based functions
+- Building a custom Promise from scratch
+- Async queue with concurrency limit
+- Retry logic implementation
+- Timeout wrapper
+- Race with timeout
+- Parallel execution with limit
+
+#### Generators & Iterators:
+- Iterator protocol
+- Generator functions (function*)
+- yield keyword
+- Generator as iterators
+- Async generators
+- for...of with generators
+
+#### Exit Criteria:
+- Implement Promise from scratch (simplified version)
+- Predict event loop execution order
+- Solve async race conditions
+- Build async utilities (retry, timeout, queue, etc.)
+- Explain microtask vs macrotask queue
+
+---
+
+### Module 1.6: Functional Programming in JavaScript (Until Mastery)
+
+#### Core Concepts:
+- Pure functions (no side effects)
+- Immutability
+- Function composition
+- Higher-order functions
+- Declarative vs imperative programming
+
+#### Array Methods Mastery:
+- map, filter, reduce (implement from scratch)
+- forEach, some, every, find, findIndex
+- flatMap, flat
+- Chaining array methods
+- Performance considerations
+
+#### Immutability:
+- Spread operator for shallow copy
+- Object.assign
+- Structured cloning
+- Deep cloning techniques
+- Immutable update patterns
+- Libraries: Immer, Immutable.js (understanding concepts)
+
+#### Advanced FP Techniques:
+- Currying implementation
+- Partial application
+- Function composition (compose, pipe)
+- Point-free style
+- Lazy evaluation
+- Transducers (advanced)
+- Monads (basic understanding)
+
+#### Practical FP:
+- Refactoring imperative to declarative
+- State management with reducers
+- Data transformation pipelines
+- FP in React (hooks, pure components)
+
+#### Exit Criteria:
+- Write point-free, declarative code naturally
+- Implement compose and pipe utilities
+- Refactor any imperative code to FP style
+- Explain when FP is better than OOP and vice versa
+
+---
+
+### Module 1.7: ES6+ Features (Until Mastery)
+
+#### Destructuring:
+- Object destructuring
+- Array destructuring
+- Nested destructuring
+- Default values
+- Rest in destructuring
+- Destructuring in function parameters
+
+#### Spread & Rest:
+- Spread operator for arrays and objects
+- Rest parameters in functions
+- Shallow vs deep copying implications
+
+#### Template Literals:
+- String interpolation
+- Multi-line strings
+- Tagged template literals
+- Use cases (styling, i18n)
+
+#### Symbols:
+- Creating symbols
+- Symbol use cases
+- Well-known symbols
+- Symbol.iterator, Symbol.toStringTag
+
+#### Iterators & Iterables:
+- Iterator protocol
+- Iterable protocol
+- Creating custom iterables
+- for...of loop
+
+#### Proxy & Reflect:
+- Proxy traps (get, set, has, deleteProperty, etc.)
+- Reflect API
+- Use cases: validation, tracking, negative array indices
+- Vue 3 reactivity system concept
+
+#### Maps & Sets:
+- Map vs Object (when to use each)
+- WeakMap (garbage collection benefits)
+- Set and WeakSet
+- Practical use cases
+
+#### Modules:
+- ES6 modules (import/export)
+- Default vs named exports
+- Dynamic imports
+- Module patterns
+- CommonJS vs ES6 modules
+
+#### Exit Criteria:
+- Use modern JavaScript features naturally
+- Implement custom iterables
+- Create practical Proxy use cases
+- Understand module systems deeply
+
+---
+
+## Phase 2: TypeScript Mastery
+
+### Module 2.1: TypeScript Fundamentals (Until Mastery)
+
+#### Setup & Configuration:
+- Installing TypeScript
+- tsconfig.json deep dive
+- Compiler options (strict mode, target, module, etc.)
+- Project references
+- Path mapping
+
+#### Basic Types:
+- Primitive types: string, number, boolean
+- Arrays and tuples
+- Enums (numeric, string, const, computed)
+- any, unknown, never, void
+- null and undefined
+- Type assertions (as, angle-bracket)
+
+#### Type Annotations & Inference:
+- When to annotate vs rely on inference
+- Best practices for type annotations
+- Contextual typing
+
+#### Union & Intersection Types:
+- Union types (A | B)
+- Intersection types (A & B)
+- Discriminated unions
+- Narrowing with type guards
+
+#### Literal Types:
+- String literal types
+- Numeric literal types
+- Boolean literal types
+- Template literal types
+
+#### Exit Criteria:
+- Configure TypeScript projects from scratch
+- Choose appropriate types for any scenario
+- Understand when compiler infers correctly
+
+---
+
+### Module 2.2: TypeScript Intermediate (Until Mastery)
+
+#### Interfaces:
+- Interface declaration
+- Optional properties (?)
+- Readonly properties
+- Index signatures
+- Extending interfaces
+- Implementing interfaces in classes
+- Interface vs Type alias (when to use each)
+
+#### Type Aliases:
+- Creating type aliases
+- Combining with unions/intersections
+- When to prefer type over interface
+
+#### Functions in TypeScript:
+- Function type annotations
+- Optional and default parameters
+- Rest parameters typing
+- Function overloads
+- this parameter in functions
+- Call signatures
+- Construct signatures
+
+#### Classes in TypeScript:
+- Class property types
+- Access modifiers: public, private, protected
+- Readonly modifier
+- Parameter properties (shorthand)
+- Abstract classes
+- Implementing interfaces
+- Static members typing
+
+#### Generics Basics:
+- Generic functions
+- Generic interfaces
+- Generic classes
+- Generic constraints (extends)
+- Default generic types
+- Multiple type parameters
+
+#### Exit Criteria:
+- Choose between interface and type appropriately
+- Write type-safe functions and classes
+- Use generics for reusable code
+- Understand access modifiers deeply
+
+---
+
+### Module 2.3: TypeScript Advanced (Until Mastery)
+
+#### Advanced Generics:
+- Generic constraints with extends
+- Using type parameters in constraints
+- Generic parameter defaults
+- Conditional types basics
+- Distributive conditional types
+- infer keyword
+
+#### Utility Types:
+- `Partial<T>` - make all properties optional
+- `Required<T>` - make all properties required
+- `Readonly<T>` - make all properties readonly
+- `Pick<T, K>` - select specific properties
+- `Omit<T, K>` - exclude specific properties
+- `Record<K, T>` - object with specific key types
+- `Exclude<T, U>` - exclude types from union
+- `Extract<T, U>` - extract types from union
+- `NonNullable<T>` - remove null/undefined
+- `ReturnType<T>` - extract function return type
+- `Parameters<T>` - extract function parameters
+- `InstanceType<T>` - get instance type of constructor
+- `Awaited<T>` - unwrap Promise type
+
+#### Mapped Types:
+- Creating mapped types
+- Mapping modifiers (readonly, ?)
+- Key remapping with as
+- Template literal types in mapping
+- Creating custom utility types
+
+#### Type Manipulation:
+- keyof operator
+- typeof operator
+- Indexed access types (T[K])
+- Conditional types advanced patterns
+- Template literal types
+- Recursive types
+
+#### Type Guards & Narrowing:
+- typeof type guards
+- instanceof type guards
+- Custom type guards (type predicates)
+- Discriminated unions
+- Truthiness narrowing
+- Equality narrowing
+- in operator narrowing
+- Control flow analysis
+
+#### Advanced Patterns:
+- Declaration merging
+- Module augmentation
+- Namespace patterns
+- Ambient declarations (.d.ts files)
+- Triple-slash directives
+- Type-only imports/exports
+
+#### Decorators:
+- Class decorators
+- Method decorators
+- Property decorators
+- Parameter decorators
+- Decorator factories
+- Metadata with decorators
+
+#### Exit Criteria:
+- Create custom utility types
+- Write complex generic constraints
+- Build type-safe APIs
+- Read and understand complex library types
+- Implement advanced type patterns
+
+---
+
+### Module 2.4: TypeScript with OOP & FP (Until Mastery)
+
+#### TypeScript OOP Patterns:
+- Interface-based design
+- Abstract classes for contracts
+- Polymorphism with TypeScript
+- Generic classes for reusability
+- Type-safe design patterns implementation
+- SOLID principles with TypeScript
+
+#### TypeScript Functional Patterns:
+- Type-safe function composition
+- Generic higher-order functions
+- Discriminated unions for state machines
+- Type-safe immutability patterns
+- Functional error handling (Either, Option types)
+
+#### Practice Projects:
+1. Type-safe State Machine (discriminated unions)
+2. Generic Data Structures (Stack, Queue, Tree with generics)
+3. API Client (full type coverage for requests/responses)
+4. Form Validation System (complex generics, type guards)
+5. Plugin Architecture (advanced generics, constraints)
+6. Event System (type-safe event emitter)
+
+#### Exit Criteria:
+- Write TypeScript that catches bugs at compile time
+- Design type-safe APIs
+- Balance type safety with pragmatism
+- Read any TypeScript codebase confidently
+
+---
+
+## Phase 3: Browser & DOM Mastery
+
+### Module 3.1: DOM Manipulation (Until Mastery)
+
+#### DOM Basics:
+- DOM tree structure
+- Node types (Element, Text, Comment, Document)
+- Node relationships (parent, children, siblings)
+
+#### Selecting Elements:
+- getElementById
+- getElementsByClassName / getElementsByTagName
+- querySelector / querySelectorAll
+- Differences and performance implications
+- Live vs static node lists
+
+#### Creating & Modifying Elements:
+- createElement, createTextNode
+- appendChild, append
+- insertBefore, insertAdjacentElement
+- removeChild, remove
+- replaceChild
+- cloneNode (shallow vs deep)
+
+#### Element Properties & Attributes:
+- innerHTML, outerHTML, textContent, innerText
+- getAttribute, setAttribute, removeAttribute, hasAttribute
+- data attributes (dataset)
+- classList (add, remove, toggle, contains)
+- style property (inline styles)
+
+#### DOM Traversal:
+- parentNode, parentElement
+- childNodes vs children
+- firstChild / lastChild vs firstElementChild / lastElementChild
+- nextSibling / previousSibling vs nextElementSibling / previousElementSibling
+- closest() method
+
+#### Document Fragments:
+- Creating fragments
+- Performance benefits
+- Batch DOM updates
+
+#### Exit Criteria:
+- Build complex UIs with vanilla JavaScript
+- Optimize DOM manipulation for performance
+- Understand reflow and repaint
+- Choose appropriate methods for each use case
+
+---
+
+### Module 3.2: Event Handling (Until Mastery)
+
+#### Event Basics:
+- addEventListener, removeEventListener
+- Event types (click, input, submit, keydown, etc.)
+- Event object properties
+- preventDefault, stopPropagation, stopImmediatePropagation
+
+#### Event Flow:
+- Event capturing (capture phase)
+- Event target (target phase)
+- Event bubbling (bubble phase)
+- useCapture parameter
+- event.target vs event.currentTarget
+
+#### Event Delegation:
+- What is event delegation
+- Why use event delegation
+- Implementing event delegation
+- Performance benefits
+- Use cases (dynamic content)
+
+#### Custom Events:
+- Creating custom events (CustomEvent)
+- Dispatching events (dispatchEvent)
+- Event detail property
+- Use cases for custom events
+
+#### Keyboard & Mouse Events:
+- Keyboard events (keydown, keyup, keypress)
+- Key codes and key values
+- Modifiers (shift, ctrl, alt, meta)
+- Mouse events (click, dblclick, mousedown, mouseup, mousemove)
+- Mouse coordinates (clientX, pageX, screenX)
+
+#### Form Events:
+- submit event
+- input vs change events
+- focus, blur events
+- Form validation with events
+
+#### Touch Events:
+- touchstart, touchmove, touchend
+- Touch object properties
+- Multi-touch handling
+
+#### Exit Criteria:
+- Implement complex event handling scenarios
+- Optimize event listeners
+- Build accessible interactive components
+- Handle all event edge cases
+
+---
+
+### Module 3.3: Browser APIs (Until Mastery)
+
+#### Storage APIs:
+
+**localStorage:**
+- setItem, getItem, removeItem, clear
+- Storage events
+- JSON serialization
+- Size limits (typically 5-10MB)
+
+**sessionStorage:**
+- Same API as localStorage
+- Differences (lifetime, scope)
+
+**IndexedDB:**
+- Database, object stores, indexes
+- Transactions (readonly, readwrite)
+- CRUD operations
+- Cursors for iteration
+- Version management
+- When to use over localStorage
+
+**Cookies:**
+- document.cookie API
+- Setting, reading, deleting cookies
+- Cookie attributes (expires, max-age, domain, path, secure, httpOnly, sameSite)
+- Limitations vs storage APIs
+
+#### Fetch API:
+- Basic fetch requests
+- Request configuration (method, headers, body)
+- Response object (json, text, blob, arrayBuffer)
+- Status codes handling
+- Error handling (network errors vs HTTP errors)
+- AbortController for cancellation
+- Request/Response headers
+- CORS basics
+
+#### File APIs:
+- File and FileList objects
+- FileReader API (readAsText, readAsDataURL, readAsArrayBuffer)
+- Blob API
+- URL.createObjectURL
+- File upload handling
+- Drag and drop file uploads
+
+#### Canvas API:
+- 2D drawing context
+- Drawing shapes (rect, arc, line, path)
+- Colors and styles
+- Text rendering
+- Image manipulation
+- Animations with canvas
+- Performance considerations
+
+#### Geolocation API:
+- getCurrentPosition
+- watchPosition
+- Position object (coords, accuracy)
+- Error handling
+- Privacy considerations
+
+#### History API:
+- pushState, replaceState
+- popstate event
+- Building single-page apps
+- URL management
+
+#### Clipboard API:
+- navigator.clipboard.writeText
+- navigator.clipboard.readText
+- Copy/paste functionality
+- Permissions
+
+#### Exit Criteria:
+- Use all storage APIs appropriately
+- Build file upload/download features
+- Create canvas-based visualizations
+- Implement complex fetch patterns
+
+---
+
+### Module 3.4: Modern Browser Features (Until Mastery)
+
+#### Intersection Observer API:
+- Creating observers
+- Observer options (root, rootMargin, threshold)
+- Entry object properties (isIntersecting, intersectionRatio)
+- Use cases:
+  - Infinite scroll
+  - Lazy loading images
+  - View tracking
+  - Animations on scroll
+
+#### Mutation Observer API:
+- Observing DOM changes
+- Observer options (childList, attributes, characterData, subtree)
+- MutationRecord object
+- Use cases:
+  - Detecting third-party script changes
+  - Monitoring dynamic content
+  - Building developer tools
+
+#### Resize Observer API:
+- Observing element size changes
+- ResizeObserverEntry
+- Use cases:
+  - Responsive components
+  - Container queries pattern
+  - Adaptive layouts
+
+#### Web Workers:
+- Creating workers
+- postMessage communication
+- Transferable objects
+- Use cases:
+  - Heavy computations
+  - Background data processing
+  - Not blocking main thread
+- Limitations (no DOM access)
+
+#### Service Workers:
+- Registration and lifecycle
+- Caching strategies
+- Offline functionality
+- Background sync
+- Push notifications basics
+- Progressive Web Apps (PWA)
+
+#### WebSockets:
+- Establishing connections
+- Sending/receiving messages
+- Connection states
+- Reconnection strategies
+- Use cases:
+  - Real-time chat
+  - Live updates
+  - Collaborative editing
+
+#### Server-Sent Events (SSE):
+- EventSource API
+- Message format
+- Auto-reconnection
+- Use cases vs WebSockets
+
+#### Web Animations API:
+- element.animate()
+- Keyframes
+- Animation options (duration, easing, iterations)
+- Animation control (play, pause, cancel, finish)
+- Use cases vs CSS animations
+
+#### Performance APIs:
+- Performance.now() for precise timing
+- Performance Observer
+- Navigation Timing API
+- Resource Timing API
+- User Timing API (mark, measure)
+- Monitoring Core Web Vitals
+
+#### Exit Criteria:
+- Implement infinite scroll with Intersection Observer
+- Build real-time features with WebSockets
+- Create a simple PWA with Service Workers
+- Use Web Workers for performance optimization
+- Monitor and optimize performance
+
+---
+
+## Phase 4: React Mastery
+
+### Module 4.1: React Fundamentals (Until Mastery)
+
+#### Core Concepts:
+- What is React and why use it
+- Virtual DOM concept
+- JSX syntax and transpilation
+- React elements vs components
+- Reconciliation algorithm
+
+#### Components:
+- Functional components
+- Props and prop drilling
+- Children prop
+- Component composition
+- Rendering lists
+- Keys and their importance
+- Conditional rendering patterns
+
+#### State:
+- useState hook
+- State updates (synchronous batching)
+- Functional updates
+- State initialization
+- Multiple state variables vs single object
+- State colocation
+
+#### Event Handling:
+- Synthetic events
+- Event handlers in JSX
+- Passing arguments to handlers
+- Event pooling (legacy)
+
+#### Forms:
+- Controlled components
+- Uncontrolled components
+- Form submission
+- Input types handling
+- Form validation patterns
+
+#### Exit Criteria:
+- Build forms and lists confidently
+- Understand component composition
+- Manage local state effectively
+- Explain React's rendering behavior
+
+---
+
+### Module 4.2: React Hooks Deep Dive (Until Mastery)
+
+#### useEffect:
+- Effect timing (after render)
+- Dependency array (when effect runs)
+- Empty dependency array (mount only)
+- Cleanup functions
+- Common pitfalls (infinite loops, missing dependencies)
+- useEffect vs useLayoutEffect timing
+- Fetching data with useEffect
+
+#### useContext:
+- Creating context
+- Context Provider
+- Consuming context
+- When to use context
+- Context limitations
+- Multiple contexts
+- Context with TypeScript
+
+#### useReducer:
+- Reducer concept
+- Action creators
+- Complex state logic
+- useReducer vs useState
+- Combining with context for state management
+- TypeScript with reducers
+
+#### useRef:
+- Storing mutable values
+- Accessing DOM elements
+- Ref vs state differences
+- Forward refs
+- useImperativeHandle
+- Callback refs
+
+#### useMemo:
+- Memoizing expensive computations
+- Dependency array
+- When to use (performance optimization)
+- When NOT to use (premature optimization)
+- Referential equality
+
+#### useCallback:
+- Memoizing functions
+- Preventing unnecessary re-renders
+- useCallback vs useMemo
+- Dependency array considerations
+
+#### useLayoutEffect:
+- Timing differences from useEffect
+- Use cases (DOM measurements, synchronous updates)
+- When to avoid (performance)
+
+#### useId:
+- Generating unique IDs
+- Accessibility (aria attributes)
+- Server-side rendering considerations
+
+#### Custom Hooks:
+- Creating custom hooks
+- Naming convention (use prefix)
+- Composing hooks
+- Testing custom hooks
+- Common patterns:
+  - useToggle
+  - useLocalStorage
+  - useFetch / useAsync
+  - useDebounce
+  - useWindowSize
+  - usePrevious
+  - useOnClickOutside
+
+#### Rules of Hooks:
+- Only call at top level
+- Only call from React functions
+- ESLint plugin for enforcement
+- Why these rules exist
+
+#### Exit Criteria:
+- Use all hooks appropriately
+- Create custom hooks for reusable logic
+- Optimize performance with useMemo/useCallback
+- Debug hook-related issues
+- Choose the right hook for each scenario
+
+---
+
+### Module 4.3: Advanced React Patterns (Until Mastery)
+
+#### Component Patterns:
+
+**1. Compound Components:**
+- Implicit state sharing
+- Context for internal communication
+- Examples: Tabs, Accordion, Select
+- When to use
+
+**2. Render Props:**
+- Function as children
+- Prop getter pattern
+- Inversion of control
+- When to use vs hooks
+
+**3. Higher-Order Components (HOC):**
+- Creating HOCs
+- Props proxy
+- withAuth, withLoading patterns
+- Limitations and pitfalls
+- HOC vs hooks
+
+**4. Controlled vs Uncontrolled:**
+- Controlled inputs
+- Uncontrolled with refs
+- Trade-offs
+- useControlled hook pattern
+
+**5. State Reducer Pattern:**
+- User-controlled state logic
+- Action types and reducers
+- Inversion of control
+
+#### Performance Optimization:
+
+**React.memo:**
+- Preventing re-renders
+- Custom comparison function
+- When to use
+- Limitations
+
+**Code Splitting:**
+- React.lazy for component splitting
+- Suspense for loading states
+- Dynamic imports
+- Route-based splitting
+- Component-based splitting
+
+**Virtualization:**
+- Why virtualize long lists
+- react-window / react-virtualized
+- Implementing basic virtualization
+- Infinite scroll with virtualization
+
+#### Error Handling:
+- Error boundaries (class components)
+- getDerivedStateFromError
+- componentDidCatch
+- Error boundary placement strategy
+- Suspense error handling
+
+#### Portals:
+- ReactDOM.createPortal
+- Use cases (modals, tooltips, notifications)
+- Event bubbling through portals
+
+#### Refs:
+- forwardRef
+- useImperativeHandle
+- Callback refs
+- Ref forwarding patterns
+
+#### Exit Criteria:
+- Implement all advanced patterns
+- Optimize React apps for performance
+- Handle errors gracefully
+- Build accessible, reusable component libraries
+
+---
+
+### Module 4.4: State Management (Until Mastery)
+
+#### Context + useReducer:
+- Building app-wide state
+- Action creators and types
+- Combining multiple contexts
+- Performance considerations
+- Avoiding context hell
+
+#### Redux Toolkit:
+- Store setup (configureStore)
+- Slices (createSlice)
+- Reducers and actions
+- Selectors
+- Async logic with createAsyncThunk
+- RTK Query for data fetching
+- Redux DevTools
+- Middleware (thunk, custom)
+- Immutable updates (Immer)
+- Normalization patterns
+
+#### Zustand:
+- Creating stores
+- Subscribing to state
+- Middleware
+- Persist state
+- Slices pattern
+- When to use vs Redux
+
+#### Jotai / Recoil:
+- Atomic state management
+- Atoms and derived state
+- Async atoms
+- When to use
+
+#### Server State vs Client State:
+- Understanding the difference
+- When to use each approach
+- Separating concerns
+
+#### React Query / TanStack Query:
+- Fetching data
+- Caching strategies
+- Background refetching
+- Mutations
+- Optimistic updates
+- Infinite queries
+- Pagination
+- Query invalidation
+- Devtools
+
+#### State Management Decision Tree:
+- Local state (useState)
+- Lifted state (props)
+- Context for prop drilling
+- Redux for complex global state
+- React Query for server state
+- When to use each
+
+#### Exit Criteria:
+- Choose appropriate state solution
+- Implement Redux Toolkit properly
+- Use React Query for server state
+- Build scalable state architecture
+- Optimize state updates
+
+---
+
+### Module 4.5: React with TypeScript (Until Mastery)
+
+#### Component Typing:
+- Functional component types
+- Props interfaces
+- Children prop typing
+- Event handler types
+- Generic components
+
+#### Hooks with TypeScript:
+- useState with TypeScript
+- useReducer with typed actions
+- useRef typing
+- useContext with typed context
+- Custom hooks typing
+
+#### Advanced Patterns:
+- HOC typing
+- Render props with TypeScript
+- Discriminated unions for state
+- Generic components
+- Forwarding refs with TypeScript
+
+#### Common Types:
+- React.FC (and when not to use it)
+- React.ReactNode
+- React.CSSProperties
+- Event types (MouseEvent, ChangeEvent, etc.)
+- Ref types
+
+#### Exit Criteria:
+- Write fully typed React applications
+- Create type-safe component APIs
+- Handle all TypeScript + React scenarios
+
+---
+
+## Phase 5: Next.js Mastery
+
+### Module 5.1: Next.js App Router Fundamentals (Until Mastery)
+
+#### Project Setup:
+- Creating Next.js app
+- Project structure
+- App router vs Pages router
+- Configuration (next.config.js)
+
+#### Routing:
+- File-based routing
+- Dynamic routes
+- Route groups
+- Parallel routes
+- Intercepting routes
+- Catch-all routes
+- Optional catch-all
+
+#### Layouts:
+- Root layout
+- Nested layouts
+- Layout composition
+- Template vs layout
+
+#### Loading States:
+- loading.tsx files
+- Streaming with Suspense
+- Instant loading states
+- Skeleton UIs
+
+#### Error Handling:
+- error.tsx files
+- Error boundaries in Next.js
+- not-found.tsx
+- Global error handling
+
+#### Server vs Client Components:
+- Understanding the difference
+- When to use each
+- "use client" directive
+- Server component patterns
+- Client component patterns
+- Composition patterns
+
+#### Exit Criteria:
+- Set up Next.js projects confidently
+- Implement complex routing
+- Choose server vs client components appropriately
+- Handle loading and error states
+
+---
+
+### Module 5.2: Data Fetching & Rendering (Until Mastery)
+
+#### Rendering Strategies:
+
+**Server-Side Rendering (SSR):**
+- Dynamic rendering
+- Per-request data fetching
+- When to use SSR
+- Performance implications
+
+**Static Site Generation (SSG):**
+- Build-time rendering
+- generateStaticParams
+- When to use SSG
+- Static exports
+
+**Incremental Static Regeneration (ISR):**
+- Revalidation strategies
+- Time-based revalidation
+- On-demand revalidation
+- Stale-while-revalidate
+
+**Client-Side Rendering (CSR):**
+- useEffect for data fetching
+- React Query in Next.js
+- When to use CSR
+
+#### Data Fetching Patterns:
+- fetch in Server Components
+- Parallel data fetching
+- Sequential data fetching
+- Automatic request deduplication
+- Data caching
+- Revalidating data
+
+#### Server Actions:
+- Creating server actions
+- Calling from Client Components
+- Form handling with server actions
+- Progressive enhancement
+- Validation and error handling
+- Revalidation after mutations
+
+#### Route Handlers:
+- API routes in App Router
+- GET, POST, PUT, DELETE handlers
+- Dynamic route handlers
+- Request and response objects
+- Middleware
+
+#### Exit Criteria:
+- Choose appropriate rendering strategy
+- Implement all data fetching patterns
+- Use server actions effectively
+- Build API routes
+
+---
+
+### Module 5.3: Next.js Advanced Features (Until Mastery)
+
+#### Metadata & SEO:
+- Metadata API
+- Dynamic metadata
+- Static metadata
+- Open Graph images
+- Twitter cards
+- Sitemap generation
+- robots.txt
+
+#### Image Optimization:
+- next/image component
+- Image sizing
+- Lazy loading
+- Placeholder strategies (blur, empty)
+- Remote images configuration
+- Image formats (WebP, AVIF)
+
+#### Font Optimization:
+- next/font
+- Google Fonts optimization
+- Local fonts
+- Font display strategies
+- Variable fonts
+
+#### Middleware:
+- Creating middleware
+- Request/response manipulation
+- Matcher configuration
+- Conditional middleware execution
+- Authentication with middleware
+- Redirects and rewrites
+- Geolocation and A/B testing
+- Edge runtime considerations
+
+#### Caching in Next.js:
+- Request memoization
+- Data Cache
+- Full Route Cache
+- Router Cache
+- Understanding cache invalidation
+- Cache configuration (force-cache, no-store)
+- Time-based revalidation
+- On-demand revalidation (revalidatePath, revalidateTag)
+
+#### Streaming & Suspense:
+- Streaming server rendering
+- Suspense boundaries
+- Loading.tsx automatic suspense
+- Progressive rendering
+- Parallel data loading with Suspense
+
+#### Internationalization (i18n):
+- Locale detection
+- Routing strategies (sub-path, domain)
+- Translation patterns
+- Dynamic routes with i18n
+- Locale-specific content
+
+#### Authentication:
+- Session management
+- JWT patterns
+- OAuth integration
+- Next-Auth / Auth.js
+- Protected routes
+- Middleware for auth
+- Server vs client auth checks
+
+#### Environment Variables:
+- NEXT_PUBLIC_ prefix
+- Server-only variables
+- Loading environment files
+- Type-safe environment variables
+
+#### Exit Criteria:
+- Implement SEO best practices
+- Optimize images and fonts
+- Build authentication systems
+- Use caching effectively
+- Deploy production-ready Next.js apps
+
+---
+
+### Module 5.4: Next.js Performance & Production (Until Mastery)
+
+#### Bundle Optimization:
+- Analyzing bundle size
+- @next/bundle-analyzer
+- Code splitting strategies
+- Dynamic imports
+- Tree shaking
+- External packages optimization
+
+#### Performance Monitoring:
+- Core Web Vitals in Next.js
+- Performance profiling
+- React DevTools Profiler
+- Lighthouse integration
+- Real User Monitoring (RUM)
+
+#### Production Best Practices:
+- Build optimization
+- Environment-specific configuration
+- Error logging (Sentry integration)
+- Analytics integration
+- Security headers
+- Content Security Policy (CSP)
+
+#### Deployment:
+- Vercel deployment
+- Self-hosted deployment
+- Docker containers
+- Environment variables in production
+- CI/CD pipelines
+- Preview deployments
+- Edge functions
+
+#### Exit Criteria:
+- Optimize Next.js apps for production
+- Monitor and improve performance
+- Deploy to various platforms
+- Implement proper security practices
+
+---
+
+## Phase 6: Testing Mastery
+
+### Module 6.1: Unit Testing (Until Mastery)
+
+#### Jest Fundamentals:
+- Setting up Jest
+- Test structure (describe, it/test)
+- Assertions (expect matchers)
+- Setup and teardown (beforeEach, afterEach, beforeAll, afterAll)
+- Mocking functions (jest.fn, jest.mock)
+- Mocking modules
+- Spying on functions
+- Timer mocks (jest.useFakeTimers)
+- Snapshot testing
+
+#### Testing JavaScript:
+- Testing pure functions
+- Testing classes and OOP
+- Testing async code (promises, async/await)
+- Testing callbacks
+- Testing error handling
+- Testing edge cases
+
+#### React Testing Library:
+- Philosophy (test behavior, not implementation)
+- Rendering components
+- Queries (getBy, queryBy, findBy)
+- User interactions (fireEvent vs userEvent)
+- Async utilities (waitFor, waitForElementToBeRemoved)
+- Testing hooks with @testing-library/react-hooks
+- Custom render functions
+- Testing context providers
+
+#### Testing Patterns:
+- Testing forms
+- Testing API calls (with msw - Mock Service Worker)
+- Testing Redux/Zustand
+- Testing custom hooks
+- Testing error boundaries
+- Testing with React Router
+
+#### Code Coverage:
+- Understanding coverage metrics
+- Coverage reports
+- Setting coverage thresholds
+- Meaningful vs meaningless coverage
+
+#### Exit Criteria:
+- Write comprehensive unit tests
+- Test React components properly
+- Mock dependencies effectively
+- Achieve meaningful code coverage
+- Practice TDD (Test-Driven Development)
+
+---
+
+### Module 6.2: Integration & E2E Testing (Until Mastery)
+
+#### Integration Testing:
+- Testing component integration
+- Testing multiple components together
+- Testing with real API calls (when appropriate)
+- Testing routing
+- Testing full user flows
+
+#### End-to-End Testing with Playwright:
+- Setting up Playwright
+- Writing test scripts
+- Locators and selectors
+- Page object model
+- Network interception
+- Screenshots and videos
+- Running tests in CI/CD
+- Parallel test execution
+- Cross-browser testing
+
+#### E2E Testing with Cypress (Alternative):
+- Setting up Cypress
+- Commands and assertions
+- Custom commands
+- Fixtures and mocking
+- Network stubbing
+- Visual regression testing
+
+#### Testing Best Practices:
+- Test pyramid (more unit, fewer E2E)
+- Arrange-Act-Assert pattern
+- Test naming conventions
+- Avoiding test brittleness
+- Testing accessibility
+- Testing performance
+
+#### Exit Criteria:
+- Write integration tests
+- Build E2E test suites
+- Test complete user journeys
+- Maintain reliable test suites
+- Integrate testing into CI/CD
+
+---
+
+## Phase 7: Frontend System Design Mastery
+
+### Module 7.1: Architecture Fundamentals (Until Deep Mastery)
+
+#### Component Architecture:
+
+**Atomic Design methodology:**
+- Atoms (buttons, inputs, labels)
+- Molecules (search bar, card header)
+- Organisms (navigation, form sections)
+- Templates (page layouts)
+- Pages (specific instances)
+- When to use atomic design
+
+**Container/Presentational pattern:**
+- Smart vs Dumb components
+- Component composition strategies
+
+#### Folder Structure:
+- Feature-based structure
+- Layer-based structure
+- Hybrid approaches
+- Monorepo considerations
+- Barrel exports (index files)
+- Co-location principles
+- Scaling folder structure
+
+#### Design Systems:
+- What is a design system
+- Component libraries
+- Design tokens
+- Theming strategies
+- Documentation (Storybook)
+- Versioning design systems
+- Consuming design systems
+
+#### Monolith vs Micro-frontends:
+- Monolithic architecture
+- Micro-frontend patterns:
+  - Build-time integration
+  - Server-side integration
+  - Runtime integration (Module Federation)
+  - IFrame-based
+- Trade-offs of each approach
+- When to use micro-frontends
+- Communication between micro-frontends
+
+#### Module Federation:
+- Webpack Module Federation
+- Sharing dependencies
+- Remote and host applications
+- Dynamic remotes
+- Versioning concerns
+
+#### Exit Criteria:
+- Design scalable component architectures
+- Organize large codebases effectively
+- Build and maintain design systems
+- Choose appropriate architectural patterns
+- Explain trade-offs of different approaches
+
+---
+
+### Module 7.2: Performance & Optimization (Until Deep Mastery)
+
+#### Performance Fundamentals:
+- Critical Rendering Path
+- Browser rendering process (parsing, layout, paint, composite)
+- Reflow and repaint
+- Layout thrashing
+- Paint complexity
+
+#### Core Web Vitals:
+
+**Largest Contentful Paint (LCP):**
+- What it measures
+- How to optimize (resource hints, image optimization, critical CSS)
+- Target: < 2.5s
+
+**First Input Delay (FID) / Interaction to Next Paint (INP):**
+- What it measures
+- JavaScript optimization
+- Long tasks breakdown
+- Target: < 100ms (FID), < 200ms (INP)
+
+**Cumulative Layout Shift (CLS):**
+- What it measures
+- Setting dimensions on images/videos
+- Font loading strategies
+- Dynamic content injection
+- Target: < 0.1
+
+#### Loading Performance:
+- Resource prioritization
+- Critical vs non-critical resources
+- Preload, prefetch, preconnect
+- DNS prefetch
+- Resource hints
+- Lazy loading strategies
+- Above-the-fold optimization
+
+#### JavaScript Performance:
+- Bundle size optimization
+- Code splitting strategies:
+  - Route-based splitting
+  - Component-based splitting
+  - Vendor splitting
+- Tree shaking
+- Dead code elimination
+- Minification and compression (Gzip, Brotli)
+- Long tasks analysis
+- Web Workers for CPU-intensive tasks
+- requestIdleCallback for non-critical work
+
+#### React-Specific Performance:
+- Preventing unnecessary re-renders
+- React.memo usage patterns
+- useMemo for expensive computations
+- useCallback for stable references
+- Virtualization for long lists
+- Suspense for code splitting
+- Concurrent rendering
+- useTransition and useDeferredValue
+- Profiling with React DevTools
+
+#### Image Optimization:
+- Modern formats (WebP, AVIF)
+- Responsive images (srcset, sizes)
+- Art direction (picture element)
+- Lazy loading (loading="lazy")
+- Blur-up technique
+- CDN usage
+- Image compression
+- Critical images preloading
+
+#### CSS Performance:
+- Critical CSS extraction
+- CSS-in-JS performance implications
+- Unused CSS removal
+- CSS containment
+- will-change property
+- Animation performance (transform, opacity)
+- Avoiding expensive properties (box-shadow, filters)
+
+#### Network Optimization:
+- HTTP/2 and HTTP/3
+- Compression (Gzip, Brotli)
+- Caching strategies:
+  - Browser caching (Cache-Control headers)
+  - Service Worker caching
+  - CDN caching
+- Cache invalidation strategies
+- Resource bundling vs HTTP/2 multiplexing
+
+#### Monitoring & Profiling:
+- Chrome DevTools Performance tab
+- Lighthouse
+- WebPageTest
+- Real User Monitoring (RUM) tools
+- Synthetic monitoring
+- Performance budgets
+- Continuous performance monitoring
+
+#### Exit Criteria:
+- Diagnose performance bottlenecks
+- Optimize Core Web Vitals
+- Implement comprehensive caching strategies
+- Profile and optimize React applications
+- Set and maintain performance budgets
+- Monitor production performance
+
+---
+
+### Module 7.3: Data Management at Scale (Until Deep Mastery)
+
+#### State Management Architecture:
+- Local vs global state
+- Server state vs client state
+- Derived state patterns
+- State normalization
+- State machines (XState concepts)
+- Optimistic UI updates
+- Pessimistic updates
+- Undo/redo functionality
+
+#### Data Fetching Strategies:
+
+**REST API patterns:**
+- Resource-based endpoints
+- Pagination strategies (offset, cursor)
+- Filtering and sorting
+- Partial responses (field selection)
+- Error handling patterns
+
+**GraphQL patterns:**
+- Query structure
+- Mutations and subscriptions
+- Caching with Apollo Client
+- Fragment composition
+- Optimistic responses
+- Error handling
+
+**Comparison: REST vs GraphQL:**
+- When to use each
+- Over-fetching vs under-fetching
+- Caching differences
+- Type safety
+
+#### Advanced Caching:
+
+**React Query / TanStack Query:**
+- Query keys and structure
+- Stale time vs cache time
+- Background refetching
+- Window focus refetching
+- Polling strategies
+- Query invalidation patterns
+- Optimistic updates
+- Infinite queries
+- Parallel queries
+- Dependent queries
+
+**Apollo Client caching:**
+- Normalized cache
+- Cache policies (cache-first, network-only, etc.)
+- Cache updates after mutations
+- Local state in Apollo
+
+**SWR patterns:**
+- Stale-while-revalidate
+- Focus revalidation
+- Interval polling
+- Mutation and revalidation
+
+#### Real-time Data:
+
+**WebSockets:**
+- Connection management
+- Reconnection strategies
+- Message queuing
+- Heartbeat/ping-pong
+- Scaling considerations
+
+**Server-Sent Events:**
+- When to use vs WebSockets
+- Event streams
+- Automatic reconnection
+
+**Polling strategies:**
+- Short polling vs long polling
+- Adaptive polling
+- Exponential backoff
+
+#### Data Synchronization:
+- Conflict resolution strategies
+- Operational Transformation (OT) basics
+- CRDT (Conflict-free Replicated Data Types) concepts
+- Online/offline sync
+- Queue-based sync
+- Optimistic concurrency control
+
+#### Offline-First Architecture:
+- Service Worker strategies
+- IndexedDB for offline storage
+- Sync queue implementation
+- Conflict resolution
+- Background sync API
+- Online/offline detection
+
+#### Form Data Management:
+- Large form optimization
+- Multi-step forms
+- Form state persistence
+- Validation strategies (client vs server)
+- Debouncing validation
+- Field-level vs form-level validation
+
+#### Exit Criteria:
+- Design data fetching architecture
+- Implement sophisticated caching
+- Build real-time features
+- Handle offline scenarios
+- Manage complex form state
+- Choose appropriate tools for each scenario
+
+---
+
+### Module 7.4: Scalability & Best Practices (Until Deep Mastery)
+
+#### Code Quality:
+
+**Linting:**
+- ESLint configuration
+- Custom rules
+- React-specific rules
+- TypeScript ESLint
+- Accessibility linting (eslint-plugin-jsx-a11y)
+
+**Formatting:**
+- Prettier configuration
+- Editor integration
+- Pre-commit hooks (Husky, lint-staged)
+
+**Type Safety:**
+- Strict TypeScript configuration
+- Type coverage tools
+- Gradual TypeScript adoption
+
+#### Code Review Practices:
+- What to look for in reviews
+- Constructive feedback
+- Review checklists
+- Automated review tools
+- Security considerations
+
+#### Git Workflow:
+- Branching strategies (Git Flow, GitHub Flow, Trunk-based)
+- Conventional commits
+- Semantic versioning
+- Changelog generation
+- Monorepo strategies (Lerna, Nx, Turborepo)
+
+#### Documentation:
+- README best practices
+- API documentation
+- Component documentation (Storybook)
+- JSDoc for type information
+- Architecture Decision Records (ADRs)
+- Runbooks and playbooks
+
+#### CI/CD Pipelines:
+- Automated testing
+- Build optimization
+- Deployment strategies:
+  - Blue-green deployment
+  - Canary releases
+  - Feature flags
+  - A/B testing
+- Preview deployments
+- Rollback strategies
+
+#### Security:
+- XSS prevention
+- CSRF protection
+- Content Security Policy (CSP)
+- HTTPS everywhere
+- Secure headers
+- Dependency vulnerabilities (npm audit, Snyk)
+- Authentication best practices
+- Authorization patterns
+- API security
+- Rate limiting
+
+#### Accessibility (a11y):
+- WCAG guidelines
+- Semantic HTML
+- ARIA attributes
+- Keyboard navigation
+- Screen reader testing
+- Focus management
+- Color contrast
+- Alt text for images
+- Form accessibility
+- Testing with axe-core
+
+#### Internationalization (i18n):
+- Translation libraries (i18next, react-intl)
+- Pluralization rules
+- Date/time formatting
+- Number formatting
+- RTL support
+- Locale detection
+- Translation management
+
+#### Error Handling:
+- Client-side error handling
+- Error boundaries in React
+- Global error handlers
+- Network error handling
+- Retry strategies
+- Error logging and monitoring:
+  - Sentry
+  - LogRocket
+  - Bugsnag
+- User-friendly error messages
+
+#### Monitoring & Observability:
+- Error tracking
+- Performance monitoring
+- User analytics
+- Custom events tracking
+- Logging strategies
+- Alerting and notifications
+- Dashboards and reports
+
+#### Exit Criteria:
+- Establish code quality standards
+- Set up comprehensive CI/CD
+- Implement security best practices
+- Build accessible applications
+- Monitor production applications
+- Handle errors gracefully
+
+---
+
+### Module 7.5: System Design Interview Practice (Until Deep Mastery)
+
+#### Design Problem Framework:
+
+**1. Requirements Clarification:**
+- Functional requirements
+- Non-functional requirements (scale, performance, etc.)
+- Out of scope
+- Assumptions
+
+**2. High-Level Design:**
+- Component diagram
+- Data flow
+- API design
+- Technology choices
+
+**3. Deep Dive:**
+- Performance optimization
+- Scalability considerations
+- Edge cases
+- Trade-offs
+
+**4. Follow-up:**
+- Metrics and monitoring
+- Future improvements
+- Alternative approaches
+
+#### Common System Design Problems:
+
+**1. Design a News Feed (Facebook/Twitter/Instagram)**
+
+*Requirements:*
+- Users follow other users
+- View posts from followed users
+- Infinite scroll
+- Real-time updates
+- Likes, comments
+
+*Key Considerations:*
+- Feed generation algorithm (fanout on write vs read)
+- Pagination strategy
+- Caching layer
+- Real-time updates (WebSockets vs polling)
+- Media handling (images, videos)
+- Virtualized list for performance
+
+*Architecture:*
+- Component structure
+- State management
+- Data fetching and caching
+- Optimistic updates
+- Error handling
+
+---
+
+**2. Design a Chat Application (WhatsApp/Slack)**
+
+*Requirements:*
+- One-on-one and group chats
+- Real-time messaging
+- Message history
+- Typing indicators
+- Read receipts
+- File sharing
+- Search messages
+
+*Key Considerations:*
+- WebSocket connection management
+- Message ordering
+- Offline message queue
+- Message status (sent, delivered, read)
+- Notification system
+- Encryption (end-to-end)
+
+*Architecture:*
+- Real-time communication layer
+- Message storage (IndexedDB)
+- Sync mechanism
+- Conflict resolution
+- Media upload/download
+
+---
+
+**3. Design an Autocomplete/Typeahead System (Google Search)**
+
+*Requirements:*
+- Suggest as user types
+- Handle millions of queries
+- Ranking of suggestions
+- Keyboard navigation
+- Recent searches
+
+*Key Considerations:*
+- Debouncing input
+- Trie data structure (understanding)
+- Caching suggestions
+- Ranking algorithm
+- Accessibility (ARIA)
+
+*Architecture:*
+- Input handling and debouncing
+- API design
+- Client-side caching
+- Keyboard navigation implementation
+- Highlighting matched text
+
+---
+
+**4. Design a Video Streaming Platform (YouTube/Netflix)**
+
+*Requirements:*
+- Video player with controls
+- Adaptive bitrate streaming
+- Playlist/queue management
+- Comments and likes
+- Recommendations
+- Watch history
+
+*Key Considerations:*
+- Video format and codec
+- Adaptive bitrate (HLS, DASH)
+- Buffering strategy
+- CDN integration
+- Analytics (watch time, completion rate)
+
+*Architecture:*
+- Video player component
+- Quality selection
+- Progress tracking
+- Thumbnail previews
+- Fullscreen handling
+
+---
+
+**5. Design a Collaborative Editor (Google Docs/Notion)**
+
+*Requirements:*
+- Multiple users editing simultaneously
+- Real-time synchronization
+- Cursor positions
+- Conflict resolution
+- Revision history
+- Comments and suggestions
+
+*Key Considerations:*
+- Operational Transformation (OT) or CRDT
+- WebSocket for real-time sync
+- Conflict resolution strategy
+- Performance with large documents
+- Offline editing and sync
+
+*Architecture:*
+- Editor component architecture
+- Real-time sync layer
+- Conflict resolution algorithm
+- Presence system (who's online)
+- Version control
+
+---
+
+**6. Design an E-commerce Product Listing Page (Amazon)**
+
+*Requirements:*
+- Display products with filters
+- Sorting options
+- Pagination or infinite scroll
+- Add to cart
+- Search within category
+- Faceted search
+
+*Key Considerations:*
+- URL state management (filters in URL)
+- Performance with thousands of products
+- Filter application (client vs server)
+- SEO considerations
+- Lazy loading images
+
+*Architecture:*
+- Filter component architecture
+- State management (URL as source of truth)
+- Product grid optimization
+- Cart management
+- Search integration
+
+---
+
+**7. Design a Social Media Timeline (Facebook/LinkedIn)**
+
+*Requirements:*
+- Posts with text, images, videos
+- Like, comment, share
+- Infinite scroll
+- Real-time updates
+- Post composer
+
+*Key Considerations:*
+- Feed algorithm
+- Content prioritization
+- Media handling
+- Optimistic updates
+- Real-time new post notifications
+
+*Architecture:*
+- Timeline component structure
+- Post rendering optimization
+- Interaction handling
+- Cache invalidation
+- Notification system
+
+---
+
+**8. Design a Kanban Board (Trello/Jira)**
+
+*Requirements:*
+- Drag and drop cards
+- Multiple columns
+- Card details (modal/drawer)
+- Real-time collaboration
+- Comments and attachments
+
+<!-- NOTE: Content was truncated here. Please provide the remainder of this section and any following sections to complete the plan. -->

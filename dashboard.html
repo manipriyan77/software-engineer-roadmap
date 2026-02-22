@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Frontend → Architect · Kanban Dashboard</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
+      :root {
+        --bg: #0f1117;
+        --surface: #161b27;
+        --surface2: #1e2536;
+        --border: #2d3748;
+        --border2: #374151;
+        --text: #e2e8f0;
+        --muted: #64748b;
+        --muted2: #94a3b8;
+      }
+
+      body {
+        font-family: "Segoe UI", system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      /* ─── Header ─── */
+      .header {
+        background: linear-gradient(135deg, #1a1f2e 0%, #0d1117 50%, #1a1230 100%);
+        border-bottom: 1px solid var(--border);
+        padding: 20px 32px;
+        display: flex;
+        align-items: flex-start;
+        gap: 24px;
+        flex-wrap: wrap;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        backdrop-filter: blur(12px);
+      }
+      .header-left { flex: 1; min-width: 260px; }
+      .header h1 {
+        font-size: 1.4rem;
+        font-weight: 800;
+        background: linear-gradient(90deg, #63b3ed, #a78bfa, #f093fb);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .header-sub { font-size: 0.8rem; color: var(--muted2); margin-top: 2px; }
+      .progress-bar-wrap {
+        width: 100%;
+        background: var(--border);
+        border-radius: 6px;
+        height: 6px;
+        margin-top: 10px;
+        overflow: hidden;
+      }
+      .progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #63b3ed, #a78bfa, #68d391);
+        border-radius: 6px;
+        transition: width 0.5s ease;
+      }
+      .progress-label { font-size: 0.72rem; color: var(--muted2); margin-top: 4px; }
+
+      .stats-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+      .stat-chip {
+        background: rgba(255,255,255,0.06);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 5px 14px;
+        font-size: 0.78rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
+      }
+      .stat-chip .num { font-weight: 700; font-size: 0.9rem; }
+      .stat-chip.done .num { color: #68d391; }
+      .stat-chip.prog .num { color: #63b3ed; }
+      .stat-chip.todo .num { color: var(--muted2); }
+
+      .header-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+      .search-box {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text);
+        padding: 7px 14px;
+        font-size: 0.82rem;
+        outline: none;
+        width: 210px;
+        transition: border-color 0.2s;
+      }
+      .search-box::placeholder { color: var(--muted); }
+      .search-box:focus { border-color: #63b3ed; }
+
+      .btn {
+        background: rgba(255,255,255,0.06);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--muted2);
+        padding: 7px 14px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+        white-space: nowrap;
+        display: inline-block;
+      }
+      .btn:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+
+      /* ─── Board ─── */
+      .board-container {
+        display: flex;
+        gap: 0;
+        padding: 24px 16px;
+        overflow-x: auto;
+        min-height: calc(100vh - 130px);
+        align-items: flex-start;
+      }
+      .board-container::-webkit-scrollbar { height: 6px; }
+      .board-container::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+      .column {
+        flex: 1;
+        min-width: 340px;
+        max-width: 420px;
+        background: #161b27;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        margin: 0 8px;
+        display: flex;
+        flex-direction: column;
+        max-height: calc(100vh - 160px);
+        transition: border-color 0.2s, background 0.2s;
+      }
+      .column.drag-over { border-color: #63b3ed; background: #1a2535; }
+
+      .col-header {
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 14px 14px 0 0;
+        flex-shrink: 0;
+      }
+      .col-title { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 0.88rem; }
+      .col-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+      .col-count {
+        background: rgba(255,255,255,0.08);
+        border-radius: 12px;
+        padding: 2px 8px;
+        font-size: 0.72rem;
+        color: var(--muted2);
+        font-weight: 600;
+      }
+
+      .col-todo .col-dot { background: #4a5568; }
+      .col-progress .col-dot { background: #63b3ed; }
+      .col-done .col-dot { background: #68d391; }
+      .col-todo .col-title { color: var(--muted2); }
+      .col-progress .col-title { color: #63b3ed; }
+      .col-done .col-title { color: #68d391; }
+
+      .col-body {
+        padding: 12px;
+        overflow-y: auto;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .col-body::-webkit-scrollbar { width: 4px; }
+      .col-body::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+      /* ─── Cards ─── */
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        cursor: grab;
+        transition: all 0.2s;
+        border-left: 3px solid var(--accent, #4a5568);
+        user-select: none;
+        animation: fadeInUp 0.22s ease;
+      }
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(10px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      .card:active { cursor: grabbing; }
+      .card:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.35); }
+      .card.dragging { opacity: 0.35; transform: rotate(1.5deg); }
+      .card.done-card { opacity: 0.65; }
+      .card.done-card .card-title { text-decoration: line-through; color: var(--muted2); }
+
+      .card-top {
+        padding: 12px 14px 10px;
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+      }
+      .card-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+      .phase-num-badge {
+        font-size: 0.62rem;
+        font-weight: 800;
+        background: rgba(255,255,255,0.08);
+        border-radius: 5px;
+        padding: 2px 6px;
+        color: var(--muted2);
+        letter-spacing: 0.5px;
+      }
+      .card-badge {
+        font-size: 0.63rem;
+        padding: 2px 8px;
+        border-radius: 10px;
+        font-weight: 600;
+        background: rgba(255,255,255,0.05);
+        color: var(--accent, #94a3b8);
+        border: 1px solid rgba(255,255,255,0.07);
+      }
+      .card-title { font-size: 0.9rem; font-weight: 700; color: var(--text); line-height: 1.3; margin-bottom: 3px; }
+      .card-timeline { font-size: 0.71rem; color: var(--muted); margin-top: 2px; }
+
+      .card-bottom {
+        padding: 10px 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .card-counts { display: flex; gap: 10px; flex-wrap: wrap; }
+      .count-chip { font-size: 0.68rem; color: var(--muted); display: flex; align-items: center; gap: 3px; }
+      .count-chip span { font-weight: 600; color: var(--muted2); }
+
+      .card-actions { display: flex; gap: 6px; }
+      .icon-btn {
+        background: none;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--muted);
+        width: 26px; height: 26px;
+        cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 0.75rem;
+        transition: all 0.15s;
+        flex-shrink: 0;
+      }
+      .icon-btn:hover { background: var(--surface2); color: var(--text); border-color: var(--border2); }
+      .icon-btn.active { background: rgba(99,179,237,0.15); color: #63b3ed; border-color: #63b3ed55; }
+
+      /* ─── Expanded Detail ─── */
+      .card-detail { display: none; padding: 0 14px 12px; }
+      .card-detail.open { display: block; }
+
+      .detail-section { margin-top: 12px; }
+      .detail-section-label {
+        font-size: 0.63rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+      .topic-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+      .topic-pill {
+        font-size: 0.67rem;
+        padding: 3px 9px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 6px;
+        color: var(--muted2);
+      }
+
+      .project-chip {
+        margin-top: 10px;
+        background: rgba(246,224,94,0.05);
+        border: 1px dashed #f6e05e44;
+        border-radius: 8px;
+        padding: 8px 10px;
+        font-size: 0.72rem;
+        color: #f6e05e;
+      }
+      .outcome-chip {
+        margin-top: 8px;
+        padding: 7px 10px;
+        background: rgba(255,255,255,0.03);
+        border-left: 3px solid var(--accent, #4a5568);
+        border-radius: 0 6px 6px 0;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--accent, #94a3b8);
+      }
+
+      /* ─── Empty State ─── */
+      .empty-state {
+        text-align: center;
+        padding: 36px 20px;
+        color: var(--muted);
+        font-size: 0.8rem;
+        border: 1px dashed var(--border);
+        border-radius: 10px;
+        margin: 4px;
+        line-height: 1.6;
+      }
+      .empty-icon { font-size: 2rem; margin-bottom: 8px; }
+
+      @media (max-width: 700px) {
+        .board-container { flex-direction: column; align-items: stretch; }
+        .column { min-width: unset; max-width: unset; max-height: none; margin: 0 0 12px; }
+        .header { padding: 16px; }
+        .search-box { width: 150px; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <header class="header">
+      <div class="header-left">
+        <h1>🗺️ Frontend → Architect · Kanban</h1>
+        <div class="header-sub">Drag cards between columns · Click ▼ to expand · Click → to advance status</div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+        </div>
+        <div class="progress-label" id="progressLabel">0 / 15 phases completed (0%)</div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-chip todo"><span class="num" id="countTodo">15</span> To Do</div>
+        <div class="stat-chip prog"><span class="num" id="countProgress">0</span> In Progress</div>
+        <div class="stat-chip done"><span class="num" id="countDone">0</span> Done</div>
+      </div>
+      <div class="header-controls">
+        <input class="search-box" type="text" placeholder="🔍 Search phases…" id="searchInput" />
+        <a href="roadmap.html" class="btn">📋 Full Roadmap</a>
+        <button class="btn" id="resetBtn">↺ Reset</button>
+      </div>
+    </header>
+
+    <div class="board-container">
+      <div class="column col-todo" id="col-todo" data-col="todo">
+        <div class="col-header">
+          <div class="col-title"><div class="col-dot"></div> To Do</div>
+          <div class="col-count" id="badge-todo">0</div>
+        </div>
+        <div class="col-body" id="body-todo"></div>
+      </div>
+
+      <div class="column col-progress" id="col-progress" data-col="progress">
+        <div class="col-header">
+          <div class="col-title"><div class="col-dot"></div> In Progress</div>
+          <div class="col-count" id="badge-progress">0</div>
+        </div>
+        <div class="col-body" id="body-progress"></div>
+      </div>
+
+      <div class="column col-done" id="col-done" data-col="done">
+        <div class="col-header">
+          <div class="col-title"><div class="col-dot"></div> Done</div>
+          <div class="col-count" id="badge-done">0</div>
+        </div>
+        <div class="col-body" id="body-done"></div>
+      </div>
+    </div>
+
+    <script>
+    const PHASES = [
+      {
+        id:"p1", num:"01", color:"#68d391",
+        title:"🟢 Engineering Foundation",
+        timeline:"Weeks 1–8 · Logic + Problem Solving Brain",
+        badge:"Beginner → Logical Coder",
+        sections:[
+          {label:"📐 Complexity & Problem Solving", topics:["Time & Space Complexity","Recursion & Backtracking","Sliding Window / Two Pointer"]},
+          {label:"🧱 Data Structures", topics:["Arrays & Strings","Hashmaps & Sets","Stack & Queue","Linked List","Trees & Binary Search Tree","Graph Basics (BFS/DFS)"]}
+        ],
+        project:"🔨 Project: Logic Visualizer Tool",
+        outcome:"👉 Logical thinking unlocked — you think in algorithms"
+      },
+      {
+        id:"p2", num:"02", color:"#63b3ed",
+        title:"🟡 JavaScript Engineering",
+        timeline:"Weeks 9–14 · Understand JS Like a Runtime Engineer",
+        badge:"JS Internals Expert",
+        sections:[
+          {label:"⚙️ JS Runtime & Engine", topics:["Execution Context & Call Stack","Event Loop & Task Queues","Closures & Scope Chain","Prototypes & Prototype Chain","Async: Promises, async/await","Memory Leaks & Garbage Collection","Hoisting & TDZ","Debounce & Throttle","Functional Programming (map/reduce/compose)","Design Patterns in JS","Generators & Iterators","WeakMap / WeakSet / WeakRef"]}
+        ],
+        project:"🔨 Project: JS Execution Simulator",
+        outcome:"👉 You understand JS engine internals — interview-ready at the deepest level"
+      },
+      {
+        id:"p3", num:"03", color:"#b794f4",
+        title:"🔵 Browser Internals + Performance",
+        timeline:"Weeks 15–22 · Become a Performance Engineer",
+        badge:"Performance Specialist",
+        sections:[
+          {label:"🌐 Browser Internals", topics:["DOM Construction & CSSOM","Rendering Pipeline (Paint, Composite)","Reflow, Repaint & Layout Thrashing","Browser Storage (cookies, localStorage, IndexedDB)","Service Workers & PWA","Web Workers & Shared Workers"]},
+          {label:"⚡ Performance Mastery", topics:["Core Web Vitals (LCP, CLS, INP)","Lazy Loading & Code Splitting","Tree Shaking & Bundle Analysis","Virtualization (React Window / Virtual Scroll)","Memoization & React.memo / useMemo","Image Optimization (WebP, AVIF, srcset)","Font Loading Optimization","HTTP Caching (Cache-Control, ETag)","Preload, Prefetch, Preconnect","Chrome DevTools Profiling"]}
+        ],
+        project:"🔨 Project: Performance Optimization Lab",
+        outcome:"👉 You can audit and optimize any frontend app like a pro"
+      },
+      {
+        id:"p4", num:"04", color:"#fc8181",
+        title:"🟣 Advanced Frontend Engineering",
+        timeline:"Weeks 23–30 · Think Like a Frontend Architect",
+        badge:"Senior Frontend Engineer",
+        sections:[
+          {label:"🏗️ Architecture", topics:["Component Architecture (Compound, HOC, Render Props)","Feature-Based Folder Structure","Design Systems & Component Libraries","Monorepo Patterns (Turborepo/Nx)","Micro-Frontends","State Architecture (Zustand / Redux Toolkit / Jotai)","Server State (React Query / SWR)","Rendering Strategies (SSR, SSG, ISR, CSR)"]},
+          {label:"🔒 Security (Frontend)", topics:["XSS (Cross-Site Scripting)","CSRF (Cross-Site Request Forgery)","CSP (Content Security Policy)","Token Storage (JWT, httpOnly cookies)","Clickjacking & iframe sandboxing","OWASP Top 10 for Frontend","HTTPS, HSTS, Secure Headers","Subresource Integrity (SRI)"]},
+          {label:"♿ Accessibility (A11y)", topics:["WCAG 2.1/2.2 Guidelines","ARIA Roles & Semantic HTML","Keyboard Navigation & Focus Management","Color Contrast & Screen Readers"]},
+          {label:"🧪 Testing", topics:["Unit Testing (Vitest / Jest)","Integration Testing","E2E Testing (Playwright / Cypress)","Visual Regression Testing","Snapshot Testing"]},
+          {label:"🎨 CSS Mastery", topics:["CSS-in-JS Solutions","CSS Grid & Flexbox Mastery","CSS Animations & Transitions"]}
+        ],
+        project:"🔨 Project: Enterprise Dashboard",
+        outcome:"👉 You architect scalable frontend systems with confidence"
+      },
+      {
+        id:"p9", num:"09", color:"#4dd0e1",
+        title:"🟦 JavaScript Mastery",
+        timeline:"Plan.md Modules 1.1–1.7 · Until Mastery",
+        badge:"JS Deep Expertise",
+        sections:[
+          {label:"⚙️ Core Fundamentals & Scope (Module 1.1)", topics:["Variables: var, let, const","Data Types: Primitives vs Reference","Type Coercion & Conversion","Global, Function & Block Scope","Variable Hoisting & Temporal Dead Zone","Execution Context Stack","Lexical Environment & Scope Chain"]},
+          {label:"🔑 this Keyword Mastery", topics:["Implicit Binding (Object Methods)","Explicit Binding: call, apply, bind","new Binding & Constructor Functions","Arrow Functions & this"]},
+          {label:"🔒 Closures & Module Pattern", topics:["Closures Deep Dive","Practical Closure Use Cases","Module Pattern & Private Variables","Memory Considerations in Closures"]},
+          {label:"🧩 Functions Deep Dive (Module 1.2)", topics:["Higher-Order Functions & Callbacks","Currying & Partial Application","Function Composition & Pipe","Recursion & Tail Call Optimization","Debouncing (from scratch)","Throttling (from scratch)","Memoization (from scratch)","IIFE Pattern"]},
+          {label:"🏛️ Objects, Prototypes & OOP (Modules 1.3–1.4)", topics:["Object Creation & Property Descriptors","Prototype Chain & __proto__ vs prototype","Constructor Functions & Object.create()","ES6 Classes & Private Fields (#)","OOP: Inheritance & extends/super","SOLID Principles in JS","Design Patterns (Factory, Observer, Strategy…)","Composition vs Inheritance & Mixins"]},
+          {label:"⏳ Asynchronous JavaScript (Module 1.5)", topics:["Callbacks & Callback Hell","Promises: States, Chaining, Error Handling","Promise.all / race / allSettled / any","Async/Await & Error Handling","Event Loop: Microtask vs Macrotask","Generators & Iterators (function*)","Async Patterns: retry, timeout, pool"]},
+          {label:"🔀 Functional Programming (Module 1.6)", topics:["Pure Functions & Side Effects","Immutability Patterns","map, filter, reduce (implement from scratch)","Declarative vs Imperative Programming","Immer & Immutable.js Concepts","Transducers & Monads (Advanced)"]},
+          {label:"✨ ES6+ Modern Features (Module 1.7)", topics:["Destructuring & Rest/Spread","Template Literals & Tagged Templates","Symbols & Well-Known Symbols","Custom Iterables & Generators","Proxy & Reflect API","Map, Set, WeakMap, WeakSet","ES Modules: import/export, Dynamic import"]}
+        ],
+        project:"🔨 Projects: JS Mastery Milestones",
+        outcome:"👉 JavaScript is no longer a mystery — you master it completely"
+      },
+      {
+        id:"p10", num:"10", color:"#7986cb",
+        title:"🔷 TypeScript Mastery",
+        timeline:"Plan.md Modules 2.1–2.4 · Until Mastery",
+        badge:"Type-Safe Engineering",
+        sections:[
+          {label:"⚙️ Setup & Fundamentals (Module 2.1)", topics:["Installing TS & Basic CLI","tsconfig.json Deep Dive","Primitive Types: string, number, boolean","Arrays, Tuples & Enums","any, unknown, never, void","Type Inference & Annotations","Project References & Path Mapping"]},
+          {label:"🔗 Type System: Unions, Intersections & Literals", topics:["Union Types (A | B)","Intersection Types (A & B)","Discriminated Unions","Literal & Template Literal Types","Type Guards & Narrowing"]},
+          {label:"🏗️ Interfaces, Classes & Generics (Module 2.2)", topics:["Interfaces: Optional, Readonly, Index Signatures","Interface vs Type Alias","Classes: Access Modifiers, Abstract, Static","Function Overloads & this Parameter","Generics: Functions, Classes, Constraints"]},
+          {label:"🔬 Advanced Types (Module 2.3)", topics:["Utility Types: Partial, Required, Pick, Omit…","Mapped Types & Key Remapping","Conditional Types & infer Keyword","keyof, typeof, Indexed Access Types","Declaration Merging & Module Augmentation","Decorators (class, method, property)"]},
+          {label:"🎯 TypeScript OOP & FP Patterns (Module 2.4)", topics:["SOLID Principles with TypeScript","Type-Safe Function Composition","Generic Data Structures (Stack, Queue, Tree)","Functional Error Handling: Option & Either Types"]}
+        ],
+        project:"🔨 Projects: TypeScript Mastery",
+        outcome:"👉 You write bulletproof type-safe code with confidence"
+      },
+      {
+        id:"p11", num:"11", color:"#61dafb",
+        title:"⚛️ React Mastery",
+        timeline:"Plan.md Modules 4.1–4.5 · Until Mastery",
+        badge:"React Expert",
+        sections:[
+          {label:"🌱 React Fundamentals (Module 4.1)", topics:["JSX, Virtual DOM & Reconciliation","Functional Components & Props","Lists, Keys & Conditional Rendering","useState & State Batching","Controlled vs Uncontrolled Forms","Synthetic Events & Event Handling"]},
+          {label:"🪝 Hooks Deep Dive (Module 4.2)", topics:["useEffect: Cleanup, Dependencies & Pitfalls","useContext & Context API","useReducer & Complex State Logic","useRef, forwardRef & useImperativeHandle","useMemo & useCallback","Custom Hooks: useToggle, useFetch, useDebounce…","Rules of Hooks & useLayoutEffect"]},
+          {label:"🎨 Advanced Patterns (Module 4.3)", topics:["Compound Components Pattern","Render Props Pattern","Higher-Order Components (withAuth, withLoading)","React.memo & Performance Optimization","Code Splitting: React.lazy & Suspense","List Virtualization (react-window)","Error Boundaries & Portals"]},
+          {label:"🗂️ State Management Ecosystem (Module 4.4)", topics:["Context + useReducer for Global State","Redux Toolkit: slices, thunks, selectors","Zustand: Simple Global State","Jotai / Recoil: Atomic State","TanStack Query: Server State, Caching, Mutations"]},
+          {label:"🔷 React + TypeScript (Module 4.5)", topics:["Typed Props, Children & Event Handlers","Typed Hooks: useState, useReducer, useRef, useContext","Generic & Typed HOCs / Render Props","Common Types: ReactNode, CSSProperties, Ref types"]}
+        ],
+        project:"🔨 Projects: React Mastery",
+        outcome:"👉 You build advanced, scalable React apps that scale"
+      },
+      {
+        id:"p12", num:"12", color:"#e2e8f0",
+        title:"▲ Next.js Mastery",
+        timeline:"Plan.md Modules 5.1–5.4 · Until Mastery",
+        badge:"Full-Stack React",
+        sections:[
+          {label:"🗂️ App Router Fundamentals (Module 5.1)", topics:["Project Setup & App Router vs Pages Router","File-Based Routing: Dynamic, Catch-All, Groups","Layouts, Templates & Nested Layouts","Loading UI, Skeleton & Suspense Streaming","Error Handling: error.tsx, not-found.tsx","Server vs Client Components (use client)"]},
+          {label:"📡 Data Fetching & Rendering (Module 5.2)", topics:["SSR, SSG, ISR & CSR Strategies","fetch in Server Components & Deduplication","Server Actions & Progressive Enhancement","Route Handlers (API Routes in App Router)","Caching: Request, Data, Route & Router Cache"]},
+          {label:"🚀 Advanced Features (Module 5.3)", topics:["Metadata API & SEO (OG images, sitemap)","next/image & next/font Optimization","Middleware: Auth, Redirects, A/B Testing","Authentication with NextAuth / Auth.js","Internationalization (i18n)","revalidatePath & revalidateTag (On-demand ISR)"]},
+          {label:"📦 Performance & Production (Module 5.4)", topics:["Bundle Analysis & Code Splitting","Core Web Vitals in Next.js","Vercel Deployment & Edge Functions","Docker & Self-Hosted Deployment"]}
+        ],
+        project:"🔨 Projects: Next.js Mastery",
+        outcome:"👉 You build production-ready full-stack applications"
+      },
+      {
+        id:"p13", num:"13", color:"#81c784",
+        title:"🧪 Testing Mastery",
+        timeline:"Plan.md Modules 6.1–6.2 · Until Mastery",
+        badge:"Quality Engineering",
+        sections:[
+          {label:"🔬 Unit Testing: Jest + RTL (Module 6.1)", topics:["Jest Setup & Test Structure (describe, it, expect)","Mocking: jest.fn, jest.mock, jest.spyOn","Async Testing & Timer Mocks","React Testing Library: Render, Queries, userEvent","Testing Async UI: waitFor, findBy queries","Mock Service Worker (MSW) for API Mocking","Testing Custom Hooks, Redux & Context Providers","Code Coverage & TDD Practice"]},
+          {label:"🎭 Integration & E2E Testing (Module 6.2)", topics:["Playwright: Setup, Locators & Assertions","Page Object Model (POM)","Network Interception & API Mocking","Visual Regression Testing"]}
+        ],
+        project:"🔨 Projects: Testing Mastery",
+        outcome:"👉 You write confident, well-tested code with excellent coverage"
+      },
+      {
+        id:"p14", num:"14", color:"#ef9a9a",
+        title:"🔐 Frontend Security Mastery",
+        timeline:"Security.md · 9-Day Daily Roadmap",
+        badge:"Security-Conscious Dev",
+        sections:[
+          {label:"🌐 Web Security Fundamentals (Day 1)", topics:["OWASP Top 10 Vulnerabilities","CIA Triad & Authentication vs Authorization"]},
+          {label:"💉 XSS: Cross-Site Scripting (Day 2)", topics:["Stored, Reflected & DOM-based XSS","Safe DOM Manipulation: textContent vs innerHTML"]},
+          {label:"🔄 CSRF & Content Security Policy (Days 3–4)", topics:["CSRF Attacks & Token Protection","SameSite Cookie Attribute","Content Security Policy (CSP): script-src, nonce"]},
+          {label:"🔑 Secure Authentication & Authorization (Day 5)", topics:["JWT-Based Authentication","OAuth 2.0 Frontend Flow","localStorage vs httpOnly Cookies for Tokens"]},
+          {label:"🛡️ Browser Security Mechanisms (Day 6)", topics:["Same-Origin Policy (SOP)","CORS: Preflight, Headers & Configuration","Subresource Integrity (SRI)"]}
+        ],
+        project:"🔨 Project: Secure Web Application",
+        outcome:"👉 You build security-first applications that resist attacks"
+      },
+      {
+        id:"p5", num:"05", color:"#f6ad55",
+        title:"🔴 System Design Thinking",
+        timeline:"Weeks 31–38 · Become a Solution Architect Thinker",
+        badge:"Architectural Thinking",
+        sections:[
+          {label:"🏛️ Core Concepts", topics:["Scalability & Load Balancing","Caching Strategies (CDN, Redis, In-memory)","Rate Limiting","DB Scaling, Replication & Sharding","Event-Driven Systems & Message Queues","API Design (REST, GraphQL, gRPC)","Websockets & Real-time (Socket.io, SSE)"]},
+          {label:"🧩 Practice: Design These Systems", topics:["Chat App (WhatsApp)","Video Streaming (Netflix)","E-commerce Platform","Real-time Notification System","URL Shortener","Social Media Feed"]}
+        ],
+        project:"🔨 Project: Design a Scalable System",
+        outcome:"👉 You think in systems and can architect for scale"
+      },
+      {
+        id:"p6", num:"06", color:"#9ae6b4",
+        title:"🟤 DevOps Foundation",
+        timeline:"Weeks 39–46 · Learn the Infrastructure Layer",
+        badge:"DevOps Engineer",
+        sections:[
+          {label:"🐧 Linux & Networking", topics:["Linux CLI (filesystem, permissions, processes)","HTTP / DNS / TCP / UDP / TLS","CDN & Reverse Proxy (Nginx)"]},
+          {label:"🐳 Docker", topics:["Docker Images, Containers, Volumes","Docker Compose & Networking","Container Orchestration Basics"]}
+        ],
+        project:"🔨 Project: Containerized Full-Stack App",
+        outcome:"👉 You can deploy and manage applications like an ops engineer"
+      },
+      {
+        id:"p7", num:"07", color:"#f093fb",
+        title:"⚫ Cloud Engineering",
+        timeline:"Weeks 47–56 · Build Cloud Architecture Skills",
+        badge:"Cloud Engineer",
+        sections:[
+          {label:"☁️ Cloud Core", topics:["AWS Fundamentals (EC2, S3, RDS, VPC)","Auto Scaling & Load Balancers","IAM & Cloud Security","Serverless (Lambda, Edge Functions)"]},
+          {label:"🏗️ Infrastructure as Code & CI/CD", topics:["Terraform","GitHub Actions (CI/CD Pipelines)","Infrastructure Monitoring"]}
+        ],
+        project:"🔨 Project: Deploy to AWS with IaC",
+        outcome:"👉 You build and deploy on cloud infrastructure independently"
+      },
+      {
+        id:"p8", num:"08", color:"#81e6d9",
+        title:"⚪ Advanced Systems + Distributed Thinking",
+        timeline:"Weeks 57–68 · Distributed Systems Mastery",
+        badge:"Distributed Systems Engineer",
+        sections:[
+          {label:"🌐 Distributed Systems Theory", topics:["CAP Theorem","Distributed Caching & Consistency","Message Queues (Kafka, RabbitMQ)","Circuit Breakers & Fault Tolerance","Streaming (Kafka Streams)"]}
+        ],
+        project:"🔨 Project: Distributed System Simulation",
+        outcome:"👉 You understand distributed systems trade-offs deeply"
+      },
+      {
+        id:"pf", num:"🏆", color:"#fbd38d",
+        title:"🏆 Architect Level — Final Phase",
+        timeline:"Weeks 69–80 · Master Engineer + Architect Mindset",
+        badge:"🏆 Architect",
+        sections:[
+          {label:"🧠 Master Skills", topics:["Production Debugging & RCA","Performance Bottleneck Detection","Cost Optimization (Cloud)","Architecture Tradeoff Analysis"]},
+          {label:"📊 Skill Progression Summary", topics:["Foundation → Logical Coder","JS Engineering → Internals Expert","Browser + Perf → Performance Specialist","Advanced Frontend → Senior Frontend Engineer","System Design → Solution Architect","DevOps → DevOps Engineer","Cloud → Cloud Engineer","Distributed → Distributed Systems Engineer","Deep Mastery (Phases 9–14)","Architect → Master Engineer"]}
+        ],
+        project:"🔨 Capstone: Production Simulation Platform",
+        outcome:"👉 You are now a Full-Stack Architect — capable of leading technical strategy"
+      }
+    ];
+
+    // ─── State ───
+    const KEY = "roadmap-kanban-v1";
+    function loadState() { try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch { return {}; } }
+    function saveState() { localStorage.setItem(KEY, JSON.stringify(state)); }
+    let state = loadState();
+
+    // ─── Build card element ───
+    function makeCard(phase) {
+      const col     = state[phase.id]?.col      || "todo";
+      const expanded = state[phase.id]?.expanded || false;
+      const topicTotal = phase.sections.reduce((s, sec) => s + sec.topics.length, 0);
+
+      const card = document.createElement("div");
+      card.className = "card" + (col === "done" ? " done-card" : "");
+      card.dataset.id = phase.id;
+      card.style.setProperty("--accent", phase.color);
+      card.draggable = true;
+
+      card.innerHTML = `
+        <div class="card-top">
+          <div class="card-meta">
+            <span class="phase-num-badge">PHASE ${phase.num}</span>
+            <span class="card-badge">${phase.badge}</span>
+          </div>
+          <div class="card-title">${phase.title}</div>
+          <div class="card-timeline">${phase.timeline}</div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-counts">
+            <div class="count-chip">📚 <span>${phase.sections.length}</span> sections</div>
+            <div class="count-chip">🎯 <span>${topicTotal}</span> topics</div>
+          </div>
+          <div class="card-actions">
+            <button class="icon-btn expand-btn ${expanded ? "active" : ""}" title="Toggle details">${expanded ? "▲" : "▼"}</button>
+            <button class="icon-btn move-btn" title="Advance to next status">→</button>
+          </div>
+        </div>
+        <div class="card-detail ${expanded ? "open" : ""}">
+          ${phase.sections.map(s => `
+            <div class="detail-section">
+              <div class="detail-section-label">${s.label}</div>
+              <div class="topic-pills">${s.topics.map(t => `<span class="topic-pill">${t}</span>`).join("")}</div>
+            </div>`).join("")}
+          <div class="project-chip">${phase.project}</div>
+          <div class="outcome-chip">${phase.outcome}</div>
+        </div>`;
+
+      // Expand/collapse
+      card.querySelector(".expand-btn").addEventListener("click", e => {
+        e.stopPropagation();
+        if (!state[phase.id]) state[phase.id] = {};
+        state[phase.id].expanded = !state[phase.id].expanded;
+        saveState();
+        renderBoard(document.getElementById("searchInput").value);
+      });
+
+      // Advance status: todo → progress → done → todo
+      card.querySelector(".move-btn").addEventListener("click", e => {
+        e.stopPropagation();
+        if (!state[phase.id]) state[phase.id] = {};
+        const cur = state[phase.id].col || "todo";
+        state[phase.id].col = cur === "todo" ? "progress" : cur === "progress" ? "done" : "todo";
+        saveState();
+        renderBoard(document.getElementById("searchInput").value);
+      });
+
+      // Drag events
+      card.addEventListener("dragstart", e => {
+        e.dataTransfer.setData("text/plain", phase.id);
+        setTimeout(() => card.classList.add("dragging"), 0);
+      });
+      card.addEventListener("dragend", () => card.classList.remove("dragging"));
+
+      return card;
+    }
+
+    // ─── Render ───
+    function renderBoard(filter = "") {
+      const bodies = {
+        todo:     document.getElementById("body-todo"),
+        progress: document.getElementById("body-progress"),
+        done:     document.getElementById("body-done")
+      };
+      Object.values(bodies).forEach(b => (b.innerHTML = ""));
+
+      const q = filter.toLowerCase();
+
+      PHASES.forEach(phase => {
+        const col = state[phase.id]?.col || "todo";
+        if (q) {
+          const hay = [phase.title, phase.badge, phase.timeline,
+            ...phase.sections.map(s => s.label + " " + s.topics.join(" "))].join(" ").toLowerCase();
+          if (!hay.includes(q)) return;
+        }
+        bodies[col].appendChild(makeCard(phase));
+      });
+
+      // Empty states
+      const emptyMsg = { todo: ["📋", "Nothing here yet."], progress: ["🚀", "No phases in progress."], done: ["🎉", "No completed phases yet."] };
+      Object.entries(bodies).forEach(([col, body]) => {
+        if (!body.children.length) {
+          const [icon, msg] = emptyMsg[col];
+          body.innerHTML = `<div class="empty-state"><div class="empty-icon">${icon}</div>${q ? "No phases match your search." : msg}</div>`;
+        }
+      });
+
+      updateStats();
+    }
+
+    function updateStats() {
+      const counts = { todo:0, progress:0, done:0 };
+      PHASES.forEach(p => { counts[state[p.id]?.col || "todo"]++; });
+
+      document.getElementById("countTodo").textContent     = counts.todo;
+      document.getElementById("countProgress").textContent = counts.progress;
+      document.getElementById("countDone").textContent     = counts.done;
+      document.getElementById("badge-todo").textContent     = counts.todo;
+      document.getElementById("badge-progress").textContent = counts.progress;
+      document.getElementById("badge-done").textContent     = counts.done;
+
+      const pct = Math.round((counts.done / PHASES.length) * 100);
+      document.getElementById("progressFill").style.width = pct + "%";
+      document.getElementById("progressLabel").textContent =
+        `${counts.done} / ${PHASES.length} phases completed (${pct}%)`;
+    }
+
+    // ─── Drag & Drop on columns ───
+    ["col-todo", "col-progress", "col-done"].forEach(colId => {
+      const colEl  = document.getElementById(colId);
+      const colName = colId.replace("col-", "");
+
+      colEl.addEventListener("dragover", e => { e.preventDefault(); colEl.classList.add("drag-over"); });
+      colEl.addEventListener("dragleave", () => colEl.classList.remove("drag-over"));
+      colEl.addEventListener("drop", e => {
+        e.preventDefault();
+        colEl.classList.remove("drag-over");
+        const id = e.dataTransfer.getData("text/plain");
+        if (!id) return;
+        if (!state[id]) state[id] = {};
+        state[id].col = colName;
+        saveState();
+        renderBoard(document.getElementById("searchInput").value);
+      });
+    });
+
+    // ─── Search ───
+    document.getElementById("searchInput").addEventListener("input", e => renderBoard(e.target.value));
+
+    // ─── Reset ───
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      if (confirm("Reset all progress? This cannot be undone.")) {
+        state = {};
+        saveState();
+        renderBoard();
+      }
+    });
+
+    // ─── Init ───
+    renderBoard();
+    </script>
+  </body>
+</html>
